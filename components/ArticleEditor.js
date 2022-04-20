@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import RichTextEditor from '../components/RichTextEditor'
+import {Button} from '@mantine/core'
 
 const handleImageUpload = file =>
 	new Promise((resolve, reject) => {
@@ -15,17 +16,35 @@ const handleImageUpload = file =>
 			.catch(() => reject(new Error('Upload failed')))
 	})
 
-const ArticleEditor = () => {
-	const [value, onChange] = useState('')
+const handleSave = text =>
+	new Promise((resolve, reject) => {
+		fetch('/api/editor', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({text})
+		})
+			.then(response => response.json())
+			.catch(err => reject(new Error(err)))
+	})
+
+const ArticleEditor = ({value}) => {
+	const [text, onChange] = useState(value || '')
 
 	return (
-		<RichTextEditor
-			radius='sm'
-			value={value}
-			onChange={onChange}
-			onImageUpload={handleImageUpload}
-			style={{minHeight: '600px'}}
-		/>
+		<>
+			<RichTextEditor
+				radius='sm'
+				value={text}
+				onChange={onChange}
+				onImageUpload={handleImageUpload}
+				style={{minHeight: '600px'}}
+			/>
+			<Button color='green' onClick={() => handleSave(text)}>
+				Saglabāt
+			</Button>
+		</>
 	)
 }
 

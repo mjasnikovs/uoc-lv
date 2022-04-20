@@ -1,3 +1,33 @@
 {
-  "extends": "next/core-web-vitals"
+    "extends": "next/core-web-vitals",
+    "plugins": ["unused-imports"],
+    "rules": {
+        "indent": [2, "tab"],
+        "no-tabs": 0,
+        "object-curly-spacing": [2, "never"],
+        "array-bracket-spacing": [2, "never"],
+        "computed-property-spacing": [2, "never"],
+        "linebreak-style": [2, "unix"],
+        "quotes": [2, "single"],
+        "semi": [2, "never"],
+        "brace-style": [2, "1tbs"],
+        "camelcase": [2, {"properties": "always"}],
+        "keyword-spacing": [2],
+        "eol-last": [2],
+        "no-trailing-spaces": [2],
+        "no-redeclare": 2,
+        "no-shadow": 2,
+        "default-param-last": 0,
+        "no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ]
+    }
 }

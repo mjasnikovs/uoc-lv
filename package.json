@@ -1,20 +1,29 @@
 {
-  "name": "uoc-lv",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "12.1.4",
-    "react": "18.0.0",
-    "react-dom": "18.0.0"
-  },
-  "devDependencies": {
-    "eslint": "8.13.0",
-    "eslint-config-next": "12.1.4"
-  }
+    "name": "uoc-lv",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@mantine/core": "4.1.4",
+        "@mantine/hooks": "4.1.4",
+        "@mantine/next": "4.1.4",
+        "@mantine/notifications": "4.1.4",
+        "@mantine/rte": "4.1.4",
+        "@mantine/ssr": "4.1.4",
+        "cookies-next": "^2.0.4",
+        "next": "12.1.5",
+        "react": "18.0.0",
+        "react-dom": "18.0.0",
+        "tabler-icons-react": "1.45.0"
+    },
+    "devDependencies": {
+        "eslint": "8.13.0",
+        "eslint-config-next": "12.1.4",
+        "eslint-plugin-unused-imports": "2.0.0"
+    }
 }

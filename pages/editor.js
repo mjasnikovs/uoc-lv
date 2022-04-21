@@ -1,11 +1,20 @@
 import fs from 'fs'
-import {resolve} from 'path'
+import path from 'path'
+
+import getConfig from 'next/config'
+const {serverRuntimeConfig} = getConfig()
 
 import AppShellPage from '../components/AppShellPage'
 import ArticleEditor from '../components/ArticleEditor'
 
+const file = path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt')
+
 export const getServerSideProps = async () => {
-	const value = await fs.promises.readFile(resolve(__dirname, '../../../db.txt'), 'utf8')
+	await fs.promises.access(file, fs.constants.F_OK).catch(async () => {
+		await fs.promises.appendFile(file, '')
+	})
+
+	const value = await fs.promises.readFile(file, 'utf8')
 
 	return {
 		props: {value}

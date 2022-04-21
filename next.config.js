@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	reactStrictMode: false
+	reactStrictMode: false,
+	serverRuntimeConfig: {
+		PROJECT_ROOT: __dirname
+	}
 }
 
 module.exports = nextConfig

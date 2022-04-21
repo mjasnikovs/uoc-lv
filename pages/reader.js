@@ -1,11 +1,14 @@
 import fs from 'fs'
-import {resolve} from 'path'
+import path from 'path'
+
+import getConfig from 'next/config'
+const {serverRuntimeConfig} = getConfig()
 
 import AppShellPage from '../components/AppShellPage'
 import ArticleReader from '../components/ArticleReader'
 
 export const getServerSideProps = async () => {
-	const value = await fs.promises.readFile(resolve(__dirname, '../../../public/db.txt'), 'utf8')
+	const value = await fs.promises.readFile(path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt'), 'utf8')
 
 	return {
 		props: {value}

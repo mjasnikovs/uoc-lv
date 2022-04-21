@@ -7,8 +7,14 @@ const {serverRuntimeConfig} = getConfig()
 import AppShellPage from '../components/AppShellPage'
 import ArticleReader from '../components/ArticleReader'
 
+const file = path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt')
+
 export const getServerSideProps = async () => {
-	const value = await fs.promises.readFile(path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt'), 'utf8')
+	await fs.promises.access(file, fs.constants.F_OK).catch(async () => {
+		await fs.promises.appendFile(file, '')
+	})
+
+	const value = await fs.promises.readFile(file, 'utf8')
 
 	return {
 		props: {value}

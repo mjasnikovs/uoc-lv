@@ -17,7 +17,14 @@ const App = props => {
 				withNormalizeCSS
 				theme={{
 					/** Put your mantine theme override here */
-					colorScheme: 'dark'
+					colorScheme: 'dark',
+					breakpoints: {
+						xs: 500,
+						sm: 800,
+						md: 1000,
+						lg: 1200,
+						xl: 1400
+					}
 				}}>
 				<NotificationsProvider>
 					<Component {...pageProps} />

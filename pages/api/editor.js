@@ -1,19 +1,12 @@
-import fs from 'fs'
-import path from 'path'
-
-import getConfig from 'next/config'
-const {serverRuntimeConfig} = getConfig()
-
-const file = path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt')
+import pg from '../../connections/postgres'
 
 const handler = async (req, res) => {
 	if (req.method === 'POST') {
-		await fs.promises.access(file, fs.constants.F_OK).catch(async () => {
-			await fs.promises.appendFile(file, '')
+		return pg({
+			query: 'update test set message = $1',
+			types: ['text'],
+			values: [req.body.text]
 		})
-
-		return fs.promises
-			.writeFile(file, req.body.text, 'utf8')
 			.then(() => res.status(200).send({text: req.body.text}))
 			.catch(e => res.status(500).send({error: e.message}))
 	}

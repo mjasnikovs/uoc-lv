@@ -4,10 +4,13 @@ import AppShellPage from '../components/AppShellPage'
 import ArticleEditor from '../components/ArticleEditor'
 
 export const getServerSideProps = async () => {
-	const {value} = await pg({query: 'select NOW()::text as value', object: true})
+	const result = await pg({
+		query: 'select message::text as value from test order by id limit 1',
+		object: true
+	})
 
 	return {
-		props: {value}
+		props: {value: result?.value || ''}
 	}
 }
 

@@ -4,6 +4,8 @@ import {Search} from 'tabler-icons-react'
 import FooterPage from './FooterPage'
 import SideBar from './SideBar'
 
+const URL = process.env.URL
+
 const AppShellPage = ({children}) => (
 	<AppShell
 		header={
@@ -19,21 +21,21 @@ const AppShellPage = ({children}) => (
 									color='yellow'
 									weight='800'
 									size='xl'
-									href='https://mantine.dev/'>
+									href={URL}>
 									UOC.LV
 								</Anchor>
 								<Anchor
 									size='xl'
 									variant='gradient'
 									gradient={{from: 'indigo', to: 'cyan'}}
-									href='https://mantine.dev/'>
+									href={`${URL}editor`}>
 									podkāsts
 								</Anchor>
 								<Anchor
 									size='xl'
 									variant='gradient'
 									gradient={{from: 'indigo', to: 'cyan'}}
-									href='https://mantine.dev/'>
+									href={`${URL}reader`}>
 									arhīvs
 								</Anchor>
 							</Breadcrumbs>

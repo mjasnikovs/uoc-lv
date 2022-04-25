@@ -1,23 +1,16 @@
-import fs from 'fs'
-import path from 'path'
-
-import getConfig from 'next/config'
-const {serverRuntimeConfig} = getConfig()
+import pg from '../connections/postgres'
 
 import AppShellPage from '../components/AppShellPage'
 import ArticleReader from '../components/ArticleReader'
 
-const file = path.join(serverRuntimeConfig.PROJECT_ROOT, './db.txt')
-
 export const getServerSideProps = async () => {
-	await fs.promises.access(file, fs.constants.F_OK).catch(async () => {
-		await fs.promises.appendFile(file, '')
+	const result = await pg({
+		query: 'select message::text as value from test order by id limit 1',
+		object: true
 	})
 
-	const value = await fs.promises.readFile(file, 'utf8')
-
 	return {
-		props: {value}
+		props: {value: result?.value || ''}
 	}
 }
 

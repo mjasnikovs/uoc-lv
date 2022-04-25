@@ -17,4 +17,6 @@ module.exports = `
 	CREATE TRIGGER update_updatedat_test BEFORE UPDATE
 	ON test FOR EACH ROW EXECUTE PROCEDURE 
 	update_updatedat_column();
+
+	INSERT into test (message) values ('Test post');
 `

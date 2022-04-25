@@ -1,10 +1,13 @@
 import {AppShell, Header, Container, Anchor, Breadcrumbs, Grid, Input} from '@mantine/core'
+import Link from 'next/link'
 
 import {Search} from 'tabler-icons-react'
 import FooterPage from './FooterPage'
 import SideBar from './SideBar'
 
 const URL = process.env.URL
+
+console.log(URL)
 
 const AppShellPage = ({children}) => (
 	<AppShell
@@ -13,31 +16,37 @@ const AppShellPage = ({children}) => (
 				<Container size='xl'>
 					<Grid>
 						<Grid.Col span={8}>
-							<Breadcrumbs separator=' ' style={{marginTop: 5}}>
-								<Anchor
-									style={{
-										textDecoration: 'none'
-									}}
-									color='yellow'
-									weight='800'
-									size='xl'
-									href={URL}>
-									UOC.LV
-								</Anchor>
-								<Anchor
-									size='xl'
-									variant='gradient'
-									gradient={{from: 'indigo', to: 'cyan'}}
-									href={`${URL}editor`}>
-									podkāsts
-								</Anchor>
-								<Anchor
-									size='xl'
-									variant='gradient'
-									gradient={{from: 'indigo', to: 'cyan'}}
-									href={`${URL}reader`}>
-									arhīvs
-								</Anchor>
+							<Breadcrumbs separator=' '>
+								<Link href={URL} passHref>
+									<Anchor
+										style={{
+											textDecoration: 'none'
+										}}
+										color='yellow'
+										weight='800'
+										size='xl'
+									>
+										UOC.LV
+									</Anchor>
+								</Link>
+								<Link href={`${URL}editor`} passHref>
+									<Anchor
+										size='xl'
+										variant='gradient'
+										gradient={{from: 'indigo', to: 'cyan'}}
+									>
+										redaktors
+									</Anchor>
+								</Link>
+								<Link href={`${URL}reader`} passHref>
+									<Anchor
+										size='xl'
+										variant='gradient'
+										gradient={{from: 'indigo', to: 'cyan'}}
+									>
+										skatītājs
+									</Anchor>
+								</Link>
 							</Breadcrumbs>
 						</Grid.Col>
 						<Grid.Col span={4}>

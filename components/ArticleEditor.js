@@ -40,6 +40,14 @@ const ArticleEditor = ({value}) => {
 				onChange={onChange}
 				onImageUpload={handleImageUpload}
 				style={{minHeight: '600px'}}
+				controls={[
+					['bold', 'italic'],
+					['blockquote', 'code'],
+					['h2', 'h3', 'h4', 'h5', 'h6'],
+					['alignLeft', 'alignCenter', 'alignRight'],
+					['unorderedList', 'orderedList'],
+					['video', 'image']
+				]}
 			/>
 			<Button color='green' onClick={() => handleSave(text)}>
 				Saglabāt

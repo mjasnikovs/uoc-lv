@@ -1,4 +1,5 @@
 import {AppShell, Header, Container, Anchor, Breadcrumbs, Grid, Input} from '@mantine/core'
+
 import Link from 'next/link'
 
 import {Search} from 'tabler-icons-react'
@@ -12,10 +13,10 @@ console.log(URL)
 const AppShellPage = ({children}) => (
 	<AppShell
 		header={
-			<Header height={60} p='md'>
+			<Header minheight={60} p='md'>
 				<Container size='xl'>
 					<Grid>
-						<Grid.Col span={8}>
+						<Grid.Col xs={12} sm={8}>
 							<Breadcrumbs separator=' '>
 								<Link href={URL} passHref>
 									<Anchor
@@ -30,37 +31,32 @@ const AppShellPage = ({children}) => (
 									</Anchor>
 								</Link>
 								<Link href={`${URL}editor`} passHref>
-									<Anchor
-										size='xl'
-										variant='gradient'
-										gradient={{from: 'indigo', to: 'cyan'}}
-									>
+									<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 										redaktors
 									</Anchor>
 								</Link>
 								<Link href={`${URL}reader`} passHref>
-									<Anchor
-										size='xl'
-										variant='gradient'
-										gradient={{from: 'indigo', to: 'cyan'}}
-									>
+									<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 										skatītājs
 									</Anchor>
 								</Link>
 							</Breadcrumbs>
 						</Grid.Col>
-						<Grid.Col span={4}>
+						<Grid.Col xs={12} sm={4}>
 							<Input icon={<Search />} placeholder='Meklēt' />
 						</Grid.Col>
 					</Grid>
 				</Container>
 			</Header>
 		}
-		footer={<FooterPage />}>
+		footer={<FooterPage />}
+	>
 		<Container size='xl'>
 			<Grid>
-				<Grid.Col span={8}>{children}</Grid.Col>
-				<Grid.Col span={4}>
+				<Grid.Col xs={12} md={8}>
+					{children}
+				</Grid.Col>
+				<Grid.Col xs={12} md={4}>
 					<SideBar />
 				</Grid.Col>
 			</Grid>

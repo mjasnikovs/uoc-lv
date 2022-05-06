@@ -1,4 +1,4 @@
-import {Text, Space, Anchor, Image, Grid, Group, ThemeIcon, Badge} from '@mantine/core'
+import {Text, Space, Anchor, Image, Grid, Group, ThemeIcon, Badge, MediaQuery} from '@mantine/core'
 
 import {CalendarStats, User} from 'tabler-icons-react'
 
@@ -14,10 +14,10 @@ const images = [
 const NewsArticleCard = ({id = 0}) => (
 	<>
 		<Grid>
-			<Grid.Col span={5}>
+			<Grid.Col xs={12} sm={5}>
 				<Image radius='xs' src={images[id]} alt='Random unsplash image' />
 			</Grid.Col>
-			<Grid.Col span={7}>
+			<Grid.Col xs={12} sm={7}>
 				<Group>
 					<ThemeIcon radius='xl' variant='light' size='sm' color='gray'>
 						<CalendarStats />
@@ -33,10 +33,12 @@ const NewsArticleCard = ({id = 0}) => (
 					Nostaļģija nespēj izglābt Tomb Raider: The Last Revelation
 				</Text>
 				<Space h='xs' />
-				<Text color='grey'>
-					Kad bērnībā spēlēju Tomb Raider The Last Revelation, tā mani aizrāva ar interesantajiem spēles
-					līmeņiem ...
-				</Text>
+				<MediaQuery smallerThan='sm' styles={{display: 'none'}}>
+					<Text color='grey'>
+						Kad bērnībā spēlēju Tomb Raider The Last Revelation, tā mani aizrāva ar interesantajiem spēles
+						līmeņiem ...
+					</Text>
+				</MediaQuery>
 				<Space h='xs' />
 				<Anchor href='https://mantine.dev/'>
 					<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'cyan'}}>

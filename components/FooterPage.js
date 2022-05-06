@@ -6,7 +6,7 @@ const FooterPage = () => (
 	<Footer height={60} p='md'>
 		<Container size='xl'>
 			<Grid>
-				<Grid.Col span={3}>
+				<Grid.Col xs={6} md={3}>
 					<Stack>
 						<Text weight='bold'>Kategorijas</Text>
 						<Divider color='indigo' size='sm' />
@@ -14,7 +14,7 @@ const FooterPage = () => (
 						<Anchor href='https://mantine.dev/'>Arhīvs</Anchor>
 					</Stack>
 				</Grid.Col>
-				<Grid.Col span={3}>
+				<Grid.Col xs={6} md={3}>
 					<Stack>
 						<Text weight='bold'>Sarunājies</Text>
 						<Divider color='indigo' size='sm' />
@@ -32,7 +32,7 @@ const FooterPage = () => (
 						</Group>
 					</Stack>
 				</Grid.Col>
-				<Grid.Col span={3}>
+				<Grid.Col xs={6} md={3}>
 					<Stack>
 						<Text weight='bold'>Lasi</Text>
 						<Divider color='indigo' size='sm' />
@@ -50,7 +50,7 @@ const FooterPage = () => (
 						</Group>
 					</Stack>
 				</Grid.Col>
-				<Grid.Col span={3}>
+				<Grid.Col xs={6} md={3}>
 					<Stack>
 						<Text weight='bold'>Skaties</Text>
 						<Divider color='indigo' size='sm' />

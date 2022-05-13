@@ -11,7 +11,7 @@ const images = [
 	'https://cdn.uoc.lv/62a6e006618ee5d3d3cfea189e01b26d5726bc9ax1065x599.jpg'
 ]
 
-const HOSTNAME = process.env.HOSTNAME
+const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
 const NewsArticleCard = ({id = 0}) => (
 	<>

@@ -2,7 +2,7 @@ import {Footer, Text, Container, Anchor, Grid, Group, ThemeIcon, Divider, Stack,
 
 import {BrandTwitter, BrandFacebook, BrandYoutube, BrandTwitch, Mail, BrandDiscord} from 'tabler-icons-react'
 
-const HOSTNAME = process.env.HOSTNAME
+const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
 const FooterPage = () => (
 	<Footer p='md'>

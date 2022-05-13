@@ -19,7 +19,7 @@ import Link from 'next/link'
 import Footer from './Footer'
 import SideBar from './SideBar'
 
-const HOSTNAME = process.env.HOSTNAME
+const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
 const AppShellContainer = ({children}) => {
 	const [opened, setOpened] = useState(false)

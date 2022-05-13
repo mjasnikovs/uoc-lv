@@ -5,7 +5,7 @@ const nextConfig = {
 		PROJECT_ROOT: __dirname
 	},
 	env: {
-		HOSTNAME: process.env.HOSTNAME,
+		NEXT_PUBLIC_HOSTNAME: process.env.HOSTNAME
 	}
 }
 

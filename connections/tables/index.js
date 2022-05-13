@@ -1,6 +1,18 @@
-import timestampTrigger from './timestampTrigger'
+const {Client} = require('pg')
 
-import test from './test'
+const timestampTrigger = require('./timestampTrigger')
 
-export const createPrerequisites = [timestampTrigger]
-export const createTables = [test]
+const test = require('./test')
+const users = require('./users')
+
+const createPrerequisites = [timestampTrigger]
+const createTables = [test, users]
+
+;(async () => {
+	const client = new Client()
+	await client.connect()
+	await Promise.all(createPrerequisites.map(val => client.query(val)))
+	await Promise.all(createTables.map(val => client.query(val)))
+	await client.end()
+	console.log('Database tables created')
+})()

@@ -1,4 +1,4 @@
-module.exports = `
+const testTable = `
 	CREATE SEQUENCE IF NOT EXISTS test_id_seq;
 
 	CREATE TABLE IF NOT EXISTS test (
@@ -20,3 +20,5 @@ module.exports = `
 
 	INSERT into test (message) values ('Test post');
 `
+
+module.exports = testTable

@@ -1,4 +1,4 @@
-module.exports = `
+const timestampTrigger = `
 	CREATE OR REPLACE FUNCTION update_updatedat_column()
 	RETURNS TRIGGER AS $$
 	BEGIN
@@ -7,3 +7,5 @@ module.exports = `
 	END;
 	$$ language 'plpgsql';
 `
+
+module.exports = timestampTrigger

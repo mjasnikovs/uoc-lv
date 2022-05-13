@@ -1,6 +1,7 @@
-const {Client} = require('pg')
+import postgres from 'pg'
+const Client = postgres.Client
 
-module.exports = select =>
+const pg = select =>
 	new Promise(async (resolve, reject) => {
 		const client = new Client()
 		await client.connect()
@@ -40,3 +41,5 @@ module.exports = select =>
 
 		return resolve([])
 	})
+
+export default pg

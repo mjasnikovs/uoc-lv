@@ -1,10 +1,9 @@
-import pg from '../../connections/postgres'
+import pg from '../../connections/pg'
 
 const handler = async (req, res) => {
 	if (req.method === 'POST') {
 		return pg({
-			query: 'update test set message = $1',
-			types: ['text'],
+			query: 'update test set message = $1::text',
 			values: [req.body.text]
 		})
 			.then(() => res.status(200).send({text: req.body.text}))

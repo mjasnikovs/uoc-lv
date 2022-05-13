@@ -1,4 +1,4 @@
-import pg from '../connections/postgres'
+import pg from '../connections/pg'
 
 import AppShellPage from '../components/AppShellPage'
 import ArticleEditor from '../components/ArticleEditor'

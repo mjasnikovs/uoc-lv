@@ -10,14 +10,13 @@ import {
 	Anchor,
 	Group,
 	Breadcrumbs,
-	Input
+	Space
 } from '@mantine/core'
-
-import {Search} from 'tabler-icons-react'
 
 import Link from 'next/link'
 import Footer from './Footer'
 import SideBar from './SideBar'
+import UserMenu from './UserMenus'
 
 const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
@@ -50,6 +49,10 @@ const AppShellContainer = ({children}) => {
 								</Anchor>
 							</Link>
 						</Group>
+					</Navbar.Section>
+					<Navbar.Section>
+						<UserMenu />
+						<Space h='xl' />
 					</Navbar.Section>
 				</Navbar>
 			}
@@ -107,8 +110,9 @@ const AppShellContainer = ({children}) => {
 										</Link>
 									</Breadcrumbs>
 								</Grid.Col>
-								<Grid.Col xs={12} sm={4}>
-									<Input icon={<Search />} placeholder='Meklēt' />
+
+								<Grid.Col xs={12} sm={4} align='right'>
+									<UserMenu />
 								</Grid.Col>
 							</Grid>
 						</Container>

@@ -5,7 +5,7 @@ const nextConfig = {
 		PROJECT_ROOT: __dirname
 	},
 	env: {
-		URL: process.env.URL,
+		HOSTNAME: process.env.HOSTNAME,
 	}
 }
 

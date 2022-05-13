@@ -11,6 +11,8 @@ const images = [
 	'https://cdn.uoc.lv/62a6e006618ee5d3d3cfea189e01b26d5726bc9ax1065x599.jpg'
 ]
 
+const HOSTNAME = process.env.HOSTNAME
+
 const NewsArticleCard = ({id = 0}) => (
 	<>
 		<Grid>
@@ -40,7 +42,7 @@ const NewsArticleCard = ({id = 0}) => (
 					</Text>
 				</MediaQuery>
 				<Space h='xs' />
-				<Anchor href='https://mantine.dev/'>
+				<Anchor href={HOSTNAME}>
 					<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'cyan'}}>
 						Lasīt vairāk
 					</Badge>

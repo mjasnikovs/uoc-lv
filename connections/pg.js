@@ -25,21 +25,27 @@ const pg = select =>
 			return reject(new Error('Postgres query function error, "values" params is not array'))
 		}
 
-		const result = await client.query(query, values)
-		client.end()
+		return client
+			.query(query, values)
+			.then(result => {
+				client.end()
+				if (object === true) {
+					if (result.rowCount === 1) {
+						return resolve(result.rows[0])
+					}
+					return resolve(null)
+				}
 
-		if (object === true) {
-			if (result.rowCount === 1) {
-				return resolve(result.rows[0])
-			}
-			return resolve(null)
-		}
+				if (result.rowCount) {
+					return resolve(result.rows)
+				}
 
-		if (result.rowCount) {
-			return resolve(result.rows)
-		}
-
-		return resolve([])
+				return resolve([])
+			})
+			.catch(err => {
+				client.end()
+				return reject(err)
+			})
 	})
 
 export default pg

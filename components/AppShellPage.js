@@ -20,8 +20,9 @@ import UserMenu from './UserMenus'
 
 const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
-const AppShellContainer = ({children}) => {
+const AppShellContainer = ({children, session}) => {
 	const [opened, setOpened] = useState(false)
+
 	return (
 		<AppShell
 			navbarOffsetBreakpoint='sm'
@@ -33,7 +34,8 @@ const AppShellContainer = ({children}) => {
 					width={{sm: 200, lg: 0}}
 					styles={{
 						root: {border: 'none'}
-					}}>
+					}}
+				>
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
 						<Group direction='column' p='md'>
@@ -51,7 +53,7 @@ const AppShellContainer = ({children}) => {
 						</Group>
 					</Navbar.Section>
 					<Navbar.Section>
-						<UserMenu />
+						<UserMenu session={session} />
 						<Space h='xl' />
 					</Navbar.Section>
 				</Navbar>
@@ -69,7 +71,8 @@ const AppShellContainer = ({children}) => {
 									}}
 									color='yellow'
 									weight='800'
-									size='xl'>
+									size='xl'
+								>
 									UOC.LV
 								</Anchor>
 							</Link>
@@ -88,7 +91,8 @@ const AppShellContainer = ({children}) => {
 												}}
 												color='yellow'
 												weight='800'
-												size='xl'>
+												size='xl'
+											>
 												UOC.LV
 											</Anchor>
 										</Link>
@@ -96,7 +100,8 @@ const AppShellContainer = ({children}) => {
 											<Anchor
 												size='xl'
 												variant='gradient'
-												gradient={{from: 'indigo', to: 'cyan'}}>
+												gradient={{from: 'indigo', to: 'cyan'}}
+											>
 												redaktors
 											</Anchor>
 										</Link>
@@ -104,7 +109,8 @@ const AppShellContainer = ({children}) => {
 											<Anchor
 												size='xl'
 												variant='gradient'
-												gradient={{from: 'indigo', to: 'cyan'}}>
+												gradient={{from: 'indigo', to: 'cyan'}}
+											>
 												skatītājs
 											</Anchor>
 										</Link>
@@ -112,13 +118,14 @@ const AppShellContainer = ({children}) => {
 								</Grid.Col>
 
 								<Grid.Col xs={12} sm={4} align='right'>
-									<UserMenu />
+									<UserMenu session={session} />
 								</Grid.Col>
 							</Grid>
 						</Container>
 					</MediaQuery>
 				</Header>
-			}>
+			}
+		>
 			<Container size='xl' hidden={opened}>
 				<Grid>
 					<Grid.Col xs={12} md={8}>

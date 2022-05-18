@@ -1,8 +1,12 @@
 import AppShellPage from '../components/AppShellPage'
 import ArticleCard from '../components/ArticleCard'
 
-const Index = () => (
-	<AppShellPage>
+import ironSession from '../connections/ironSession'
+
+export const getServerSideProps = ironSession
+
+const Index = ({session}) => (
+	<AppShellPage session={session}>
 		<ArticleCard id={0} />
 		<ArticleCard id={1} />
 		<ArticleCard id={2} />

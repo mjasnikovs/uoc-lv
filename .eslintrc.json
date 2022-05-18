@@ -18,7 +18,8 @@
         "no-redeclare": 2,
         "no-shadow": 2,
         "default-param-last": 0,
-        "no-unused-vars": "off",
+        "no-unused-vars": 1,
+        "no-undef": 1,
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
             "warn",

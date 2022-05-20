@@ -8,8 +8,11 @@ import {
 	Container,
 	Title,
 	TextInput,
-	Loader
+	Loader,
+	Alert
 } from '@mantine/core'
+
+import {AlertCircle} from 'tabler-icons-react'
 
 import {useForm} from '@mantine/form'
 import Link from 'next/link'
@@ -23,6 +26,8 @@ const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 const CreateNewSession = ({id, token}) => {
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
+	const [success, setSuccess] = useState(false)
+
 	const router = useRouter()
 
 	const form = useForm({
@@ -52,12 +57,29 @@ const CreateNewSession = ({id, token}) => {
 					return setError(res.error)
 				}
 				form.reset()
+				setSuccess(true)
 				return router.push('/')
 			})
 			.catch(err => {
 				setLoading(false)
 				return setError(err.message)
 			})
+	}
+
+	if (success === true) {
+		return (
+			<AppShellPage>
+				<Alert icon={<AlertCircle size={16} />} title='Tev paveicās!' color='teal'>
+					Tu tiksi pāradresēts uz sākumlapu. Ja tas nenotiek automātiski, spied te:
+					<Link href={`${HOSTNAME}`} passHref>
+						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+							{' '}
+							sākums
+						</Anchor>
+					</Link>
+				</Alert>
+			</AppShellPage>
+		)
 	}
 
 	return (

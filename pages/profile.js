@@ -1,38 +1,17 @@
-import {
-	Anchor,
-	PasswordInput,
-	Button,
-	Breadcrumbs,
-	Grid,
-	Center,
-	Container,
-	Title,
-	TextInput,
-	Loader,
-	Space,
-	Alert,
-	Avatar,
-	InputWrapper
-} from '@mantine/core'
+import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper} from '@mantine/core'
 
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 
-import {AlertCircle} from 'tabler-icons-react'
-
 import {useForm} from '@mantine/form'
-import Link from 'next/link'
 import {useState} from 'react'
 import AppShellPage from '../components/AppShellPage'
 import ErrorBox from '../components/ErrorBox'
 import DropBox from '../components/DropBox'
 
 import {useRouter} from 'next/router'
-import Image from 'next/image'
 import {withIronSessionSsr} from 'iron-session/next'
 import ironSessionConfig from '../connections/ironSessionConfig'
 import pg from '../connections/pg'
-
-const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	if (typeof req.session.user === 'undefined') {
@@ -156,7 +135,7 @@ const CreateNewAccount = ({session}) => {
 							/>
 						</Grid.Col>
 						<Grid.Col span={12}>
-							<InputWrapper label='Profila bilde' />
+							<InputWrapper label='Profila attēls' />
 							<Center>
 								<Avatar size='xl' src={avatarUrl} />
 							</Center>

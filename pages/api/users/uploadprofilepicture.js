@@ -5,7 +5,7 @@ import path from 'path'
 import busboy from 'busboy'
 import logger from '../../../connections/logger'
 import pg from '../../../connections/pg'
-import sharp from 'sharp'
+import FormData from 'form-data'
 
 export const config = {
 	api: {
@@ -22,9 +22,6 @@ const handler = async (req, res) => {
 		return res.status(200).redirect(307, '/')
 	}
 
-	const avatarName = `${req.session.user.name}${new Date().getTime()}.webp`
-	const imagePath = path.resolve('public/avatars/', avatarName)
-
 	const imageHandler = new Promise((resolve, reject) => {
 		const bb = busboy({headers: req.headers, limits: {files: 1, fileSize: 5 * 1048576}})
 		let count = 0
@@ -35,43 +32,38 @@ const handler = async (req, res) => {
 				return reject(new Error(`Image mimeType is invalid :"${mimeType}".`))
 			}
 
-			const type = mimeType.split('/')
-			const tempPath = path.resolve(
-				'temp/',
-				`${Buffer.from(filename).toString('base64').slice(0, 10)}.${type[1]}`
-			)
-
-			const fstream = fs.createWriteStream(tempPath)
-			file.pipe(fstream)
-
 			file.on('limit', () => {
 				if (count++ === 0) {
 					return reject(new Error('Image filesize limit.'))
 				}
 			})
 
-			fstream.on('finish', () => {
-				sharp(tempPath)
-					.resize({
-						width: 150,
-						height: 150,
-						fit: sharp.fit.cover
-					})
-					.webp()
-					.toFile(imagePath)
-					.then(() => {
-						fs.unlink(tempPath, e => e && logger.error(e))
-						if (count++ === 0) {
-							return resolve()
-						}
-					})
-					.catch(err => {
-						fs.unlink(tempPath, e => e && logger.error(e))
-						if (count++ === 0) {
-							return reject(new Error(err))
-						}
-					})
+			const body = new FormData()
+			body.append('height', 150)
+			body.append('width', 150)
+			body.append('file', file, {
+				filename,
+				mimeType
 			})
+
+			fetch(`${process.env.FILESERVER_HOSTNAME}uploadimage`, {
+				method: 'POST',
+				body
+			})
+				.then(resp => {
+					if (resp.ok) {
+						return resp.json()
+					}
+					if (count++ === 0) {
+						return reject(new Error(`HTTP status code: "${resp.status}" with message "${resp.statusText}"`))
+					}
+				})
+				.then(resolve)
+				.catch(err => {
+					if (count++ === 0) {
+						return reject(new Error(err))
+					}
+				})
 		})
 
 		bb.on('error', err => {
@@ -84,26 +76,30 @@ const handler = async (req, res) => {
 	})
 
 	await imageHandler
-		.then(async () => {
+		.then(async ({url}) => {
 			const user = await pg({
 				query: 'select photo from users where id = $1::bigint',
 				values: [req.session.user.id],
 				object: true
 			})
 
-			if (user.photo !== null) {
-				fs.unlink(path.resolve('public/avatars/', user.photo), e => e && logger.error(e))
-			}
+			const body = new FormData()
+			body.append('name', user.photo)
+
+			await fetch(`${process.env.FILESERVER_HOSTNAME}delete`, {
+				method: 'POST',
+				body
+			})
 
 			await pg({
 				query: 'update users set photo = $2::text where id = $1::bigint',
-				values: [req.session.user.id, avatarName]
+				values: [req.session.user.id, url]
 			})
 
-			return res.status(200).send({url: `/avatars/${avatarName}`})
+			return res.status(200).send({url})
 		})
 		.catch(err => {
-			logger.error(new Error(err))
+			logger.error(err)
 			return res.status(500).send({message: 'Server error'})
 		})
 }

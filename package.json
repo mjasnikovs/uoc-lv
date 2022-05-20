@@ -4,9 +4,11 @@
 	"private": true,
 	"scripts": {
 		"dev": "env-cmd -f './.env.local' node ./connections/tables/index.js && next dev -p 4000 | pino-pretty",
+		"build-local": "env-cmd -f './.env.local' node ./connections/tables/index.js && next build",
 		"build": "node ./connections/tables/index.js && next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"cdn": "env-cmd -f './.env.local' nodemon ./cdn/index.js"
 	},
 	"dependencies": {
 		"@mantine/core": "4.2.5",
@@ -20,6 +22,8 @@
 		"busboy": "1.6.0",
 		"cookies-next": "2.0.4",
 		"env-cmd": "10.1.0",
+		"express": "^4.18.1",
+		"form-data": "^4.0.0",
 		"format-schema": "3.0.0",
 		"iron-session": "6.1.3",
 		"next": "12.1.6",

@@ -33,6 +33,6 @@ yarn-error.log*
 .vercel
 
 /temp/**/*
-/public/avatars/**/*
+/cdn/avatars/**/*
 
 !.gitkeep

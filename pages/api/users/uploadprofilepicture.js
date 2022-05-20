@@ -38,7 +38,7 @@ const handler = async (req, res) => {
 			const type = mimeType.split('/')
 			const tempPath = path.resolve(
 				'temp/',
-				`${Buffer.from(filename).toString('base64url').slice(0, 10)}.${type[1]}`
+				`${Buffer.from(filename).toString('base64').slice(0, 10)}.${type[1]}`
 			)
 
 			const fstream = fs.createWriteStream(tempPath)

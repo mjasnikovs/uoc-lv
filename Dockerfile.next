@@ -16,11 +16,12 @@ RUN npm install sharp@0.30.4 --unsafe-perm
 RUN npm ci --no-optional --only=production --dd
 RUN npx next telemetry disable
 
-RUN mkdir -p /usr/src/app/logs
-
 ADD https://api.github.com/repos/mjasnikovs/uoc-lv/git/refs/heads/main version.js
+
+RUN git reset --hard
 RUN git pull origin main
 
+RUN mkdir -p /usr/src/app/logs
 RUN npm run build
 
 EXPOSE 80

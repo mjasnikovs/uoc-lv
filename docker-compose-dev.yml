@@ -1,0 +1,32 @@
+version: '2.0'
+
+services:
+    uoc-pg:
+        image: camptocamp/postgres:9.6
+        container_name: uoc-pg
+        volumes:
+            - ./postgresqlData:/var/lib/postgresql/data
+            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        networks:
+            - uoc-network
+        ports:
+            - '5432:5432'
+        env_file:
+            - ./.env.development
+
+    uoc-cdn:
+        container_name: uoc-cdn
+        build:
+            context: ./
+            dockerfile: Dockerfile.cdn
+        volumes:
+            - ./public/cdn:/usr/src/app/public/cdn
+        networks:
+            - uoc-network
+        ports:
+            - '3001:80'
+        env_file:
+            - ./.env.development
+
+networks:
+    uoc-network:

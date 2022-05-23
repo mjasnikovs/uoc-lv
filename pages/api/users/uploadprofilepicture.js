@@ -1,11 +1,11 @@
 import {withIronSessionApiRoute} from 'iron-session/next'
 import ironSessionConfig from '../../../connections/ironSessionConfig'
-import fs from 'fs'
-import path from 'path'
 import busboy from 'busboy'
 import logger from '../../../connections/logger'
 import pg from '../../../connections/pg'
-import FormData from 'form-data'
+import path from 'path'
+import fs from 'fs'
+import sharp from 'sharp'
 
 export const config = {
 	api: {
@@ -38,32 +38,55 @@ const handler = async (req, res) => {
 				}
 			})
 
-			const body = new FormData()
-			body.append('height', 150)
-			body.append('width', 150)
-			body.append('file', file, {
-				filename,
-				mimeType
-			})
+			const type = mimeType.split('/')
+			const tempPath = path.resolve(
+				'temp/',
+				`${Buffer.from(filename).toString('base64url').slice(0, 10)}.${type[1]}`
+			)
 
-			fetch(`${process.env.FILESERVER_HOSTNAME}uploadimage`, {
-				method: 'POST',
-				body
+			const fstream = fs.createWriteStream(tempPath)
+			file.pipe(fstream)
+
+			fstream.on('finish', async () => {
+				const webp = await new Promise(wepResolve => {
+					const generateWebpUrl = () => {
+						const webpName = `${Buffer.from(new Date().getTime() + filename)
+							.toString('base64url')
+							.slice(0, 25)}.webp`
+						const webpPath = path.resolve('public/cdn/', webpName)
+
+						return {webpName, webpPath}
+					}
+
+					const filePathExists = () => {
+						const f = generateWebpUrl()
+						fs.access(f.webpPath, fs.constants.F_OK, err => (err ? wepResolve(f) : filePathExists()))
+					}
+					return filePathExists()
+				})
+
+				return sharp(tempPath)
+					.resize({
+						width: 150,
+						height: 150,
+						fit: sharp.fit.cover
+					})
+					.webp()
+					.toFile(webp.webpPath)
+					.then(() => {
+						fs.unlink(tempPath, e => e && logger.error(e))
+						if (count++ === 0) {
+							return resolve({url: webp.webpName})
+						}
+					})
+					.catch(err => {
+						fs.unlink(tempPath, e => e && logger.error(e))
+						if (count++ === 0) {
+							logger.error(err)
+							return reject(new Error(err))
+						}
+					})
 			})
-				.then(resp => {
-					if (resp.ok) {
-						return resp.json()
-					}
-					if (count++ === 0) {
-						return reject(new Error(`HTTP status code: "${resp.status}" with message "${resp.statusText}"`))
-					}
-				})
-				.then(resolve)
-				.catch(err => {
-					if (count++ === 0) {
-						return reject(new Error(err))
-					}
-				})
 		})
 
 		bb.on('error', err => {
@@ -83,13 +106,14 @@ const handler = async (req, res) => {
 				object: true
 			})
 
-			const body = new FormData()
-			body.append('name', user.photo)
-
-			await fetch(`${process.env.FILESERVER_HOSTNAME}delete`, {
-				method: 'POST',
-				body
-			})
+			if (user.photo !== null) {
+				const oldPhotoPath = path.resolve('public/cdn/', user.photo)
+				fs.access(oldPhotoPath, fs.constants.F_OK, err => {
+					if (!err) {
+						fs.unlink(oldPhotoPath, e => e && logger.error(e))
+					}
+				})
+			}
 
 			await pg({
 				query: 'update users set photo = $2::text where id = $1::bigint',

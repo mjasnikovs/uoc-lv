@@ -59,7 +59,7 @@ const CreateNewAccount = ({session}) => {
 	const router = useRouter()
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [avatarUrl, setAvatarUrl] = useState(`/avatars/${session.photo}`)
+	const [avatarUrl, setAvatarUrl] = useState(`${process.env.NEXT_PUBLIC_CDN}${session.photo}`)
 
 	const form = useForm({
 		initialValues: {
@@ -90,7 +90,7 @@ const CreateNewAccount = ({session}) => {
 				if (typeof res.error !== 'undefined') {
 					return setError(res.error)
 				}
-				setAvatarUrl(res.url)
+				setAvatarUrl(`${process.env.NEXT_PUBLIC_CDN}${res.url}`)
 				return form.reset()
 			})
 			.catch(err => {

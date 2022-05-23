@@ -3,7 +3,14 @@ const Client = postgres.Client
 
 const pg = select =>
 	new Promise(async (resolve, reject) => {
-		const client = new Client()
+		const client = new Client({
+			host: process.env.POSTGRES_HOST,
+			port: process.env.POSTGRES_PORT,
+			user: process.env.POSTGRES_USER,
+			database: process.env.POSTGRES_DATABASE,
+			password: process.env.POSTGRES_PASSWORD
+		})
+
 		await client.connect()
 
 		const {query, values, object} = (() => {

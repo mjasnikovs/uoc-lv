@@ -1,0 +1,27 @@
+FROM node:16.14.2-alpine
+
+RUN echo "ipv6" >> /etc/modules
+
+RUN apk add --update --no-cache git && rm -rf /var/cache/apk/*
+
+WORKDIR /icu
+RUN npm init -y && npm install full-icu
+ENV NODE_ICU_DATA=/icu/node_modules/full-icu
+
+WORKDIR /usr/src/app
+
+RUN git clone https://github.com/mjasnikovs/uoc-lv.git .
+
+RUN npm install sharp@0.30.4 --unsafe-perm
+RUN npm ci --no-optional --only=production --dd
+
+RUN mkdir -p /usr/src/app/logs
+
+RUN git pull origin main
+RUN npx next telemetry disable
+
+RUN npm run build
+
+EXPOSE 80
+
+CMD ["npm", "run", "start"]

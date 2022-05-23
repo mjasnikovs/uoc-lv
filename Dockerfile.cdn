@@ -1,0 +1,13 @@
+FROM node:16.14.2-alpine
+
+RUN echo "ipv6" >> /etc/modules
+
+WORKDIR /usr/src/app
+RUN npm install express@4.18.1
+
+RUN mkdir -p /usr/src/app/public/cdn
+
+COPY ./cdn.js ./
+EXPOSE 80
+
+CMD ["node", "cdn.js"]

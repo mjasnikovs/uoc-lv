@@ -2,11 +2,11 @@ const {Client} = require('pg')
 
 const timestampTrigger = require('./timestampTrigger')
 
-const test = require('./test')
 const users = require('./users')
+const articles = require('./articles')
 
 const createPrerequisites = [timestampTrigger]
-const createTables = [test, users]
+const createTables = [users, articles]
 
 ;(async () => {
 	const client = new Client({

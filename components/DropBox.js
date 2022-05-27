@@ -4,9 +4,9 @@ import {FileUpload} from 'tabler-icons-react'
 
 const dropBox = status => (
 	<Group position='center' spacing='xl'>
-		<FileUpload status={status} size={80} />
+		<FileUpload status={status} size={50} />
 		<div>
-			<Text size='xl' inline>
+			<Text size='lg' inline>
 				Uzvelc failu šeit vai noklikšķini lai izvēlētos.
 			</Text>
 			<Text size='sm' color='dimmed' inline mt={7}>

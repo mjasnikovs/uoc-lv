@@ -2,7 +2,7 @@ const usersTable = `
 	CREATE SEQUENCE IF NOT EXISTS users_id_seq;
 
 	CREATE TABLE IF NOT EXISTS users (
-		id bigint PRIMARY KEY DEFAULT nextval('test_id_seq'),
+		id bigint PRIMARY KEY DEFAULT nextval('users_id_seq'),
 		"updatedAt" timestamp with time zone DEFAULT NOW(),
 		"createdAt" timestamp with time zone DEFAULT NOW(),
 		name text NOT null,

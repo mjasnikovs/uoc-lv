@@ -1,4 +1,4 @@
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper} from '@mantine/core'
+import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Anchor, Button} from '@mantine/core'
 
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 
@@ -7,11 +7,15 @@ import {useState} from 'react'
 import AppShellPage from '../components/AppShellPage'
 import ErrorBox from '../components/ErrorBox'
 import DropBox from '../components/DropBox'
+import {List} from 'tabler-icons-react'
 
 import {useRouter} from 'next/router'
 import {withIronSessionSsr} from 'iron-session/next'
 import ironSessionConfig from '../connections/ironSessionConfig'
 import pg from '../connections/pg'
+
+import Image from 'next/image'
+import Link from 'next/link'
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	if (typeof req.session.user === 'undefined') {
@@ -59,7 +63,7 @@ const CreateNewAccount = ({session}) => {
 	const router = useRouter()
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [avatarUrl, setAvatarUrl] = useState(`${process.env.NEXT_PUBLIC_CDN}${session.photo}`)
+	const [avatarUrl, setAvatarUrl] = useState(session.photo && `${process.env.NEXT_PUBLIC_CDN}${session.photo}`)
 
 	const form = useForm({
 		initialValues: {
@@ -108,6 +112,19 @@ const CreateNewAccount = ({session}) => {
 							<Title order={2}>Profils</Title>
 						</Grid.Col>
 						<Grid.Col span={12}>
+							<Group direction='row'>
+								<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}drafts`} passHref>
+									<Button
+										leftIcon={<List />}
+										variant='gradient'
+										gradient={{from: 'indigo', to: 'cyan'}}
+									>
+										Melnraksti
+									</Button>
+								</Link>
+							</Group>
+						</Grid.Col>
+						<Grid.Col span={12}>
 							<TextInput
 								id='email'
 								disabled
@@ -136,9 +153,18 @@ const CreateNewAccount = ({session}) => {
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<InputWrapper label='Profila attēls' />
-							<Center>
-								<Avatar size='xl' src={avatarUrl} />
-							</Center>
+							{avatarUrl && (
+								<Center>
+									<Avatar size='xl'>
+										<Image
+											src={avatarUrl}
+											alt={form.getInputProps('name')}
+											width='150'
+											height='150'
+										/>
+									</Avatar>
+								</Center>
+							)}
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<ErrorBox error={error} />

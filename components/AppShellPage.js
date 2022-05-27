@@ -20,7 +20,7 @@ import UserMenu from './UserMenus'
 
 const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
-const AppShellContainer = ({children, session}) => {
+const AppShellContainer = ({children, sidebar, session}) => {
 	const [opened, setOpened] = useState(false)
 
 	return (
@@ -132,7 +132,7 @@ const AppShellContainer = ({children, session}) => {
 						{children}
 					</Grid.Col>
 					<Grid.Col xs={12} md={4}>
-						<SideBar />
+						{sidebar || <SideBar />}
 					</Grid.Col>
 				</Grid>
 			</Container>

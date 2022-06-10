@@ -30,7 +30,7 @@ services:
             context: ./
             dockerfile: Dockerfile.next
         volumes:
-            - ./uoc-next-logs:/usr/src/app/logs
+            - ./logs:/usr/src/app/logs
             - ./public/cdn:/usr/src/app/public/cdn
         networks:
             - uoc-network

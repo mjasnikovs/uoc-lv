@@ -1,4 +1,4 @@
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Anchor, Button} from '@mantine/core'
+import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Button} from '@mantine/core'
 
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 
@@ -19,7 +19,7 @@ import Link from 'next/link'
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	if (typeof req.session.user === 'undefined') {
-		res.statusCode = 301
+		res.statusCode = 302
 		res.setHeader('Location', '/')
 		res.end()
 		return {
@@ -42,7 +42,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	})
 
 	if (session === null) {
-		res.statusCode = 301
+		res.statusCode = 302
 		res.setHeader('location', '/')
 		res.end()
 		return {

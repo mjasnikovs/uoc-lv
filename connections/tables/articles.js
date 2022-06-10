@@ -17,6 +17,7 @@ const articlesTable = `
 		id bigint PRIMARY KEY DEFAULT nextval('articles_id_seq'),
 		"updatedAt" timestamp with time zone DEFAULT NOW(),
 		"createdAt" timestamp with time zone DEFAULT NOW(),
+		"publishedAt" timestamp with time zone DEFAULT null,
 		"userId" bigint not null,
 		url varchar(300) not null,
 		title varchar(200) not null,
@@ -28,7 +29,7 @@ const articlesTable = `
 		thumbnail text,
 		mp3 text,
 		CONSTRAINT articles_title_key UNIQUE (title),
-		CONSTRAINT articles_title_key UNIQUE (url)
+		CONSTRAINT articles_url_key UNIQUE (url)
 	)
 	WITH (
 		OIDS=FALSE

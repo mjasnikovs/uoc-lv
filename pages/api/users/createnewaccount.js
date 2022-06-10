@@ -15,7 +15,7 @@ const handler = async (req, res) => {
 		const args = test(req.body.values)
 
 		if (args instanceof Error) {
-			return res.status(400).send({error: 'Ievades dati nav korektā formātā.'})
+			return res.status(400).send({error: args.message})
 		}
 
 		const {name, email, password, robo} = args

@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import RichTextEditor from '../components/RichTextEditor'
 
 const handleImageUpload = file =>

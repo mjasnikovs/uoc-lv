@@ -12,6 +12,7 @@ import DropBox from '../components/DropBox'
 
 import {Grid, Container, TextInput, Select, Button, Center, Textarea, Image as ImageContainer} from '@mantine/core'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
+import {Check} from 'tabler-icons-react'
 
 import Head from 'next/head'
 import Image from 'next/image'
@@ -19,7 +20,7 @@ import {useForm} from '@mantine/form'
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	if (typeof req.session.user === 'undefined') {
-		res.statusCode = 301
+		res.statusCode = 302
 		res.setHeader('Location', '/')
 		res.end()
 		return {
@@ -42,7 +43,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 	})
 
 	if (session === null) {
-		res.statusCode = 301
+		res.statusCode = 302
 		res.setHeader('location', '/')
 		res.end()
 		return {
@@ -137,6 +138,19 @@ const SideBar = ({form}) => {
 						minRows={5}
 					/>
 				</Grid.Col>
+				<Grid.Col>
+					<Select
+						label='Status'
+						placeholder='Izvēlies vienu'
+						required
+						data={[
+							{value: 'draft', label: 'Melnraksts', group: 'Redaktors'},
+							{value: 'approved', label: 'Apstiprināts', group: 'Redaktors'},
+							{value: 'active', label: 'Aktīvs'}
+						]}
+						{...form.getInputProps('status')}
+					/>
+				</Grid.Col>
 			</Grid>
 		</Container>
 	)
@@ -144,11 +158,17 @@ const SideBar = ({form}) => {
 
 const Editor = ({session}) => {
 	const router = useRouter()
+
+	const [error, setError] = useState(null)
+	const [loading, setLoading] = useState(false)
+	const [success, setSuccess] = useState(false)
+
 	const form = useForm({
 		initialValues: {
 			title: 'Virsraksts',
 			tags: 'mario, party, wuu',
-			category: 'zinas',
+			category: 'news',
+			status: 'draft',
 			article: 'Some text? Bro?',
 			notes: '',
 			thumbnail: '',
@@ -167,7 +187,28 @@ const Editor = ({session}) => {
 	}
 
 	const handleSubmit = values => {
-		console.log(values)
+		setError(null)
+		setSuccess(null)
+		setLoading(true)
+		fetch('/api/articles/createnewarticle', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({values})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setLoading(false)
+				if (typeof res.error !== 'undefined') {
+					return setError(res.error)
+				}
+				setSuccess(true)
+			})
+			.catch(err => {
+				setLoading(false)
+				return setError(err.message)
+			})
 	}
 
 	return (
@@ -203,11 +244,11 @@ const Editor = ({session}) => {
 									placeholder='Izvēlies vienu'
 									required
 									data={[
-										{value: 'apskats', label: 'Apskats'},
-										{value: 'zinas', label: 'Ziņas'},
+										{value: 'review', label: 'Apskats'},
+										{value: 'news', label: 'Ziņas'},
 										{value: 'video', label: 'Video'},
 										{value: 'blogs', label: 'Blogs'},
-										{value: 'podkasts', label: 'Podkāsts'}
+										{value: 'podcast', label: 'Podkāsts'}
 									]}
 									{...form.getInputProps('category')}
 								/>
@@ -216,7 +257,15 @@ const Editor = ({session}) => {
 								<ArticleEditor {...form.getInputProps('article')} />
 							</Grid.Col>
 							<Grid.Col span={12}>
-								<Button type='submit' color='green'>
+								<ErrorBox error={error} />
+							</Grid.Col>
+							<Grid.Col span={12}>
+								<Button
+									leftIcon={success && <Check size={14} />}
+									loading={loading}
+									type='submit'
+									color='green'
+								>
 									Saglabāt
 								</Button>
 							</Grid.Col>

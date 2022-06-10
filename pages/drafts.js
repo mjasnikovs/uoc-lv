@@ -7,6 +7,7 @@ import {useState} from 'react'
 import AppShellPage from '../components/AppShellPage'
 import ErrorBox from '../components/ErrorBox'
 import DropBox from '../components/DropBox'
+import ArticleCard from '../components/ArticleCard'
 import {List, News} from 'tabler-icons-react'
 
 import {useRouter} from 'next/router'
@@ -53,14 +54,42 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 		}
 	}
 
+	const articles = await pg({
+		query: `
+			select
+				a.id,
+				to_char(a."updatedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "updatedAt",
+				to_char(a."createdAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "createdAt",
+				to_char(a."publishedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "publishedAt",
+				a."userId",
+				u.name as "userName",
+				a.url,
+				a.title,
+				a.tags,
+				a.category,
+				a.status,
+				a.article,
+				a.notes,
+				a.thumbnail,
+				a.mp3
+			from articles a
+			left join users u on(u.id = a."userId")
+			where status != 'active'
+			order by a."createdAt" DESC
+	    `,
+		values: [],
+		object: false
+	})
+
 	return {
 		props: {
-			session
+			session,
+			articles
 		}
 	}
 }, ironSessionConfig)
 
-const CreateNewAccount = ({session}) => {
+const CreateNewAccount = ({session, articles}) => {
 	const router = useRouter()
 
 	if (session === null) {
@@ -84,6 +113,11 @@ const CreateNewAccount = ({session}) => {
 									Izveidot jaunu
 								</Button>
 							</Link>
+						</Grid.Col>
+						<Grid.Col span={12}>
+							{articles.map(article => (
+								<ArticleCard key={article.id} {...article} />
+							))}
 						</Grid.Col>
 					</Grid>
 				</Container>

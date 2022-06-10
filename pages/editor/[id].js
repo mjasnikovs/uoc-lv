@@ -1,14 +1,14 @@
 import {useState} from 'react'
 
 import {withIronSessionSsr} from 'iron-session/next'
-import ironSessionConfig from '../connections/ironSessionConfig'
-import pg from '../connections/pg'
+import ironSessionConfig from '../../connections/ironSessionConfig'
+import pg from '../../connections/pg'
 import {useRouter} from 'next/router'
 
-import AppShellPage from '../components/AppShellPage'
-import ArticleEditor from '../components/ArticleEditor'
-import ErrorBox from '../components/ErrorBox'
-import DropBox from '../components/DropBox'
+import AppShellPage from '../../components/AppShellPage'
+import ArticleEditor from '../../components/ArticleEditor'
+import ErrorBox from '../../components/ErrorBox'
+import DropBox from '../../components/DropBox'
 
 import {Grid, Container, TextInput, Select, Button, Center, Textarea, Image as ImageContainer} from '@mantine/core'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
@@ -18,7 +18,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 import {useForm} from '@mantine/form'
 
-export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
+import {format, integerFormat} from 'format-schema'
+
+const test = format({
+	articleId: integerFormat({naturalNumber: true, notEmpty: true})
+})
+
+export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) => {
 	if (typeof req.session.user === 'undefined') {
 		res.statusCode = 302
 		res.setHeader('Location', '/')
@@ -53,9 +59,51 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 		}
 	}
 
+	const articleId = params.id
+	const data = test({articleId})
+
+	if (data instanceof Error) {
+		res.statusCode = 302
+		res.setHeader('location', '/editor/0')
+		res.end()
+		return {
+			props: {
+				session
+			}
+		}
+	}
+
+	const article = await pg({
+		query: `
+			select
+				a.id,
+				to_char(a."updatedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "updatedAt",
+				to_char(a."createdAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "createdAt",
+				to_char(a."publishedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "publishedAt",
+				a."userId",
+				u.name as "userName",
+				u.photo as "userPhoto",
+				a.url,
+				a.title,
+				a.tags,
+				a.category,
+				a.status,
+				a.article,
+				a.notes,
+				a.thumbnail,
+				a.mp3
+			from articles a
+			left join users u on(u.id = a."userId")
+			where a.id = $1
+	    `,
+		values: [data.articleId],
+		object: true
+	})
+
 	return {
 		props: {
-			session
+			session,
+			article
 		}
 	}
 }, ironSessionConfig)
@@ -156,7 +204,7 @@ const SideBar = ({form}) => {
 	)
 }
 
-const Editor = ({session}) => {
+const Editor = ({session, article}) => {
 	const router = useRouter()
 
 	const [error, setError] = useState(null)
@@ -165,14 +213,14 @@ const Editor = ({session}) => {
 
 	const form = useForm({
 		initialValues: {
-			title: 'Virsraksts',
-			tags: 'mario, party, wuu',
-			category: 'news',
-			status: 'draft',
-			article: 'Some text? Bro?',
-			notes: '',
-			thumbnail: '',
-			mp3: ''
+			title: article?.title || 'Virsraksts',
+			tags: article ? String(article.tags) : 'mario, party, wuu',
+			category: article?.category || 'news',
+			status: article?.status || 'draft',
+			article: article?.article || 'Some text? Bro?',
+			notes: article?.notes || '',
+			thumbnail: article?.thumbnail || '',
+			mp3: article?.mp3 || ''
 		},
 		validate: {
 			mp3: val =>
@@ -190,12 +238,20 @@ const Editor = ({session}) => {
 		setError(null)
 		setSuccess(null)
 		setLoading(true)
-		fetch('/api/articles/createnewarticle', {
+
+		const url = (() => {
+			if (article?.id) {
+				return '/api/articles/updatearticle'
+			}
+			return '/api/articles/createnewarticle'
+		})()
+
+		fetch(url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({values})
+			body: JSON.stringify({...values, id: article?.id})
 		})
 			.then(res => res.json())
 			.then(res => {
@@ -204,6 +260,7 @@ const Editor = ({session}) => {
 					return setError(res.error)
 				}
 				setSuccess(true)
+				if (!article) return router.push(`/editor/${res.id}`)
 			})
 			.catch(err => {
 				setLoading(false)
@@ -266,7 +323,7 @@ const Editor = ({session}) => {
 									type='submit'
 									color='green'
 								>
-									Saglabāt
+									{article ? 'Saglabāt' : 'Pievienot'}
 								</Button>
 							</Grid.Col>
 						</Grid>

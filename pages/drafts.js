@@ -108,7 +108,7 @@ const CreateNewAccount = ({session, articles}) => {
 							<Title order={2}>Melnrakstis</Title>
 						</Grid.Col>
 						<Grid.Col span={4}>
-							<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}editor`} passHref>
+							<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}editor/0`} passHref>
 								<Button leftIcon={<News />} variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									Izveidot jaunu
 								</Button>

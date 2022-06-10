@@ -1,5 +1,5 @@
 import pg from '../../../connections/pg'
-import {format, stringFormat} from 'format-schema'
+import {format, stringFormat, integerFormat} from 'format-schema'
 import logger from '../../../connections/logger'
 
 import {withIronSessionApiRoute} from 'iron-session/next'
@@ -7,6 +7,7 @@ import ironSessionConfig from '../../../connections/ironSessionConfig'
 import {convertToSlug} from '../../../connections/locales'
 
 const test = format({
+	id: integerFormat({naturalNumber: true, notEmpty: true, notZero: true}),
 	title: stringFormat({trim: true, notEmpty: true, max: 200}),
 	tags: stringFormat({trim: true, notEmpty: true, toLowerCase: true}),
 	category: stringFormat({trim: true, notEmpty: true, enum: ['review', 'news', 'video', 'blog', 'podcast']}),
@@ -33,7 +34,7 @@ const handler = async (req, res) => {
 			return reject(new Error(props))
 		}
 
-		const {title, tags, category, status, article, notes, thumbnail, mp3} = props
+		const {id, title, tags, category, status, article, notes, thumbnail, mp3} = props
 
 		const tagList = tags.split(',').map(val => val.trim())
 
@@ -41,23 +42,21 @@ const handler = async (req, res) => {
 
 		return pg({
 			query: `
-					insert into articles ("userId", url, title, tags, category, status, article, notes, thumbnail, mp3) 
-					values (
-						$1::bigint,
-						(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
-						$3::varchar(200),
-						$4::text[],
-						$5::articles_category_type,
-						$6::articles_status_type,
-						$7::text,
-						$8::text,
-						$9::text,
-						$10::text
-					)
+					update articles set 
+						url = (CONCAT($2::text,'-',id))::varchar(300),
+						title = $3::varchar(200),
+						tags = $4::text[],
+						category = $5::articles_category_type,
+						status = $6::articles_status_type,
+						article = $7::text,
+						notes = $8::text,
+						thumbnail = $9::text,
+						mp3 = $10::text
+					where id = $1::bigint
 					RETURNING
 					*
 				`,
-			values: [req.session.user.id, url, title, tagList, category, status, article, notes, thumbnail, mp3],
+			values: [id, url, title, tagList, category, status, article, notes, thumbnail, mp3],
 			object: true
 		})
 			.then(resolve)

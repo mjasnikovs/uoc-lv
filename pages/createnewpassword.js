@@ -25,12 +25,12 @@ const CreateNewPassword = () => (
 				<Grid.Col span={12}>
 					<Center>
 						<Breadcrumbs grow align='center'>
-							<Link href={`${HOSTNAME}createnewaccount`} passHref>
+							<Link href={`${HOSTNAME}createnewaccount`}>
 								<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									Izveidot jaunu kontu
 								</Anchor>
 							</Link>
-							<Link href={`${HOSTNAME}createnewsession`} passHref>
+							<Link href={`${HOSTNAME}createnewsession`}>
 								<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									Pievienoties sistēmai
 								</Anchor>

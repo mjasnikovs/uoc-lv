@@ -73,7 +73,7 @@ const FooterPage = () => (
 				<Grid.Col span={12}>
 					<Center color=''>
 						<Text size='xs' color='gray'>
-							©2020 UOC.LV
+							©2022 UOC.LV
 						</Text>
 					</Center>
 				</Grid.Col>

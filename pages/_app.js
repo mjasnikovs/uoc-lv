@@ -1,3 +1,4 @@
+import '../styles/global.css'
 import Head from 'next/head'
 import {MantineProvider} from '@mantine/core'
 import {NotificationsProvider} from '@mantine/notifications'

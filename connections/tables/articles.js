@@ -18,6 +18,7 @@ const articlesTable = `
 		"updatedAt" timestamp with time zone DEFAULT NOW(),
 		"createdAt" timestamp with time zone DEFAULT NOW(),
 		"publishedAt" timestamp with time zone DEFAULT null,
+		"commentedAt" timestamp with time zone DEFAULT null,
 		"userId" bigint not null,
 		url varchar(300) not null,
 		title varchar(200) not null,

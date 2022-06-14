@@ -1,21 +1,14 @@
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Anchor, Button} from '@mantine/core'
+import {Grid, Container, Title, Button} from '@mantine/core'
 
-import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
-
-import {useForm} from '@mantine/form'
-import {useState} from 'react'
 import AppShellPage from '../components/AppShellPage'
-import ErrorBox from '../components/ErrorBox'
-import DropBox from '../components/DropBox'
 import ArticleCard from '../components/ArticleCard'
-import {List, News} from 'tabler-icons-react'
+import {News} from 'tabler-icons-react'
 
 import {useRouter} from 'next/router'
 import {withIronSessionSsr} from 'iron-session/next'
 import ironSessionConfig from '../connections/ironSessionConfig'
 import pg from '../connections/pg'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 
@@ -116,7 +109,7 @@ const CreateNewAccount = ({session, articles}) => {
 						</Grid.Col>
 						<Grid.Col span={12}>
 							{articles.map(article => (
-								<ArticleCard key={article.id} {...article} />
+								<ArticleCard editLink key={article.id} {...article} />
 							))}
 						</Grid.Col>
 					</Grid>

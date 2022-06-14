@@ -4,9 +4,10 @@ const timestampTrigger = require('./timestampTrigger')
 
 const users = require('./users')
 const articles = require('./articles')
+const comments = require('./comments')
 
 const createPrerequisites = [timestampTrigger]
-const createTables = [users, articles]
+const createTables = [users, articles, comments]
 
 ;(async () => {
 	const client = new Client({

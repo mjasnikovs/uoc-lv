@@ -10,13 +10,27 @@ import ArticleEditor from '../../components/ArticleEditor'
 import ErrorBox from '../../components/ErrorBox'
 import DropBox from '../../components/DropBox'
 
-import {Grid, Container, TextInput, Select, Button, Center, Textarea, Image as ImageContainer} from '@mantine/core'
+import {
+	Grid,
+	Container,
+	TextInput,
+	Select,
+	Button,
+	Center,
+	Textarea,
+	Anchor,
+	ActionIcon,
+	Group,
+	Image as ImageContainer
+} from '@mantine/core'
+
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
-import {Check} from 'tabler-icons-react'
+import {Check, Link as IconLink} from 'tabler-icons-react'
 
 import Head from 'next/head'
 import Image from 'next/image'
 import {useForm} from '@mantine/form'
+import Link from 'next/link'
 
 import {format, integerFormat} from 'format-schema'
 
@@ -108,7 +122,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 	}
 }, ironSessionConfig)
 
-const SideBar = ({form}) => {
+const SideBar = ({form, article}) => {
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(null)
 	const [thumbnail, setThumbnail] = useState(null)
@@ -166,7 +180,7 @@ const SideBar = ({form}) => {
 						{status => DropBox(status)}
 					</Dropzone>
 				</Grid.Col>
-				{form.getInputProps('category').value === 'podkasts' && (
+				{form.getInputProps('category').value === 'podcast' && (
 					<>
 						<Grid.Col span={12}>
 							<label>Mp3 saite</label>
@@ -192,13 +206,27 @@ const SideBar = ({form}) => {
 						placeholder='Izvēlies vienu'
 						required
 						data={[
-							{value: 'draft', label: 'Melnraksts', group: 'Redaktors'},
-							{value: 'approved', label: 'Apstiprināts', group: 'Redaktors'},
-							{value: 'active', label: 'Aktīvs'}
+							{key: 'draft', value: 'draft', label: 'Melnraksts'},
+							{key: 'approved', value: 'approved', label: 'Apstiprināts'},
+							{key: 'active', value: 'active', label: 'Aktīvs'}
 						]}
 						{...form.getInputProps('status')}
 					/>
 				</Grid.Col>
+				{article?.url && (
+					<Grid.Col>
+						<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}${article.url}`}>
+							<Anchor>
+								<Group>
+									<ActionIcon>
+										<IconLink />
+									</ActionIcon>
+									{article.url}
+								</Group>
+							</Anchor>
+						</Link>
+					</Grid.Col>
+				)}
 			</Grid>
 		</Container>
 	)
@@ -273,7 +301,7 @@ const Editor = ({session, article}) => {
 			<Head>
 				<title>Redaktors</title>
 			</Head>
-			<AppShellPage session={session} sidebar={<SideBar form={form} />}>
+			<AppShellPage session={session} sidebar={<SideBar form={form} article={article} />}>
 				<Container size='xl'>
 					<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
 						<Grid>
@@ -304,7 +332,7 @@ const Editor = ({session, article}) => {
 										{value: 'review', label: 'Apskats'},
 										{value: 'news', label: 'Ziņas'},
 										{value: 'video', label: 'Video'},
-										{value: 'blogs', label: 'Blogs'},
+										{value: 'blog', label: 'Blogs'},
 										{value: 'podcast', label: 'Podkāsts'}
 									]}
 									{...form.getInputProps('category')}

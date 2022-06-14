@@ -39,7 +39,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
 						<Group direction='column' p='md'>
-							<Link href={`${HOSTNAME}editor`} passHref>
+							<Link href={`${HOSTNAME}editor`}>
 								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									redaktors
 								</Anchor>

@@ -1,0 +1,20 @@
+.rhap_container {
+    background-color: #25262b !important;
+}
+
+.rhap_main-controls-button svg {
+    color: #4087c1 !important;
+}
+.rhap_progress-filled,
+.rhap_progress-indicator {
+    background-color: #4087c1 !important;
+}
+
+.rhap_button-clear.rhap_volume-button {
+    color: #4087c1 !important;
+}
+
+.rhap_time,
+.rhap_total-time {
+    color: #dddddd !important;
+}

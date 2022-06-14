@@ -71,7 +71,7 @@ const CreateNewSession = ({id, token}) => {
 			<AppShellPage>
 				<Alert icon={<AlertCircle size={16} />} title='Tev paveicās!' color='teal'>
 					Tu tiksi pāradresēts uz sākumlapu. Ja tas nenotiek automātiski, spied te:
-					<Link href={`${HOSTNAME}`} passHref>
+					<Link href={`${HOSTNAME}`}>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 							{' '}
 							sākums
@@ -131,12 +131,12 @@ const CreateNewSession = ({id, token}) => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href={`${HOSTNAME}createnewpassword`} passHref>
-										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+									<Link href={`${HOSTNAME}createnewpassword`}>
+										<Anchor inherit variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Atjaunot paroli
 										</Anchor>
 									</Link>
-									<Link href={`${HOSTNAME}createnewaccount`} passHref>
+									<Link href={`${HOSTNAME}createnewaccount`}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Izveidot jaunu kontu
 										</Anchor>

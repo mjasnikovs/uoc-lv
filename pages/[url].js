@@ -17,7 +17,7 @@ const test = format({
 export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) => {
 	const session = await new Promise(async (resolve, reject) => {
 		if (typeof req.session.user === 'undefined' || typeof params.url === 'undefined') {
-			return null
+			return resolve(null)
 		}
 
 		const {id, token} = req.session.user
@@ -75,6 +75,17 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 		values: [data.articleId],
 		object: true
 	})
+
+	if (article === null) {
+		res.statusCode = 302
+		res.setHeader('location', '/')
+		res.end()
+		return {
+			props: {
+				session
+			}
+		}
+	}
 
 	return {
 		props: {

@@ -133,11 +133,14 @@ const CreateNewAccount = () => {
 							<Grid.Col span={12}>
 								<Alert icon={<AlertCircle size={16} />} title='Apsveicu!' color='cyne'>
 									Konts ir reģistrēts. &nbsp;
-									<Link href={`${HOSTNAME}createnewsession`} passHref>
-										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-											Pievienoties sistēmai
-										</Anchor>
-									</Link>
+									<Anchor
+										component={Link}
+										href={`${HOSTNAME}createnewsession`}
+										variant='gradient'
+										gradient={{from: 'indigo', to: 'cyan'}}
+									>
+										Pievienoties sistēmai
+									</Anchor>
 								</Alert>
 								<Space size='md' />
 							</Grid.Col>
@@ -161,12 +164,12 @@ const CreateNewAccount = () => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href={`${HOSTNAME}createnewpassword`} passHref>
+									<Link href={`${HOSTNAME}createnewpassword`}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Atjaunot paroli
 										</Anchor>
 									</Link>
-									<Link href={`${HOSTNAME}createnewsession`} passHref>
+									<Link href={`${HOSTNAME}createnewsession`}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Pievienoties sistēmai
 										</Anchor>

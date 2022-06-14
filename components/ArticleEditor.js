@@ -14,7 +14,7 @@ const handleImageUpload = file =>
 				if (typeof res.error !== 'undefined') {
 					return reject(res.error)
 				}
-				return resolve({url: `${process.env.NEXT_PUBLIC_CDN}${res.url}`})
+				return resolve(`${process.env.NEXT_PUBLIC_CDN}${res.url}`)
 			})
 			.catch(err => reject(err.message))
 	})

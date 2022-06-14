@@ -1,8 +1,8 @@
+import {format, integerFormat, stringFormat} from 'format-schema'
+import {getApiRouteSession} from '../../../connections/ironSession'
+
 import pg from '../../../connections/pg'
 import logger from '../../../connections/logger'
-import {format, integerFormat, stringFormat} from 'format-schema'
-import {withIronSessionApiRoute} from 'iron-session/next'
-import ironSessionConfig from '../../../connections/ironSessionConfig'
 
 const testGet = format({
 	id: integerFormat({notEmpty: true, notUndef: true, notZero: true, naturalNumber: true})
@@ -110,4 +110,4 @@ const handler = (req, res) => {
 		.send({error: 'Route accepts only post or get requests. The non-post/get request was requested.'})
 }
 
-export default withIronSessionApiRoute(handler, ironSessionConfig)
+export default getApiRouteSession(handler)

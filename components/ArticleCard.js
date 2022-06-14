@@ -1,8 +1,10 @@
 import {Text, Space, Anchor, Grid, Group, ThemeIcon, Badge, MediaQuery} from '@mantine/core'
-import Image from 'next/image'
 import {CalendarStats, User} from 'tabler-icons-react'
+
 import {toLocaleDateFull, strip} from '../connections/locales'
+
 import Link from 'next/link'
+import Image from 'next/image'
 
 const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, article, createdAt, editLink}) => (
 	<>
@@ -28,7 +30,7 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				</Group>
 				<Space h='xs' />
 
-				<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}${url}`}>
+				<Link href={`/${url}`}>
 					<Anchor>
 						<Text size='xl' weight='bold'>
 							{title}
@@ -42,14 +44,14 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				</MediaQuery>
 				<Space h='xs' />
 				<Group>
-					<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}${url}`}>
+					<Link href={`/${url}`}>
 						<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'cyan'}}>
 							Lasīt vairāk
 						</Badge>
 					</Link>
 
 					{editLink && (
-						<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}editor/${id}`}>
+						<Link href={`/editor/${id}`}>
 							<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'red'}}>
 								Labot
 							</Badge>
@@ -58,7 +60,6 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				</Group>
 			</Grid.Col>
 		</Grid>
-		<Space h='xl' />
 		<Space h='xl' />
 	</>
 )

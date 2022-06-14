@@ -1,65 +1,21 @@
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Button} from '@mantine/core'
-
-import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
-
-import {useForm} from '@mantine/form'
 import {useState} from 'react'
-import AppShellPage from '../components/AppShellPage'
-import ErrorBox from '../components/ErrorBox'
-import DropBox from '../components/DropBox'
+
+import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Button} from '@mantine/core'
+import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
+import {useForm} from '@mantine/form'
 import {List} from 'tabler-icons-react'
 
 import {useRouter} from 'next/router'
-import {withIronSessionSsr} from 'iron-session/next'
-import ironSessionConfig from '../connections/ironSessionConfig'
-import pg from '../connections/pg'
-
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
-	if (typeof req.session.user === 'undefined') {
-		res.statusCode = 302
-		res.setHeader('Location', '/')
-		res.end()
-		return {
-			props: {
-				session: null
-			}
-		}
-	}
+import AppShellPage from '../components/AppShellPage'
+import ErrorBox from '../components/ErrorBox'
+import DropBox from '../components/DropBox'
 
-	const {id, token} = req.session.user
+export {getServerSideProps} from '../connections/ironSession'
 
-	const session = await pg({
-		query: `
-			select id, email, photo, name, privileges from users
-			where id = $1::bigint and token = $2::text
-			limit 1
-	    `,
-		values: [id, token],
-		object: true
-	})
-
-	if (session === null) {
-		res.statusCode = 302
-		res.setHeader('location', '/')
-		res.end()
-		return {
-			props: {
-				session: null
-			}
-		}
-	}
-
-	return {
-		props: {
-			session
-		}
-	}
-}, ironSessionConfig)
-
-const CreateNewAccount = ({session}) => {
+const Profile = ({session}) => {
 	const router = useRouter()
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
@@ -113,7 +69,7 @@ const CreateNewAccount = ({session}) => {
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<Group direction='row'>
-								<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}drafts`} passHref>
+								<Link href='/drafts'>
 									<Button
 										leftIcon={<List />}
 										variant='gradient'
@@ -186,4 +142,4 @@ const CreateNewAccount = ({session}) => {
 	)
 }
 
-export default CreateNewAccount
+export default Profile

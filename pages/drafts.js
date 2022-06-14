@@ -1,43 +1,21 @@
 import {Grid, Container, Title, Button} from '@mantine/core'
-
-import AppShellPage from '../components/AppShellPage'
-import ArticleCard from '../components/ArticleCard'
 import {News} from 'tabler-icons-react'
 
-import {useRouter} from 'next/router'
 import {withIronSessionSsr} from 'iron-session/next'
-import ironSessionConfig from '../connections/ironSessionConfig'
-import pg from '../connections/pg'
-
 import Link from 'next/link'
 import Head from 'next/head'
 
+import {ironSessionSettings, getSession} from '../connections/ironSession'
+import pg from '../connections/pg'
+
+import AppShellPage from '../components/AppShellPage'
+import ArticleCard from '../components/ArticleCard'
+
 export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
-	if (typeof req.session.user === 'undefined') {
-		res.statusCode = 301
-		res.setHeader('Location', '/')
-		res.end()
-		return {
-			props: {
-				session: null
-			}
-		}
-	}
-
-	const {id, token} = req.session.user
-
-	const session = await pg({
-		query: `
-			select id, email, photo, name, privileges from users
-			where id = $1::bigint and token = $2::text
-			limit 1
-	    `,
-		values: [id, token],
-		object: true
-	})
+	const session = await getSession(req)
 
 	if (session === null) {
-		res.statusCode = 301
+		res.statusCode = 302
 		res.setHeader('location', '/')
 		res.end()
 		return {
@@ -80,43 +58,35 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 			articles
 		}
 	}
-}, ironSessionConfig)
+}, ironSessionSettings)
 
-const CreateNewAccount = ({session, articles}) => {
-	const router = useRouter()
+const Drafts = ({session, articles}) => (
+	<>
+		<Head>
+			<title>Melnraksti</title>
+		</Head>
+		<AppShellPage session={session}>
+			<Container size='xl'>
+				<Grid>
+					<Grid.Col span={8}>
+						<Title order={2}>Melnrakstis</Title>
+					</Grid.Col>
+					<Grid.Col span={4}>
+						<Link href='/editor/0'>
+							<Button leftIcon={<News />} variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+								Izveidot jaunu
+							</Button>
+						</Link>
+					</Grid.Col>
+					<Grid.Col span={12}>
+						{articles.map(article => (
+							<ArticleCard editLink key={article.id} {...article} />
+						))}
+					</Grid.Col>
+				</Grid>
+			</Container>
+		</AppShellPage>
+	</>
+)
 
-	if (session === null) {
-		return router.push('/')
-	}
-
-	return (
-		<>
-			<Head>
-				<title>Melnraksti</title>
-			</Head>
-			<AppShellPage session={session}>
-				<Container size='xl'>
-					<Grid>
-						<Grid.Col span={8}>
-							<Title order={2}>Melnrakstis</Title>
-						</Grid.Col>
-						<Grid.Col span={4}>
-							<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}editor/0`} passHref>
-								<Button leftIcon={<News />} variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-									Izveidot jaunu
-								</Button>
-							</Link>
-						</Grid.Col>
-						<Grid.Col span={12}>
-							{articles.map(article => (
-								<ArticleCard editLink key={article.id} {...article} />
-							))}
-						</Grid.Col>
-					</Grid>
-				</Container>
-			</AppShellPage>
-		</>
-	)
-}
-
-export default CreateNewAccount
+export default Drafts

@@ -1,5 +1,5 @@
-import {withIronSessionApiRoute} from 'iron-session/next'
-import ironSessionConfig from '../../../connections/ironSessionConfig'
+import {getApiRouteSession} from '../../../connections/ironSession'
+
 import busboy from 'busboy'
 import logger from '../../../connections/logger'
 import pg from '../../../connections/pg'
@@ -128,4 +128,4 @@ const handler = async (req, res) => {
 		})
 }
 
-export default withIronSessionApiRoute(handler, ironSessionConfig)
+export default getApiRouteSession(handler)

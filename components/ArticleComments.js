@@ -1,15 +1,17 @@
 import {useState, useEffect} from 'react'
+
 import {useForm} from '@mantine/form'
+import {Divider, Loader, Center, Textarea, Button, Space, Grid, Group, Avatar, Text, Anchor, Alert} from '@mantine/core'
+import {Check, MessageCircle} from 'tabler-icons-react'
 
-import {Divider, Loader, Center, Textarea, Button, Space, Grid, Group, Avatar, Text, Anchor} from '@mantine/core'
-
-import ErrorBox from './ErrorBox'
 import Image from 'next/image'
+import Link from 'next/link'
 
-import {Check} from 'tabler-icons-react'
 import {toLocaleDateFull} from '../connections/locales'
 
-const ArticleComents = ({id}) => {
+import ErrorBox from './ErrorBox'
+
+const ArticleComents = ({id, session}) => {
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
@@ -36,6 +38,23 @@ const ArticleComents = ({id}) => {
 			content: ''
 		}
 	})
+
+	const insertFormValue = val => {
+		const content = form.values.content
+		form.setFieldValue('content', `${content}${content && ' '}${val}`)
+	}
+
+	const replaceUsernames = str =>
+		str.split(/\B(@\w+)/gm).map((val, key) => {
+			if (/^\B@\w+$/.test(val)) {
+				return (
+					<Anchor key={val + key} onClick={() => insertFormValue(val)}>
+						{val}
+					</Anchor>
+				)
+			}
+			return val
+		})
 
 	const handleSubmit = values => {
 		setError(null)
@@ -88,19 +107,14 @@ const ArticleComents = ({id}) => {
 									/>
 								</Avatar>
 							</Grid.Col>
-							<Grid.Col span={10}>
+							<Grid.Col span={11}>
 								<Group position='apart'>
-									<Anchor
-										onClick={() =>
-											form.setFieldValue('content', `${form.values.content}@${comment.userName}`)
-										}
-										color='grey'
-									>
-										{comment.userName}
+									<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
+										<MessageCircle size={16} /> {comment.userName}
 									</Anchor>
 									<Text size='xs'>{toLocaleDateFull(comment.createdAt)}</Text>
 								</Group>
-								<Text>{comment.content}</Text>
+								<Text>{replaceUsernames(comment.content)}</Text>
 								<Divider my='sm' variant='dotted' />
 							</Grid.Col>
 						</Grid>
@@ -108,19 +122,30 @@ const ArticleComents = ({id}) => {
 				))}
 			</Grid>
 			<Space h='md' />
-			<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
-				<Textarea
-					minrow={5}
-					placeholder='Raksti te!'
-					label='Tavs komentārs'
-					radius='md'
-					{...form.getInputProps('content')}
-				/>
-				<Space h='md' />
-				<Button loading={loading} leftIcon={success && <Check size={14} />} type='submit' color='indigo'>
-					Komentēt
-				</Button>
-			</form>
+			{session && (
+				<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
+					<Textarea
+						minrow={5}
+						placeholder='Raksti te!'
+						label='Tavs komentārs'
+						radius='md'
+						{...form.getInputProps('content')}
+					/>
+					<Space h='md' />
+					<Button loading={loading} leftIcon={success && <Check size={14} />} type='submit' color='indigo'>
+						Komentēt
+					</Button>
+				</form>
+			)}
+			{!session && (
+				<Alert icon={<MessageCircle size={16} />} title='Vēlies komentēt?' color='gray'>
+					<Link href='/login'>
+						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+							Pievienojies sistēmai
+						</Anchor>
+					</Link>
+				</Alert>
+			)}
 		</>
 	)
 }

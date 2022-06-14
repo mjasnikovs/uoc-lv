@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
+
 import {
 	AppShell,
 	Navbar,
@@ -14,11 +15,9 @@ import {
 } from '@mantine/core'
 
 import Link from 'next/link'
-import Footer from './Footer'
-import SideBar from './SideBar'
-import UserMenu from './UserMenus'
 
-const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
+import Footer from './Footer'
+import UserNavbarMenu from './UserNavbarMenu'
 
 const AppShellContainer = ({children, sidebar, session}) => {
 	const [opened, setOpened] = useState(false)
@@ -39,13 +38,13 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
 						<Group direction='column' p='md'>
-							<Link href={`${HOSTNAME}editor`}>
+							<Link href='/editor'>
 								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									redaktors
 								</Anchor>
 							</Link>
 
-							<Link href={`${HOSTNAME}reader`} passHref>
+							<Link href='/reader'>
 								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									skatītājs
 								</Anchor>
@@ -53,7 +52,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 						</Group>
 					</Navbar.Section>
 					<Navbar.Section>
-						<UserMenu session={session} />
+						<UserNavbarMenu session={session} />
 						<Space h='xl' />
 					</Navbar.Section>
 				</Navbar>
@@ -64,7 +63,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<MediaQuery largerThan='sm' styles={{display: 'none'}}>
 						<Group>
 							<Burger opened={opened} onClick={() => setOpened(o => !o)} size='sm' mr='xl' />
-							<Link href={HOSTNAME} passHref>
+							<Link href='/'>
 								<Anchor
 									style={{
 										textDecoration: 'none'
@@ -84,7 +83,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 							<Grid>
 								<Grid.Col xs={12} sm={8}>
 									<Breadcrumbs separator=' '>
-										<Link href={HOSTNAME} passHref>
+										<Link href='/'>
 											<Anchor
 												style={{
 													textDecoration: 'none'
@@ -96,7 +95,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 												UOC.LV
 											</Anchor>
 										</Link>
-										<Link href={`${HOSTNAME}editor`} passHref>
+										<Link href='/editor'>
 											<Anchor
 												size='xl'
 												variant='gradient'
@@ -105,7 +104,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 												redaktors
 											</Anchor>
 										</Link>
-										<Link href={`${HOSTNAME}reader`} passHref>
+										<Link href='/reader'>
 											<Anchor
 												size='xl'
 												variant='gradient'
@@ -118,7 +117,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 								</Grid.Col>
 
 								<Grid.Col xs={12} sm={4} align='right'>
-									<UserMenu session={session} />
+									<UserNavbarMenu session={session} />
 								</Grid.Col>
 							</Grid>
 						</Container>
@@ -132,7 +131,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 						{children}
 					</Grid.Col>
 					<Grid.Col xs={12} md={4}>
-						{sidebar || <SideBar />}
+						{sidebar}
 					</Grid.Col>
 				</Grid>
 			</Container>

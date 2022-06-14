@@ -1,14 +1,9 @@
 import {useState} from 'react'
 
 import {withIronSessionSsr} from 'iron-session/next'
-import ironSessionConfig from '../../connections/ironSessionConfig'
-import pg from '../../connections/pg'
-import {useRouter} from 'next/router'
 
-import AppShellPage from '../../components/AppShellPage'
-import ArticleEditor from '../../components/ArticleEditor'
-import ErrorBox from '../../components/ErrorBox'
-import DropBox from '../../components/DropBox'
+import {ironSessionSettings, getSession} from '../../connections/ironSession'
+import pg from '../../connections/pg'
 
 import {
 	Grid,
@@ -23,44 +18,28 @@ import {
 	Group,
 	Image as ImageContainer
 } from '@mantine/core'
-
+import {useForm} from '@mantine/form'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 import {Check, Link as IconLink} from 'tabler-icons-react'
 
 import Head from 'next/head'
 import Image from 'next/image'
-import {useForm} from '@mantine/form'
 import Link from 'next/link'
+import {useRouter} from 'next/router'
 
 import {format, integerFormat} from 'format-schema'
+
+import AppShellPage from '../../components/AppShellPage'
+import ArticleEditor from '../../components/ArticleEditor'
+import ErrorBox from '../../components/ErrorBox'
+import DropBox from '../../components/DropBox'
 
 const test = format({
 	articleId: integerFormat({naturalNumber: true, notEmpty: true})
 })
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) => {
-	if (typeof req.session.user === 'undefined') {
-		res.statusCode = 302
-		res.setHeader('Location', '/')
-		res.end()
-		return {
-			props: {
-				session: null
-			}
-		}
-	}
-
-	const {id, token} = req.session.user
-
-	const session = await pg({
-		query: `
-			select id, email, photo, name, privileges from users
-			where id = $1::bigint and token = $2::text
-			limit 1
-	    `,
-		values: [id, token],
-		object: true
-	})
+	const session = await getSession(req)
 
 	if (session === null) {
 		res.statusCode = 302
@@ -120,7 +99,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 			article
 		}
 	}
-}, ironSessionConfig)
+}, ironSessionSettings)
 
 const SideBar = ({form, article}) => {
 	const [error, setError] = useState(null)
@@ -215,7 +194,7 @@ const SideBar = ({form, article}) => {
 				</Grid.Col>
 				{article?.url && (
 					<Grid.Col>
-						<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}${article.url}`}>
+						<Link href={`/${article.url}`}>
 							<Anchor>
 								<Group>
 									<ActionIcon>
@@ -271,7 +250,7 @@ const Editor = ({session, article}) => {
 			if (article?.id) {
 				return '/api/articles/updatearticle'
 			}
-			return '/api/articles/createnewarticle'
+			return '/api/articles/createarticle'
 		})()
 
 		fetch(url, {

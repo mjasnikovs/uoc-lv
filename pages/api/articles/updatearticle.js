@@ -1,9 +1,8 @@
-import pg from '../../../connections/pg'
 import {format, stringFormat, integerFormat} from 'format-schema'
-import logger from '../../../connections/logger'
 
-import {withIronSessionApiRoute} from 'iron-session/next'
-import ironSessionConfig from '../../../connections/ironSessionConfig'
+import logger from '../../../connections/logger'
+import pg from '../../../connections/pg'
+import {getApiRouteSession} from '../../../connections/ironSession'
 import {convertToSlug} from '../../../connections/locales'
 
 const test = format({
@@ -71,4 +70,4 @@ const handler = async (req, res) => {
 		})
 }
 
-export default withIronSessionApiRoute(handler, ironSessionConfig)
+export default getApiRouteSession(handler)

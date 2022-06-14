@@ -1,30 +1,16 @@
 import 'react-h5-audio-player/lib/styles.css'
-import RichTextEditor from '../components/RichTextEditor'
+import AudioPlayer from 'react-h5-audio-player'
+
 import {Title, Avatar, Grid, Group, ThemeIcon, Text, Badge} from '@mantine/core'
 import {CalendarStats, BrandTwitter, BrandFacebook, Link} from 'tabler-icons-react'
 import Image from 'next/image'
-import AudioPlayer from 'react-h5-audio-player'
 
 import {toLocaleDateFull, convertToSlug} from '../connections/locales'
+
 import ArticleComments from './ArticleComments'
+import RichTextEditor from './RichTextEditor'
 
-// a.id,
-// to_char(a."updatedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "updatedAt",
-// to_char(a."createdAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "createdAt",
-// to_char(a."publishedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "publishedAt",
-// a."userId",
-// u.name as "userName",
-// a.url,
-// a.title,
-// a.tags,
-// a.category,
-// a.status,
-// a.article,
-// a.notes,
-// a.thumbnail,
-// a.mp3
-
-const ArticleReader = ({id, mp3, userName, userPhoto, title, article, tags, publishedAt, createdAt}) => (
+const ArticleReader = ({id, mp3, userName, userPhoto, title, article, tags, publishedAt, createdAt, session}) => (
 	<Grid>
 		<Grid.Col span={10}>
 			<Title order={1}>{title}</Title>
@@ -62,12 +48,7 @@ const ArticleReader = ({id, mp3, userName, userPhoto, title, article, tags, publ
 			<Group position='apart'>
 				<Group spacing='xs'>
 					{tags.map(tag => (
-						<Badge
-							key={tag}
-							component='a'
-							href={`${process.env.NEXT_PUBLIC_HOSTNAME}tags/${convertToSlug(tag)}`}
-							variant='outline'
-						>
+						<Badge key={tag} component='a' href={`/tags/${convertToSlug(tag)}`} variant='outline'>
 							{tag}
 						</Badge>
 					))}
@@ -90,7 +71,7 @@ const ArticleReader = ({id, mp3, userName, userPhoto, title, article, tags, publ
 			</Group>
 		</Grid.Col>
 		<Grid.Col span={12}>
-			<ArticleComments id={id} />
+			<ArticleComments session={session} id={id} />
 		</Grid.Col>
 	</Grid>
 )

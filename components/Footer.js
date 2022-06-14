@@ -1,8 +1,5 @@
 import {Footer, Text, Container, Anchor, Grid, Group, ThemeIcon, Divider, Stack, Center} from '@mantine/core'
-
 import {BrandTwitter, BrandFacebook, BrandYoutube, BrandTwitch, Mail, BrandDiscord} from 'tabler-icons-react'
-
-const HOSTNAME = process.env.NEXT_PUBLIC_HOSTNAME
 
 const FooterPage = () => (
 	<Footer p='md'>
@@ -12,8 +9,8 @@ const FooterPage = () => (
 					<Stack>
 						<Text weight='bold'>Kategorijas</Text>
 						<Divider color='indigo' size='sm' />
-						<Anchor href={HOSTNAME}>Sākums</Anchor>
-						<Anchor href={HOSTNAME}>Arhīvs</Anchor>
+						<Anchor href='/'>Sākums</Anchor>
+						<Anchor href='/'>Arhīvs</Anchor>
 					</Stack>
 				</Grid.Col>
 				<Grid.Col xs={6} md={3}>

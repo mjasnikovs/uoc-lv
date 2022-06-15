@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import useSWR from 'swr'
 import {Space, Grid, Badge, List, Avatar, Skeleton, Anchor} from '@mantine/core'
 
 import Image from 'next/image'
@@ -8,27 +8,12 @@ import ErrorBox from '../ErrorBox'
 
 const ComentBadgeStyle = {float: 'right', position: 'absolute', right: 0}
 
+const fetcher = (...args) => fetch(...args).then(res => res.json())
+
 const ComentsTab = () => {
-	const [comments, setComments] = useState([])
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(null)
+	const {data, error} = useSWR('/api/comments/newestcomments', fetcher)
 
-	useEffect(() => {
-		setLoading(true)
-		fetch('/api/comments/newestcomments')
-			.then(res => res.json())
-			.then(res => {
-				if (typeof res.error !== 'undefined') {
-					setLoading(false)
-					return setError(res.error)
-				}
-				setLoading(false)
-				return setComments(res)
-			})
-			.catch(err => setError(err.message))
-	}, [])
-
-	if (loading) {
+	if (!data) {
 		return (
 			<>
 				<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'cyan'}} fullWidth>
@@ -36,7 +21,6 @@ const ComentsTab = () => {
 				</Badge>
 				<Space h='xl' />
 				{error && <ErrorBox error={error} />}
-				<Space h='xl' />
 				<Skeleton height={8} radius='xl' />
 				<Skeleton height={8} mt={6} radius='xl' />
 				<Skeleton height={8} mt={6} width='70%' radius='xl' />
@@ -60,7 +44,7 @@ const ComentsTab = () => {
 					</Avatar>
 				}
 			>
-				{comments.map(comment => (
+				{data.map(comment => (
 					<List.Item
 						key={comment.id}
 						icon={

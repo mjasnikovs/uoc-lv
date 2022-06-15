@@ -68,19 +68,6 @@ const Profile = ({session}) => {
 							<Title order={2}>Profils</Title>
 						</Grid.Col>
 						<Grid.Col span={12}>
-							<Group direction='row'>
-								<Link href='/drafts'>
-									<Button
-										leftIcon={<List />}
-										variant='gradient'
-										gradient={{from: 'indigo', to: 'cyan'}}
-									>
-										Melnraksti
-									</Button>
-								</Link>
-							</Group>
-						</Grid.Col>
-						<Grid.Col span={12}>
 							<TextInput
 								id='email'
 								disabled

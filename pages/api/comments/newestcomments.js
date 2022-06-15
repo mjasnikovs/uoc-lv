@@ -13,6 +13,7 @@ const newestCommentsHandler = (req, res) => {
 						(select count(*) from comments c where "articleId" = a.id) as count,
 						(select "userId" from comments c where "articleId" = a.id order by a."createdAt" limit 1) as "userId"
 					from articles a
+					where a.status = 'active'
 					group by a.id
 					order by a."commentedAt"
 					limit 10

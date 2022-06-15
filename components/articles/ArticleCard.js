@@ -1,4 +1,4 @@
-import {Text, Space, Anchor, Grid, Group, ThemeIcon, Badge, MediaQuery} from '@mantine/core'
+import {Text, Space, Anchor, Grid, Group, ThemeIcon, Badge, MediaQuery, Button} from '@mantine/core'
 import {CalendarStats, User} from 'tabler-icons-react'
 
 import {toLocaleDateFull, strip} from '../../connections/locales'
@@ -45,16 +45,30 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				<Space h='xs' />
 				<Group>
 					<Link href={`/${url}`}>
-						<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'cyan'}}>
+						<Button
+							variant='gradient'
+							compact
+							radius='sm'
+							size='xs'
+							uppercase
+							gradient={{from: 'indigo', to: 'cyan'}}
+						>
 							Lasīt vairāk
-						</Badge>
+						</Button>
 					</Link>
 
 					{editLink && (
 						<Link href={`/editor/${id}`}>
-							<Badge variant='gradient' radius='sm' gradient={{from: 'indigo', to: 'red'}}>
+							<Button
+								variant='gradient'
+								compact
+								radius='sm'
+								size='xs'
+								uppercase
+								gradient={{from: 'indigo', to: 'red'}}
+							>
 								Labot
-							</Badge>
+							</Button>
 						</Link>
 					)}
 				</Group>

@@ -101,14 +101,14 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 	}
 }, ironSessionSettings)
 
-const SideBar = ({form, article}) => {
+const SideBar = ({form, article, loading, success}) => {
 	const [error, setError] = useState(null)
-	const [loading, setLoading] = useState(null)
+	const [loadingThumbnail, setLoadingThumbnail] = useState(null)
 	const [thumbnail, setThumbnail] = useState(null)
 
 	const handleProfilePictureSubmit = files => {
 		setError(null)
-		setLoading(true)
+		setLoadingThumbnail(true)
 
 		const formData = new FormData()
 		formData.append('file', files[0])
@@ -120,7 +120,7 @@ const SideBar = ({form, article}) => {
 		})
 			.then(res => res.json())
 			.then(res => {
-				setLoading(false)
+				setLoadingThumbnail(false)
 				if (typeof res.error !== 'undefined') {
 					return setError(res.error)
 				}
@@ -128,7 +128,7 @@ const SideBar = ({form, article}) => {
 				return setThumbnail(`${process.env.NEXT_PUBLIC_CDN}${res.url}`)
 			})
 			.catch(err => {
-				setLoading(false)
+				setLoadingThumbnail(false)
 				return setError(err.message)
 			})
 	}
@@ -149,7 +149,7 @@ const SideBar = ({form, article}) => {
 				<Grid.Col span={12}>
 					<ErrorBox error={error} />
 					<Dropzone
-						loading={loading}
+						loading={loadingThumbnail}
 						multiple={false}
 						onDrop={handleProfilePictureSubmit}
 						onReject={() => setError('Faila/u augšuplāde neizdevās.')}
@@ -206,6 +206,17 @@ const SideBar = ({form, article}) => {
 						</Link>
 					</Grid.Col>
 				)}
+				<Grid.Col span={12}>
+					<Button
+						fullWidth
+						leftIcon={success && <Check size={14} />}
+						loading={loading}
+						type='submit'
+						color='green'
+					>
+						{article ? 'Saglabāt' : 'Pievienot'}
+					</Button>
+				</Grid.Col>
 			</Grid>
 		</Container>
 	)
@@ -280,7 +291,10 @@ const Editor = ({session, article}) => {
 			<Head>
 				<title>Redaktors</title>
 			</Head>
-			<AppShellPage session={session} sidebar={<SideBar form={form} article={article} />}>
+			<AppShellPage
+				session={session}
+				sidebar={<SideBar form={form} article={article} loading={loading} success={success} />}
+			>
 				<Container size='xl'>
 					<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
 						<Grid>
@@ -322,16 +336,6 @@ const Editor = ({session, article}) => {
 							</Grid.Col>
 							<Grid.Col span={12}>
 								<ErrorBox error={error} />
-							</Grid.Col>
-							<Grid.Col span={12}>
-								<Button
-									leftIcon={success && <Check size={14} />}
-									loading={loading}
-									type='submit'
-									color='green'
-								>
-									{article ? 'Saglabāt' : 'Pievienot'}
-								</Button>
 							</Grid.Col>
 						</Grid>
 					</form>

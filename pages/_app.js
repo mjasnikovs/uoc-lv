@@ -1,7 +1,6 @@
 import '../styles/global.css'
 import Head from 'next/head'
 import {MantineProvider} from '@mantine/core'
-import {NotificationsProvider} from '@mantine/notifications'
 import {DefaultSeo} from 'next-seo'
 
 const App = props => {
@@ -41,9 +40,7 @@ const App = props => {
 					}
 				}}
 			>
-				<NotificationsProvider>
-					<Component {...pageProps} />
-				</NotificationsProvider>
+				<Component {...pageProps} />
 			</MantineProvider>
 		</>
 	)

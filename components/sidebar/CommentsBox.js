@@ -49,7 +49,7 @@ const ComentsTab = () => {
 						key={comment.id}
 						icon={
 							comment.userId && (
-								<Avatar color='indigo' radius='xl' alt="it's me">
+								<Avatar color='indigo' radius='xl' alt={comment.userName}>
 									<Image
 										src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
 										alt={comment.userName}

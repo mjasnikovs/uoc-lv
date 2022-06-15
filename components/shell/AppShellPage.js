@@ -18,6 +18,7 @@ import Link from 'next/link'
 
 import Footer from './Footer'
 import UserNavbarMenu from './UserNavbarMenu'
+import SideBar from '../sidebar/SideBar'
 
 const AppShellContainer = ({children, sidebar, session}) => {
 	const [opened, setOpened] = useState(false)
@@ -131,7 +132,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 						{children}
 					</Grid.Col>
 					<Grid.Col xs={12} md={4}>
-						{sidebar}
+						{sidebar || <SideBar />}
 					</Grid.Col>
 				</Grid>
 			</Container>

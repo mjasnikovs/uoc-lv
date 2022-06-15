@@ -7,9 +7,9 @@ import {Check, MessageCircle} from 'tabler-icons-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {toLocaleDateFull} from '../connections/locales'
+import {toLocaleDateFull} from '../../connections/locales'
 
-import ErrorBox from './ErrorBox'
+import ErrorBox from '../ErrorBox'
 
 const ArticleComents = ({id, session}) => {
 	const [loading, setLoading] = useState(true)

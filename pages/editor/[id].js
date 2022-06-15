@@ -29,8 +29,8 @@ import {useRouter} from 'next/router'
 
 import {format, integerFormat} from 'format-schema'
 
-import AppShellPage from '../../components/AppShellPage'
-import ArticleEditor from '../../components/ArticleEditor'
+import AppShellPage from '../../components/shell/AppShellPage'
+import ArticleEditor from '../../components/articles/ArticleEditor'
 import ErrorBox from '../../components/ErrorBox'
 import DropBox from '../../components/DropBox'
 

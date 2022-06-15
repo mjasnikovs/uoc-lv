@@ -5,10 +5,10 @@ import {Title, Avatar, Grid, Group, ThemeIcon, Text, Badge} from '@mantine/core'
 import {CalendarStats, BrandTwitter, BrandFacebook, Link} from 'tabler-icons-react'
 import Image from 'next/image'
 
-import {toLocaleDateFull, convertToSlug} from '../connections/locales'
+import {toLocaleDateFull, convertToSlug} from '../../connections/locales'
 
 import ArticleComments from './ArticleComments'
-import RichTextEditor from './RichTextEditor'
+import RichTextEditor from '../RichTextEditor'
 
 const ArticleReader = ({id, mp3, userName, userPhoto, title, article, tags, publishedAt, createdAt, session}) => (
 	<Grid>

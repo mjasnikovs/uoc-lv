@@ -13,7 +13,7 @@ const testPost = format({
 	content: stringFormat({notEmpty: true, notUndef: true, trim: true})
 })
 
-const handler = (req, res) => {
+const commentsHandler = (req, res) => {
 	if (req.method === 'GET') {
 		const args = testGet(req.query)
 
@@ -110,4 +110,4 @@ const handler = (req, res) => {
 		.send({error: 'Route accepts only post or get requests. The non-post/get request was requested.'})
 }
 
-export default getApiRouteSession(handler)
+export default getApiRouteSession(commentsHandler)

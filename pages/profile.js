@@ -9,7 +9,7 @@ import {useRouter} from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import AppShellPage from '../components/AppShellPage'
+import AppShellPage from '../components/shell/AppShellPage'
 import ErrorBox from '../components/ErrorBox'
 import DropBox from '../components/DropBox'
 

@@ -1,7 +1,7 @@
 import pg from '../../../connections/pg'
 import logger from '../../../connections/logger'
 
-const handler = (req, res) => {
+const newestCommentsHandler = (req, res) => {
 	if (req.method === 'GET') {
 		return pg({
 			query: `
@@ -11,7 +11,7 @@ const handler = (req, res) => {
 						a.title,
 						a.url,
 						(select count(*) from comments c where "articleId" = a.id) as count,
-						(select "userId" from comments c where "articleId" = a.id order by a."createdAt") as "userId"
+						(select "userId" from comments c where "articleId" = a.id order by a."createdAt" limit 1) as "userId"
 					from articles a
 					group by a.id
 					order by a."commentedAt"
@@ -30,8 +30,8 @@ const handler = (req, res) => {
 			`,
 			values: []
 		})
-			.then(coments => {
-				return res.status(200).send(coments)
+			.then(comments => {
+				return res.status(200).send(comments)
 			})
 			.catch(err => {
 				logger.error(new Error(err))
@@ -42,4 +42,4 @@ const handler = (req, res) => {
 	return res.status(404).send({error: 'Route accepts only get requests. The non-get request was requested.'})
 }
 
-export default handler
+export default newestCommentsHandler

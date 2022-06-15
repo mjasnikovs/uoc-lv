@@ -9,8 +9,8 @@ import {strip} from '../connections/locales'
 import pg from '../connections/pg'
 import logger from '../connections/logger'
 
-import AppShellPage from '../components/AppShellPage'
-import ArticleReader from '../components/ArticleReader'
+import AppShellPage from '../components/shell/AppShellPage'
+import ArticleReader from '../components/articles/ArticleReader'
 
 const test = format({
 	articleId: integerFormat({naturalNumber: true, notEmpty: true, notZero: true})

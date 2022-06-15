@@ -4,8 +4,8 @@ import {ironSessionSettings, getSession} from '../connections/ironSession'
 import logger from '../connections/logger'
 import pg from '../connections/pg'
 
-import AppShellPage from '../components/AppShellPage'
-import ArticleCard from '../components/ArticleCard'
+import AppShellPage from '../components/shell/AppShellPage'
+import ArticleCard from '../components/articles/ArticleCard'
 
 export const getServerSideProps = withIronSessionSsr(async ({req}) => {
 	const [session, articles] = await Promise.all([

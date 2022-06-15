@@ -1,4 +1,4 @@
-import RichTextEditor from '../components/RichTextEditor'
+import RichTextEditor from '../RichTextEditor'
 
 const handleImageUpload = file =>
 	new Promise((resolve, reject) => {

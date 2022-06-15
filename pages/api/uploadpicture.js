@@ -1,8 +1,6 @@
-import {getApiRouteSession} from '../../../connections/ironSession'
-
+import {getApiRouteSession} from '../../connections/ironSession'
 import busboy from 'busboy'
-import logger from '../../../connections/logger'
-import pg from '../../../connections/pg'
+import logger from '../../connections/logger'
 import path from 'path'
 import fs from 'fs'
 import sharp from 'sharp'
@@ -13,7 +11,7 @@ export const config = {
 	}
 }
 
-const uploadProfilePictureHandler = async (req, res) => {
+const uploadPictureHandler = async (req, res) => {
 	if (req.method !== 'POST') {
 		return res.status(404).send({error: 'Route accepts only post requests. The non-post request was requested.'})
 	}
@@ -25,6 +23,9 @@ const uploadProfilePictureHandler = async (req, res) => {
 	const imageHandler = new Promise((resolve, reject) => {
 		const bb = busboy({headers: req.headers, limits: {files: 1, fileSize: 5 * 1048576}})
 		let count = 0
+		const fields = new Map()
+
+		bb.on('field', (name, val) => fields.set(name, val))
 
 		bb.on('file', async (name, file, {filename, mimeType}) => {
 			if (['image/jpeg', 'image/jpg', 'image/png'].indexOf(mimeType) === -1) {
@@ -65,12 +66,22 @@ const uploadProfilePictureHandler = async (req, res) => {
 					return filePathExists()
 				})
 
+				const resizeOptions = (typeField => {
+					if (typeField === 'thumbnail') {
+						return {
+							width: 864,
+							height: 486,
+							fit: sharp.fit.contain
+						}
+					}
+					return {
+						width: 1280,
+						fit: sharp.fit.contain
+					}
+				})(fields.get('type'))
+
 				return sharp(tempPath)
-					.resize({
-						width: 150,
-						height: 150,
-						fit: sharp.fit.cover
-					})
+					.resize(resizeOptions)
 					.webp()
 					.toFile(webp.webpPath)
 					.then(() => {
@@ -99,33 +110,11 @@ const uploadProfilePictureHandler = async (req, res) => {
 	})
 
 	await imageHandler
-		.then(async ({url}) => {
-			const user = await pg({
-				query: 'select photo from users where id = $1::bigint',
-				values: [req.session.user.id],
-				object: true
-			})
-
-			if (user.photo !== null) {
-				const oldPhotoPath = path.resolve('public/cdn/', user.photo)
-				fs.access(oldPhotoPath, fs.constants.F_OK, err => {
-					if (!err) {
-						fs.unlink(oldPhotoPath, e => e && logger.error(e))
-					}
-				})
-			}
-
-			await pg({
-				query: 'update users set photo = $2::text where id = $1::bigint',
-				values: [req.session.user.id, url]
-			})
-
-			return res.status(200).send({url})
-		})
+		.then(async ({url}) => res.status(200).send({url}))
 		.catch(err => {
 			logger.error(err)
 			return res.status(500).send({message: 'Server error'})
 		})
 }
 
-export default getApiRouteSession(uploadProfilePictureHandler)
+export default getApiRouteSession(uploadPictureHandler)

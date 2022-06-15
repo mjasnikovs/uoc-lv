@@ -1,7 +1,7 @@
 import {Text, Space, Anchor, Grid, Group, ThemeIcon, Badge, MediaQuery} from '@mantine/core'
 import {CalendarStats, User} from 'tabler-icons-react'
 
-import {toLocaleDateFull, strip} from '../connections/locales'
+import {toLocaleDateFull, strip} from '../../connections/locales'
 
 import Link from 'next/link'
 import Image from 'next/image'

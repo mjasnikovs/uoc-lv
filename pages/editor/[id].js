@@ -101,7 +101,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 	}
 }, ironSessionSettings)
 
-const SideBar = ({form, article, loading, success}) => {
+const SideBar = ({form, article}) => {
 	const [error, setError] = useState(null)
 	const [loadingThumbnail, setLoadingThumbnail] = useState(null)
 	const [thumbnail, setThumbnail] = useState(null)
@@ -194,29 +194,18 @@ const SideBar = ({form, article, loading, success}) => {
 				</Grid.Col>
 				{article?.url && (
 					<Grid.Col>
-						<Link href={`/${article.url}`}>
+						<Link href={`/article/${article.url}`}>
 							<Anchor>
 								<Group>
 									<ActionIcon>
 										<IconLink />
 									</ActionIcon>
-									{article.url}
+									{process.env.NEXT_PUBLIC_HOSTNAME}article/{article.url}
 								</Group>
 							</Anchor>
 						</Link>
 					</Grid.Col>
 				)}
-				<Grid.Col span={12}>
-					<Button
-						fullWidth
-						leftIcon={success && <Check size={14} />}
-						loading={loading}
-						type='submit'
-						color='green'
-					>
-						{article ? 'Saglabāt' : 'Pievienot'}
-					</Button>
-				</Grid.Col>
 			</Grid>
 		</Container>
 	)
@@ -336,6 +325,16 @@ const Editor = ({session, article}) => {
 							</Grid.Col>
 							<Grid.Col span={12}>
 								<ErrorBox error={error} />
+							</Grid.Col>
+							<Grid.Col span={12}>
+								<Button
+									leftIcon={success && <Check size={14} />}
+									loading={loading}
+									type='submit'
+									color='green'
+								>
+									{article ? 'Saglabāt' : 'Pievienot'}
+								</Button>
 							</Grid.Col>
 						</Grid>
 					</form>

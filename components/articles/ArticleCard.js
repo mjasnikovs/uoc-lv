@@ -1,4 +1,4 @@
-import {Text, Space, Anchor, Grid, Group, ThemeIcon, Badge, MediaQuery, Button} from '@mantine/core'
+import {Text, Space, Anchor, Grid, Group, ThemeIcon, MediaQuery, Button} from '@mantine/core'
 import {CalendarStats, User} from 'tabler-icons-react'
 
 import {toLocaleDateFull, strip} from '../../connections/locales'
@@ -30,7 +30,7 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				</Group>
 				<Space h='xs' />
 
-				<Link href={`/${url}`}>
+				<Link href={`/article/${url}`}>
 					<Anchor>
 						<Text size='xl' weight='bold'>
 							{title}
@@ -44,7 +44,7 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				</MediaQuery>
 				<Space h='xs' />
 				<Group>
-					<Link href={`/${url}`}>
+					<Link href={`/article/${url}`}>
 						<Button
 							variant='gradient'
 							compact

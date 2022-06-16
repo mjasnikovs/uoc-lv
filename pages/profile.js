@@ -66,6 +66,7 @@ const Profile = ({session}) => {
 					<Grid>
 						<Grid.Col span={12}>
 							<Title order={2}>Profils</Title>
+							<pre>{JSON.stringify(session, null, 4)}</pre>
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<TextInput

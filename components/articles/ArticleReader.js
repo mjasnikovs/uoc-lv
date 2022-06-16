@@ -41,7 +41,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 					onClick={() =>
 						window.open(
 							`https://twitter.com/intent/tweet?text=${title}&url=` +
-								encodeURIComponent(process.env.NEXT_PUBLIC_HOSTNAME + url),
+								encodeURIComponent(process.env.NEXT_PUBLIC_HOSTNAME + 'article/' + url),
 							'twitter-share-dialog',
 							'width=626,height=436'
 						)
@@ -57,7 +57,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 					onClick={() =>
 						window.open(
 							'https://www.facebook.com/sharer/sharer.php?u=' +
-								encodeURIComponent(process.env.NEXT_PUBLIC_HOSTNAME + url),
+								encodeURIComponent(process.env.NEXT_PUBLIC_HOSTNAME + 'article/' + url),
 							'facebook-share-dialog',
 							'width=626,height=436'
 						)
@@ -70,7 +70,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 
 				<Anchor
 					href={`mailto:?subject=${title}&amp;body=${title} ${encodeURIComponent(
-						process.env.NEXT_PUBLIC_HOSTNAME + url
+						process.env.NEXT_PUBLIC_HOSTNAME + 'article/' + url
 					)}`}
 					title={title}
 				>
@@ -119,6 +119,9 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 					<Text color='grey'>{toLocaleDateFull(publishedAt || createdAt)}</Text>
 				</Group>
 			</Group>
+		</Grid.Col>
+		<Grid.Col span={12}>
+			<textarea defaultValue={article} />
 		</Grid.Col>
 		<Grid.Col span={12}>
 			<ArticleComments session={session} id={id} />

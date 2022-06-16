@@ -15,7 +15,7 @@ const newestCommentsHandler = (req, res) => {
 					from articles a
 					where a.status = 'active'
 					group by a.id
-					order by a."commentedAt"
+					order by a."commentedAt" DESC
 					limit 10
 				)
 				select

@@ -62,7 +62,7 @@ const ComentsTab = () => {
 					>
 						<Grid gutter='xs'>
 							<Grid.Col span={10}>
-								<Link href={`${process.env.NEXT_PUBLIC_HOSTNAME}${comment.url}`}>
+								<Link href={`/article/${comment.url}`}>
 									<Anchor>{comment.title}</Anchor>
 								</Link>
 							</Grid.Col>

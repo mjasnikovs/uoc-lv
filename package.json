@@ -6,7 +6,7 @@
 		"dev": "env-cmd -f './.env.development' node ./connections/tables/index.js && next dev -p 3000 | pino-pretty",
 		"build-local": "env-cmd -f './.env.local' node ./connections/tables/index.js && next build",
 		"build": "next build",
-		"start": "node ./connections/tables/index.js && next start -p 80",
+		"start": "env-cmd -f './.env.production' next start -p 3000",
 		"lint": "next lint",
 		"cdn-dev": "env-cmd -f './.env.development' nodemon ./cdn.js",
 		"cdn": "env-cmd -f './.env.production' node ./cdn.js",

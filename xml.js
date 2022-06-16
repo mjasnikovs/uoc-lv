@@ -46,7 +46,7 @@ const test = format({
 	mp3: stringFormat({trim: true})
 })
 
-const xml = path.resolve(__dirname, './rss.xml')
+const xml = path.resolve(__dirname, './rss300.xml')
 
 const xmlText = fs.readFileSync(xml, 'utf-8')
 
@@ -86,7 +86,13 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 
 						const {userId, url, title, tags, category, status, notes, thumbnail, mp3, publishedAt} = parsed
 
-						const tagList = tags.split(',').map(v => v.trim())
+						const tagList = tags
+							.split(',')
+							.map(v => v.trim())
+							.filter(v => !!v)
+
+						const slugTags = tagList.map(convertToSlug)
+
 						const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(err => cb(err))
 
 						let articleHTML = decodeEscapedHTML(item.itunes.summary)
@@ -136,6 +142,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 								url,
 								title,
 								tags,
+								"slugTags",
 								category,
 								status,
 								article,
@@ -152,16 +159,17 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 								(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
 								$3::varchar(200),
 								$4::text[],
-								$5::articles_category_type,
-								$6::articles_status_type,
-								$7::text,
+								$5::text[],
+								$6::articles_category_type,
+								$7::articles_status_type,
 								$8::text,
 								$9::text,
 								$10::text,
-								$11::timestamp with time zone,
+								$11::text,
 								$12::timestamp with time zone,
 								$13::timestamp with time zone,
-								$14::timestamp with time zone
+								$14::timestamp with time zone,
+								$15::timestamp with time zone
 							)
 						`,
 							values: [
@@ -169,6 +177,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 								url,
 								title,
 								tagList,
+								slugTags,
 								category,
 								status,
 								articleHTML,
@@ -190,6 +199,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 										url,
 										title,
 										tagList,
+										slugTags,
 										category,
 										status,
 										articleHTML,

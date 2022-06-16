@@ -23,6 +23,7 @@ const articlesTable = `
 		url varchar(300) not null,
 		title varchar(200) not null,
 		tags text[] not null default '{}',
+		"slugTags" text[] not null default '{}',
 		category articles_category_type not null default 'news',
 		status articles_status_type not null default 'draft',
 		article text not null,

@@ -98,7 +98,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 			<Group position='apart'>
 				<Group spacing='xs'>
 					{tags.map(tag => (
-						<Badge key={tag} component='a' href={`/tags/${convertToSlug(tag)}`} variant='outline'>
+						<Badge key={tag} component='a' href={`/tag/${convertToSlug(tag)}`} variant='outline'>
 							{tag}
 						</Badge>
 					))}

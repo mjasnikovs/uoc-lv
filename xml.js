@@ -95,11 +95,15 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 					let articleHTML = decodeEscapedHTML(item.itunes.summary)
 					const images = articleHTML.match(/<img src="(.*?)" \/>/gm)
 
-					await new Promise((resolve, reject) => {
-						sync(
-							images.map(v => {
+					sync(
+						[
+							...images.map(v => {
 								return (image => {
-									return async cbS => {
+									return (cbS, skip = false) => {
+										if (skip === true) {
+											return cbS(null, true)
+										}
+
 										const imgUrl = /src="(.*?)"/gm.exec(image)
 
 										if (imgUrl[1] === thumbnail) {
@@ -107,113 +111,96 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 												new RegExp(`${image}`, 'gm'),
 												`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadThumbImg.url}" alt="${item.title}" />`
 											)
-											return cbS(null)
+											return cbS(null, false)
 										}
 
-										await uploadPictureHandler(imgUrl[1])
+										uploadPictureHandler(imgUrl[1])
 											.then(uploadImg => {
 												articleHTML = articleHTML.replace(
 													new RegExp(`${image}`, 'gm'),
 													`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadImg.url}" alt="${item.title}" />`
 												)
-												return cbS(null)
+												return cbS(null, false)
 											})
-											.catch(err => cbS(err))
+											.catch(err => {
+												console.log(err)
+												return cbS(null, true)
+											})
 									}
 								})(v)
 							}),
-							err => {
-								if (err) {
-									return reject(err)
+							(cbS, skip = false) => {
+								if (skip === true) {
+									return cbS(null)
 								}
-								return resolve()
-							}
-						)
-					}).catch(err => {
-						console.error('IMG error', 'Skiping', title)
-						console.log(err)
-						return cb(null)
-					})
 
-					pg({
-						query: `
-							insert into articles (
-								"userId",
-								url,
-								title,
-								tags,
-								"slugTags",
-								category,
-								status,
-								article,
-								notes,
-								thumbnail,
-								mp3,
-								"createdAt",
-								"publishedAt",
-								"updatedAt",
-								"commentedAt"
-							) 
-							values (
-								$1::bigint,
-								(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
-								$3::varchar(200),
-								$4::text[],
-								$5::text[],
-								$6::articles_category_type,
-								$7::articles_status_type,
-								$8::text,
-								$9::text,
-								$10::text,
-								$11::text,
-								$12::timestamp with time zone,
-								$13::timestamp with time zone,
-								$14::timestamp with time zone,
-								$15::timestamp with time zone
-							)
-						`,
-						values: [
-							userId,
-							url,
-							title,
-							tagList,
-							slugTags,
-							category,
-							status,
-							articleHTML,
-							notes,
-							uploadThumbImg.url,
-							mp3,
-							publishedAt,
-							publishedAt,
-							publishedAt,
-							publishedAt
+								return pg({
+									query: `
+										insert into articles (
+											"userId",
+											url,
+											title,
+											tags,
+											"slugTags",
+											category,
+											status,
+											article,
+											notes,
+											thumbnail,
+											mp3,
+											"createdAt",
+											"publishedAt",
+											"updatedAt",
+											"commentedAt"
+										) 
+										values (
+											$1::bigint,
+											(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
+											$3::varchar(200),
+											$4::text[],
+											$5::text[],
+											$6::articles_category_type,
+											$7::articles_status_type,
+											$8::text,
+											$9::text,
+											$10::text,
+											$11::text,
+											$12::timestamp with time zone,
+											$13::timestamp with time zone,
+											$14::timestamp with time zone,
+											$15::timestamp with time zone
+										)
+									`,
+									values: [
+										userId,
+										url,
+										title,
+										tagList,
+										slugTags,
+										category,
+										status,
+										articleHTML,
+										notes,
+										uploadThumbImg.url,
+										mp3,
+										publishedAt,
+										publishedAt,
+										publishedAt,
+										publishedAt
+									],
+									object: true
+								})
+									.then(() => cbS(null))
+									.catch(err => cbS(new Error(err)))
+							}
 						],
-						object: true
-					})
-						.then(() => cb(null))
-						.catch(err => {
-							console.log({
-								values: {
-									userId,
-									url,
-									title,
-									tagList,
-									slugTags,
-									category,
-									status,
-									articleHTML,
-									notes,
-									thumbnail: uploadThumbImg.url,
-									mp3,
-									publishedAt,
-									publishedAt,
-									publishedAt,
-									publishedAt
-								}
-							})
-							return cb(new Error(err))
-						})
+						err => {
+							if (err) {
+								return cb(err)
+							}
+							return cb(null)
+						}
+					)
 				}
 			})(val)
 		}),

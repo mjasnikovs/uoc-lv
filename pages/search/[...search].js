@@ -6,7 +6,7 @@ import {ironSessionSettings, getSession} from '../../connections/ironSession'
 import logger from '../../connections/logger'
 import pg from '../../connections/pg'
 
-import {Pagination, Title, Space, Anchor, Alert} from '@mantine/core'
+import {Pagination, Title, Space, Alert, Anchor} from '@mantine/core'
 import {AlertCircle} from 'tabler-icons-react'
 
 import {format, integerFormat, stringFormat} from 'format-schema'
@@ -19,24 +19,24 @@ const testPage = format({
 })
 
 const testTag = format({
-	tag: stringFormat({trim: true, toLowerCase: true, notEmpty: true})
+	search: stringFormat({trim: true, toLowerCase: true, notEmpty: true})
 })
 
 export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
 	const page = (() => {
 		if (typeof params === 'undefined') return 1
-		const data = testPage({page: params.tag[1]})
+		const data = testPage({page: params.search[1]})
 
 		if (data instanceof Error) return 1
 		return data.page
 	})()
 
-	const tag = (() => {
+	const search = (() => {
 		if (typeof params === 'undefined') return ''
-		const data = testTag({tag: params.tag[0]})
+		const data = testTag({search: params.search[0]})
 
 		if (data instanceof Error) return ''
-		return data.tag
+		return data.search
 	})()
 
 	const [session, articles, {totalArticles}] = await Promise.all([
@@ -61,20 +61,22 @@ export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")
-			where status = 'active' and $1::text = any("slugTags")
+			where status = 'active' and
+			"titleVector" @@ plainto_tsquery('english', $1::text)
 			order by a."createdAt" DESC
 			limit 10 offset $2::bigint
 	    `,
-			values: [tag, page * 10 - 10],
+			values: [search, page * 10 - 10],
 			object: false
 		}).catch(err => logger.error(new Error(err))),
 		pg({
 			query: `
 				select count(*)::int as "totalArticles"
 				from articles
-				where status = 'active' and $1::text = any("slugTags")
+				where status = 'active' and
+				"titleVector" @@ plainto_tsquery('english', $1::text)
 			`,
-			values: [tag],
+			values: [search],
 			object: true
 		}).catch(err => logger.error(new Error(err)))
 	])
@@ -83,17 +85,17 @@ export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
 		props: {
 			session,
 			articles,
-			tag,
+			search,
 			page,
 			totalPages: Math.ceil(totalArticles / 10)
 		}
 	}
 }, ironSessionSettings)
 
-const Index = ({session, articles, tag, page, totalPages}) => {
+const Index = ({session, articles, search, page, totalPages}) => {
 	const router = useRouter()
 
-	const pageNavigation = val => router.push(`/tag/${tag}/${val}`)
+	const pageNavigation = val => router.push(`/search/${search}/${val}`)
 
 	return (
 		<AppShellPage session={session}>
@@ -101,10 +103,10 @@ const Index = ({session, articles, tag, page, totalPages}) => {
 			<Space h='xl' />
 			{articles.length === 0 && (
 				<Alert icon={<AlertCircle size={16} />} title='Tukšums!' color='cyne'>
-					Diemžēl pēc Jūsu meklētās frāzes &quot;{tag}&quot; nekas netika atrasts. Mēģiniet vēlreiz ar citu
+					Diemžēl pēc Jūsu meklētās frāzes &quot;{search}&quot; nekas netika atrasts. Mēģiniet vēlreiz ar citu
 					atslēgas vārdu.
 					<br /> Piemērs: &nbsp;
-					<Link href='/tag/podkasts'>
+					<Link href='/search/podkāsts'>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 							podkāsts
 						</Anchor>

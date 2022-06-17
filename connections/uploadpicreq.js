@@ -22,7 +22,7 @@ const uploadPictureHandler = (url, typeField) =>
 		// console.log({url, httpsUrl, protocol, type, filename, tempPath})
 
 		const fstream = fs.createWriteStream(tempPath)
-		https.get(httpsUrl, res => res.pipe(fstream))
+		https.get(httpsUrl, res => res.pipe(fstream)).on('error', reject)
 
 		fstream.on('finish', async () => {
 			const webp = await new Promise(wepResolve => {

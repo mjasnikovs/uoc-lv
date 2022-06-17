@@ -104,14 +104,16 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 					))}
 				</Group>
 				<Group>
-					<Avatar radius='xl'>
-						<Image
-							src={`${process.env.NEXT_PUBLIC_CDN}${userPhoto}`}
-							alt={userName}
-							width='56'
-							height='56'
-						/>
-					</Avatar>
+					{userPhoto && (
+						<Avatar radius='xl'>
+							<Image
+								src={`${process.env.NEXT_PUBLIC_CDN}${userPhoto}`}
+								alt={userName}
+								width='56'
+								height='56'
+							/>
+						</Avatar>
+					)}
 					<Text color='grey'>{userName}</Text>
 					<ThemeIcon radius='xl' variant='light' size='sm' color='gray'>
 						<CalendarStats />

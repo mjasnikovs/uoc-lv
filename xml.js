@@ -31,7 +31,7 @@ const convertToSlug = text =>
 		.replace(/[^\w ]+/g, '')
 		.replace(/ +/g, '-')
 
-const USER_ID = 316
+const USER_ID = 1
 
 const test = format({
 	title: stringFormat({notEmpty: true, trim: true}),
@@ -62,81 +62,89 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 	})
 
 	sync(
-		data.items
-			// .slice(0, 100)
-			.map(val => {
-				return (item => {
-					return async cb => {
-						const parsed = test({
-							title: item.title,
-							publishedAt: item.isoDate,
-							userId: USER_ID,
-							url: convertToSlug(item.title),
-							title: item.title,
-							tags: item.itunes.keywords,
-							category: item.categories[0],
-							status: 'active',
-							thumbnail: item.itunes.image,
-							mp3: item.enclosure.url
-						})
+		data.items.slice(0, 20).map(val => {
+			return (item => {
+				return async cb => {
+					const parsed = test({
+						title: item.title,
+						publishedAt: item.isoDate,
+						userId: USER_ID,
+						url: convertToSlug(item.title),
+						title: item.title,
+						tags: item.itunes.keywords,
+						category: item.categories[0],
+						status: 'active',
+						thumbnail: item.itunes.image,
+						mp3: item.enclosure.url
+					})
 
-						if (parsed instanceof Error) {
-							return cb(new Error(parsed))
-						}
+					if (parsed instanceof Error) {
+						return cb(new Error(parsed))
+					}
 
-						const {userId, url, title, tags, category, status, notes, thumbnail, mp3, publishedAt} = parsed
+					const {userId, url, title, tags, category, status, notes, thumbnail, mp3, publishedAt} = parsed
 
-						const tagList = tags
-							.split(',')
-							.map(v => v.trim())
-							.filter(v => !!v)
+					const tagList = tags
+						.split(',')
+						.map(v => v.trim())
+						.filter(v => !!v)
 
-						const slugTags = tagList.map(convertToSlug)
+					const slugTags = tagList.map(convertToSlug)
 
-						const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(err => cb(err))
+					const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(err =>
+						console.error(err)
+					)
 
-						let articleHTML = decodeEscapedHTML(item.itunes.summary)
-						const images = articleHTML.match(/<img src="(.*?)" \/>/gm)
+					if (!uploadThumbImg) {
+						console.error('uploadThumbImg: Error', 'Skiping', title, thumbnail)
+						return cb(null)
+					}
 
-						await new Promise((resolve, reject) => {
-							sync(
-								images.map(v => {
-									return (image => {
-										return async cbS => {
-											const imgUrl = /src="(.*?)"/gm.exec(image)
+					let articleHTML = decodeEscapedHTML(item.itunes.summary)
+					const images = articleHTML.match(/<img src="(.*?)" \/>/gm)
 
-											if (imgUrl[1] === thumbnail) {
-												articleHTML = articleHTML.replace(
-													new RegExp(`${image}`, 'gm'),
-													`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadThumbImg.url}" alt="${item.title}" />`
-												)
-												return cbS(null)
-											}
+					await new Promise((resolve, reject) => {
+						sync(
+							images.map(v => {
+								return (image => {
+									return async cbS => {
+										const imgUrl = /src="(.*?)"/gm.exec(image)
 
-											const uploadImg = await uploadPictureHandler(imgUrl[1]).catch(err =>
-												cbS(err)
-											)
-
+										if (imgUrl[1] === thumbnail) {
 											articleHTML = articleHTML.replace(
 												new RegExp(`${image}`, 'gm'),
-												`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadImg.url}" alt="${item.title}" />`
+												`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadThumbImg.url}" alt="${item.title}" />`
 											)
 											return cbS(null)
 										}
-									})(v)
-								}),
-								err => {
-									if (err) {
-										console.error(err)
-										return reject(err)
-									}
-									return resolve()
-								}
-							)
-						})
 
-						pg({
-							query: `
+										await uploadPictureHandler(imgUrl[1])
+											.then(uploadImg => {
+												articleHTML = articleHTML.replace(
+													new RegExp(`${image}`, 'gm'),
+													`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadImg.url}" alt="${item.title}" />`
+												)
+												return cbS(null)
+											})
+											.catch(err => cbS(err))
+									}
+								})(v)
+							}),
+							err => {
+								if (err) {
+									return reject(err)
+								}
+								return resolve()
+							}
+						)
+					}).catch(err => {
+						console.error('IMG error', 'Skiping', title)
+						console.log(err)
+						return cb(null)
+					})
+
+					pg({
+						query: `
 							insert into articles (
 								"userId",
 								url,
@@ -172,51 +180,51 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 								$15::timestamp with time zone
 							)
 						`,
-							values: [
-								userId,
-								url,
-								title,
-								tagList,
-								slugTags,
-								category,
-								status,
-								articleHTML,
-								notes,
-								uploadThumbImg.url,
-								mp3,
-								publishedAt,
-								publishedAt,
-								publishedAt,
-								publishedAt
-							],
-							object: true
-						})
-							.then(() => cb(null))
-							.catch(err => {
-								console.log({
-									values: {
-										userId,
-										url,
-										title,
-										tagList,
-										slugTags,
-										category,
-										status,
-										articleHTML,
-										notes,
-										thumbnail: uploadThumbImg.url,
-										mp3,
-										publishedAt,
-										publishedAt,
-										publishedAt,
-										publishedAt
-									}
-								})
-								return cb(new Error(err))
+						values: [
+							userId,
+							url,
+							title,
+							tagList,
+							slugTags,
+							category,
+							status,
+							articleHTML,
+							notes,
+							uploadThumbImg.url,
+							mp3,
+							publishedAt,
+							publishedAt,
+							publishedAt,
+							publishedAt
+						],
+						object: true
+					})
+						.then(() => cb(null))
+						.catch(err => {
+							console.log({
+								values: {
+									userId,
+									url,
+									title,
+									tagList,
+									slugTags,
+									category,
+									status,
+									articleHTML,
+									notes,
+									thumbnail: uploadThumbImg.url,
+									mp3,
+									publishedAt,
+									publishedAt,
+									publishedAt,
+									publishedAt
+								}
 							})
-					}
-				})(val)
-			}),
+							return cb(new Error(err))
+						})
+				}
+			})(val)
+		}),
 		err => {
 			if (err) {
 				console.error(err)

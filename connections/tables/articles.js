@@ -22,6 +22,7 @@ const articlesTable = `
 		"userId" bigint not null,
 		url varchar(300) not null,
 		title varchar(200) not null,
+		"titleVector" tsvector GENERATED ALWAYS AS (to_tsvector('english', title)) STORED,
 		tags text[] not null default '{}',
 		"slugTags" text[] not null default '{}',
 		category articles_category_type not null default 'news',
@@ -30,7 +31,6 @@ const articlesTable = `
 		notes text,
 		thumbnail text,
 		mp3 text,
-		CONSTRAINT articles_title_key UNIQUE (title),
 		CONSTRAINT articles_url_key UNIQUE (url)
 	)
 	WITH (
@@ -39,6 +39,7 @@ const articlesTable = `
 
 	CREATE INDEX IF NOT EXISTS articles_id_index ON articles USING btree (id);
 	CREATE INDEX IF NOT EXISTS articles_url_index ON articles USING btree (url);
+	CREATE INDEX IF NOT EXISTS articles_title_vector_index ON articles USING GIN ("titleVector");
 
 	DROP TRIGGER IF EXISTS update_updatedat_articles on articles;
 	CREATE TRIGGER update_updatedat_articles BEFORE UPDATE

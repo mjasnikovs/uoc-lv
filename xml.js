@@ -53,16 +53,10 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 ;(async () => {
 	const data = await parser.parseString(xmlText)
 
-	await pg({
-		query: 'delete from articles',
-		values: []
-	}).catch(err => {
-		console.error(err)
-		process.exit(1)
-	})
+	await pg('delete from articles')
 
 	sync(
-		data.items.slice(0, 20).map(val => {
+		data.items.map(val => {
 			return (item => {
 				return async cb => {
 					const parsed = test({
@@ -91,9 +85,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 
 					const slugTags = tagList.map(convertToSlug)
 
-					const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(err =>
-						console.error(err)
-					)
+					const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(console.error)
 
 					if (!uploadThumbImg) {
 						console.error('uploadThumbImg: Error', 'Skiping', title, thumbnail)

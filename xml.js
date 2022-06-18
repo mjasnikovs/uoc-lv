@@ -46,7 +46,7 @@ const test = format({
 	mp3: stringFormat({trim: true})
 })
 
-const xml = path.resolve(__dirname, './rss300.xml')
+const xml = path.resolve(__dirname, './rss.xml')
 
 const xmlText = fs.readFileSync(xml, 'utf-8')
 
@@ -55,8 +55,10 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 
 	await pg('delete from articles')
 
+	let count = data.items.length
+
 	sync(
-		data.items.map(val => {
+		data.items.reverse().map(val => {
 			return (item => {
 				return async cb => {
 					const parsed = test({
@@ -65,7 +67,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 						userId: USER_ID,
 						url: convertToSlug(item.title),
 						title: item.title,
-						tags: item.itunes.keywords,
+						tags: item.itunes.keywords || 'arhīvs',
 						category: item.categories[0],
 						status: 'active',
 						thumbnail: item.itunes.image,
@@ -198,6 +200,9 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 							if (err) {
 								return cb(err)
 							}
+							process.stdout.clearLine()
+							process.stdout.cursorTo(0)
+							process.stdout.write(`Progress: ${data.items.length}/${--count}`)
 							return cb(null)
 						}
 					)

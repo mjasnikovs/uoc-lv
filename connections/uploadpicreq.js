@@ -5,9 +5,14 @@ const sharp = require('sharp')
 
 const uploadPictureHandler = (url, typeField) =>
 	new Promise(async (resolve, reject) => {
-		const type = url.split('.').pop()
+		const type = /^(?:.*)\.([a-zA-Z]*?)$/gm.exec(url)
+
+		if (type === null) {
+			return reject(new Error(`Invalid filetype for image "${url}"`))
+		}
+
 		const filename = url.split('/').pop()
-		const tempPath = path.resolve('temp/', `${Buffer.from(filename).toString('base64url').slice(0, 10)}.${type}`)
+		const tempPath = path.resolve('temp/', `${Buffer.from(filename).toString('base64url').slice(0, 10)}.${type[1]}`)
 
 		const protocol = url.split(':').shift()
 
@@ -20,7 +25,8 @@ const uploadPictureHandler = (url, typeField) =>
 
 		// console.log({url, httpsUrl, protocol, type, filename, tempPath})
 
-		console.log(httpsUrl, 'START')
+		// console.log(httpsUrl, 'START')
+
 		https
 			.get(httpsUrl, res => {
 				if (res.statusCode !== 200) {
@@ -30,7 +36,7 @@ const uploadPictureHandler = (url, typeField) =>
 				const fstream = fs.createWriteStream(tempPath)
 
 				fstream.on('finish', async () => {
-					console.log(httpsUrl, 'fstream FINISH')
+					// console.log(httpsUrl, 'fstream FINISH')
 
 					const webp = await new Promise(wepResolve => {
 						const generateWebpUrl = () => {
@@ -49,7 +55,7 @@ const uploadPictureHandler = (url, typeField) =>
 						return filePathExists()
 					})
 
-					console.log(httpsUrl, 'WEBP')
+					// console.log(httpsUrl, 'WEBP')
 
 					const resizeOptions = (() => {
 						if (typeField === 'thumbnail') {
@@ -65,7 +71,7 @@ const uploadPictureHandler = (url, typeField) =>
 						}
 					})(type)
 
-					console.log(httpsUrl, 'SHARP')
+					// console.log(httpsUrl, 'SHARP')
 
 					return sharp(tempPath)
 						.resize(resizeOptions)
@@ -73,11 +79,11 @@ const uploadPictureHandler = (url, typeField) =>
 						.toFile(webp.webpPath)
 						.then(() => {
 							fs.unlink(tempPath, e => e && console.error(e))
-							console.log(httpsUrl, 'SHARP RESOLVE')
+							// console.log(httpsUrl, 'SHARP RESOLVE')
 							return resolve({url: webp.webpName})
 						})
 						.catch(err => {
-							console.log(httpsUrl, 'SHARP ERROR')
+							// console.log(httpsUrl, 'SHARP ERROR')
 							return reject(new Error(err))
 						})
 				})

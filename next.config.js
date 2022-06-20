@@ -8,7 +8,7 @@ const nextConfig = {
 		ignoreDuringBuilds: true
 	},
 	images: {
-		domains: ['localhost']
+		domains: ['localhost', 'mx5.lv', 'cdn.mx5.lv']
 	}
 }
 

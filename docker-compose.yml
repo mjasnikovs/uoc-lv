@@ -12,18 +12,6 @@ services:
         env_file:
             - ./.env.production
 
-    uoc-cdn:
-        container_name: uoc-cdn
-        build:
-            context: ./
-            dockerfile: Dockerfile.cdn
-        volumes:
-            - ./public/cdn:/usr/src/app/public/cdn
-        ports:
-            - '81:80'
-        env_file:
-            - ./.env.production
-
     uoc-next:
         container_name: uoc-next
         build:
@@ -34,12 +22,37 @@ services:
             - ./public/cdn:/usr/src/app/public/cdn
         networks:
             - uoc-network
-        ports:
-            - '80:80'
         depends_on:
             - uoc-pg
         env_file:
             - ./.env.production
+
+    uoc-nginx:
+        image: nginx:1.21.6
+        build:
+            context: ./
+            dockerfile: Dockerfile.nginx
+        container_name: uoc-nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"  
+        networks:
+            - uoc-network
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+            - ./public/cdn:/var/www/cdn
+
+    certbot:
+        container_name: uoc-certbot
+        image: certbot/certbot:v1.28.0
+        depends_on:
+            - uoc-nginx
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+        # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d mx5.lv --agree-tos
 
 networks:
     uoc-network:

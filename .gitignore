@@ -37,5 +37,5 @@ yarn-error.log*
 /public/cdn/**/*
 /postgresqlData
 /uoc-next-logs
-
+/certbot/**/*
 !.gitkeep

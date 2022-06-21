@@ -23,8 +23,8 @@ RUN git pull origin main
 
 RUN mkdir -p /usr/src/app/logs
 COPY .env.production .env.production 
-RUN npm run xml
+RUN npm run build
 
 EXPOSE 80
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "xml"]

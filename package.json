@@ -10,7 +10,7 @@
 		"lint": "next lint",
 		"cdn-dev": "env-cmd -f './.env.development' nodemon ./cdn.js",
 		"cdn": "env-cmd -f './.env.production' node ./cdn.js",
-		"xml": "env-cmd -f './.env.development' nodemon ./xml.js"
+		"xml": "env-cmd -f './.env.production' node ./xml.js"
 	},
 	"dependencies": {
 		"@mantine/core": "4.2.9",

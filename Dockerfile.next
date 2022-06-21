@@ -23,7 +23,7 @@ RUN git pull origin main
 
 RUN mkdir -p /usr/src/app/logs
 COPY .env.production .env.production 
-RUN npm run build
+RUN npm run xml
 
 EXPOSE 80
 

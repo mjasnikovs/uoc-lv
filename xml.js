@@ -4,6 +4,7 @@ const pg = require('./connections/pgreq')
 const uploadPictureHandler = require('./connections/uploadpicreq')
 const {sync} = require('scpp')
 const decodeEscapedHTML = require('./bbc')
+const readline = require('readline')
 
 const {stringFormat, integerFormat, format} = require('format-schema')
 
@@ -200,9 +201,10 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 							if (err) {
 								return cb(err)
 							}
-							process.stdout.clearLine()
-							process.stdout.cursorTo(0)
+							readline.clearLine(process.stdout, 0)
+							readline.cursorTo(process.stdout, 0)
 							process.stdout.write(`Progress: ${data.items.length}/${--count}`)
+
 							return cb(null)
 						}
 					)

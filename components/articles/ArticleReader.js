@@ -81,7 +81,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 			</Group>
 		</Grid.Col>
 		<Grid.Col span={12}>
-			<RichTextEditor readOnly value={article} />
+			<RichTextEditor readOnly key={id} value={article} />
 		</Grid.Col>
 		{mp3 && (
 			<Grid.Col>

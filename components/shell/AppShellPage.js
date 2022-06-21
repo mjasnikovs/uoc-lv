@@ -39,15 +39,9 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
 						<Group direction='column' p='md'>
-							<Link href='/editor'>
+							<Link href='/tag/podkasts'>
 								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-									redaktors
-								</Anchor>
-							</Link>
-
-							<Link href='/reader'>
-								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-									skatītājs
+									podkasts
 								</Anchor>
 							</Link>
 						</Group>

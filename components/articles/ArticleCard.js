@@ -13,8 +13,8 @@ const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, arti
 				<Image
 					src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
 					alt={title}
-					width='864'
-					height='486'
+					width='689'
+					height='387'
 				/>
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>

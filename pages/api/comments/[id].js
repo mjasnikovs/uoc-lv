@@ -9,7 +9,7 @@ const testGet = format({
 })
 
 const testPost = format({
-	id: integerFormat({notEmpty: true, notUndef: true, max: 999, naturalNumber: true}),
+	id: integerFormat({notEmpty: true, notUndef: true, naturalNumber: true}),
 	content: stringFormat({notEmpty: true, notUndef: true, trim: true})
 })
 

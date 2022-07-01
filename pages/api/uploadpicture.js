@@ -4,6 +4,7 @@ import logger from '../../connections/logger'
 import path from 'path'
 import fs from 'fs'
 import sharp from 'sharp'
+import {getPlaiceholder} from 'plaiceholder'
 
 export const config = {
 	api: {
@@ -80,23 +81,27 @@ const uploadPictureHandler = async (req, res) => {
 					}
 				})(fields.get('type'))
 
-				return sharp(tempPath)
-					.resize(resizeOptions)
-					.webp()
-					.toFile(webp.webpPath)
-					.then(() => {
-						fs.unlink(tempPath, e => e && logger.error(e))
-						if (count++ === 0) {
-							return resolve({url: webp.webpName})
-						}
-					})
-					.catch(err => {
-						fs.unlink(tempPath, e => e && logger.error(e))
-						if (count++ === 0) {
-							logger.error(err)
-							return reject(new Error(err))
-						}
-					})
+				try {
+					const url = await sharp(tempPath)
+						.resize(resizeOptions)
+						.webp()
+						.toFile(webp.webpPath)
+						.then(() => webp.webpName)
+
+					const {base64} = await getPlaiceholder(path.resolve('/cdn', webp.webpName))
+
+					fs.unlink(tempPath, e => e && logger.error(e))
+
+					if (count++ === 0) {
+						return resolve({url, thumbnailBlur: base64})
+					}
+				} catch (err) {
+					fs.unlink(tempPath, e => e && logger.error(e))
+					if (count++ === 0) {
+						logger.error(err)
+						return reject(new Error(err))
+					}
+				}
 			})
 		})
 
@@ -110,7 +115,7 @@ const uploadPictureHandler = async (req, res) => {
 	})
 
 	await imageHandler
-		.then(async ({url}) => res.status(200).send({url}))
+		.then(async data => res.status(200).send(data))
 		.catch(err => {
 			logger.error(err)
 			return res.status(500).send({message: 'Server error'})

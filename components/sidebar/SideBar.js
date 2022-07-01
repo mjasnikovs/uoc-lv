@@ -1,7 +1,7 @@
 import {useState} from 'react'
 
 import {Space, Input, Badge} from '@mantine/core'
-import {Search} from 'tabler-icons-react'
+import Search from 'tabler-icons-react/dist/icons/search'
 
 import {useRouter} from 'next/router'
 import Image from 'next/image'
@@ -44,7 +44,7 @@ const SideBar = () => {
 					height: '400px'
 				}}
 			>
-				<Image src='/discord.png' width='400' height='400' alt='discord' />
+				<Image src='/discord.png' width='420' height='413' alt='discord' layout='responsive' />
 				{/*<iframe
 				src='https://discord.com/widget?id=619838999208656906&theme=dark'
 				width='100%'

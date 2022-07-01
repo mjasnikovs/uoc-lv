@@ -1,5 +1,5 @@
 import {Alert, Space} from '@mantine/core'
-import {AlertCircle} from 'tabler-icons-react'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 const ErrorBox = ({error}) => {
 	if (typeof error === 'string') {

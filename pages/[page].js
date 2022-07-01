@@ -44,6 +44,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
 				a.article,
 				a.notes,
 				a.thumbnail,
+				a."thumbnailBlur",
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")
@@ -81,8 +82,8 @@ const Index = ({session, articles, page, totalPages}) => {
 	return (
 		<AppShellPage session={session}>
 			<>
-				{articles.map(article => (
-					<ArticleCard key={article.id} {...article} />
+				{articles.map((article, count) => (
+					<ArticleCard key={article.id} {...article} count={count} />
 				))}
 			</>
 			<Pagination page={page} onChange={pageNavigation} total={totalPages} radius='xs' color='indigo' />

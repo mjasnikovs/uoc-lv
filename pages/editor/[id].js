@@ -20,7 +20,9 @@ import {
 } from '@mantine/core'
 import {useForm} from '@mantine/form'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
-import {Check, Link as IconLink} from 'tabler-icons-react'
+
+import Check from 'tabler-icons-react/dist/icons/check'
+import IconLink from 'tabler-icons-react/dist/icons/link'
 
 import Head from 'next/head'
 import Image from 'next/image'
@@ -84,6 +86,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 				a.article,
 				a.notes,
 				a.thumbnail,
+				a."thumbnailBlur",
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")
@@ -125,6 +128,7 @@ const SideBar = ({form, article}) => {
 					return setError(res.error)
 				}
 				form.setFieldValue('thumbnail', res.url)
+				form.setFieldValue('thumbnailBlur', res.thumbnailBlur)
 				return setThumbnail(`${process.env.NEXT_PUBLIC_CDN}${res.url}`)
 			})
 			.catch(err => {
@@ -140,11 +144,16 @@ const SideBar = ({form, article}) => {
 					<label>Titilbilde</label>
 				</Grid.Col>
 				{thumbnail && (
-					<Grid.Col span={12}>
-						<Center>
-							<Image as={ImageContainer} src={thumbnail} alt='titulbilde' width='384' height='216' />
-						</Center>
-					</Grid.Col>
+					<>
+						<Grid.Col span={12}>
+							<Center>
+								<Image as={ImageContainer} src={thumbnail} alt='titulbilde' width='384' height='216' />
+							</Center>
+						</Grid.Col>
+						<Grid.Col>
+							<TextInput id='thumbnailBlur' {...form.getInputProps('thumbnailBlur')} disabled />
+						</Grid.Col>
+					</>
 				)}
 				<Grid.Col span={12}>
 					<ErrorBox error={error} />
@@ -227,6 +236,7 @@ const Editor = ({session, article}) => {
 			article: article?.article || 'Some text? Bro?',
 			notes: article?.notes || '',
 			thumbnail: article?.thumbnail || '',
+			thumbnailBlur: article?.thumbnailBlur || '',
 			mp3: article?.mp3 || ''
 		},
 		validate: {

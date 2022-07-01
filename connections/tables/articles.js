@@ -30,6 +30,7 @@ const articlesTable = `
 		article text not null,
 		notes text,
 		thumbnail text,
+		"thumbnailBlur" text,
 		mp3 text,
 		CONSTRAINT articles_url_key UNIQUE (url)
 	)

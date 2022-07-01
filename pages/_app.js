@@ -1,4 +1,4 @@
-import '../styles/global.css'
+import '../styles/react-h5-audio-player.css'
 import Head from 'next/head'
 import {MantineProvider} from '@mantine/core'
 import {DefaultSeo} from 'next-seo'
@@ -10,7 +10,7 @@ const App = props => {
 		<>
 			<Head>
 				<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
-				<link rel='shortcut icon' href='/favicon.svg' />
+				<link rel='shortcut icon' href='/favicon.ico' />
 			</Head>
 			<DefaultSeo
 				openGraph={{

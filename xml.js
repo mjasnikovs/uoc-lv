@@ -150,6 +150,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 											article,
 											notes,
 											thumbnail,
+											"thumbnailBlur",
 											mp3,
 											"createdAt",
 											"publishedAt",
@@ -168,10 +169,11 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 											$9::text,
 											$10::text,
 											$11::text,
-											$12::timestamp with time zone,
+											$12::text,
 											$13::timestamp with time zone,
 											$14::timestamp with time zone,
-											$15::timestamp with time zone
+											$15::timestamp with time zone,
+											$16::timestamp with time zone
 										)
 									`,
 									values: [
@@ -185,6 +187,7 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 										articleHTML,
 										notes,
 										uploadThumbImg.url,
+										uploadThumbImg.thumbnailBlur,
 										mp3,
 										publishedAt,
 										publishedAt,

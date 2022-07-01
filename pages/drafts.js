@@ -1,5 +1,5 @@
 import {Grid, Container, Title, Button} from '@mantine/core'
-import {News} from 'tabler-icons-react'
+import News from 'tabler-icons-react/dist/icons/news'
 
 import {withIronSessionSsr} from 'iron-session/next'
 import Link from 'next/link'

@@ -1,3 +1,4 @@
+import {Fragment} from 'react'
 import useSWR from 'swr'
 import {Space, Grid, Badge, List, Avatar, Skeleton, Anchor} from '@mantine/core'
 
@@ -21,9 +22,23 @@ const ComentsTab = () => {
 				</Badge>
 				<Space h='xl' />
 				{error && <ErrorBox error={error} />}
-				<Skeleton height={8} radius='xl' />
-				<Skeleton height={8} mt={6} radius='xl' />
-				<Skeleton height={8} mt={6} width='70%' radius='xl' />
+				{Array(10)
+					.fill()
+					.map((_, key) => (
+						<Grid gutter='xs' key={key}>
+							<Grid.Col span={2}>
+								<Skeleton height={38} circle mb='xl' radius='xl' />
+							</Grid.Col>
+							<Grid.Col span={8}>
+								<Skeleton height={10} width='90%' radius='xl' />
+								<Skeleton height={10} mt={5} width='60%' radius='xl' />
+								<Skeleton height={10} mt={5} width='60%' radius='xl' />
+							</Grid.Col>
+							<Grid.Col span={2}>
+								<Skeleton height={20} circle mb='xl' radius='xl' />
+							</Grid.Col>
+						</Grid>
+					))}
 			</>
 		)
 	}

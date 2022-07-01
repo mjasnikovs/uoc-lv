@@ -13,6 +13,7 @@ const test = format({
 	article: stringFormat({trim: true, notEmpty: true}),
 	notes: stringFormat({trim: true}),
 	thumbnail: stringFormat({trim: true}),
+	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/gm}),
 	mp3: stringFormat({trim: true})
 })
 
@@ -32,7 +33,7 @@ const createArticlehandler = async (req, res) => {
 			return reject(new Error(props))
 		}
 
-		const {title, tags, category, status, article, notes, thumbnail, mp3} = props
+		const {title, tags, category, status, article, notes, thumbnail, thumbnailBlur, mp3} = props
 
 		const tagList = tags
 			.split(',')
@@ -45,7 +46,7 @@ const createArticlehandler = async (req, res) => {
 
 		return pg({
 			query: `
-					insert into articles ("userId", url, title, tags, "slugTags", category, status, article, notes, thumbnail, mp3) 
+					insert into articles ("userId", url, title, tags, "slugTags", category, status, article, notes, thumbnail, "thumbnailBlur", mp3) 
 					values (
 						$1::bigint,
 						(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
@@ -57,7 +58,8 @@ const createArticlehandler = async (req, res) => {
 						$8::text,
 						$9::text,
 						$10::text,
-						$11::text
+						$11::text,
+						$12::text
 					)
 					RETURNING
 					*
@@ -73,6 +75,7 @@ const createArticlehandler = async (req, res) => {
 				article,
 				notes,
 				thumbnail,
+				thumbnailBlur,
 				mp3
 			],
 			object: true

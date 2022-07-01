@@ -2,6 +2,7 @@ const https = require('https')
 const path = require('path')
 const fs = require('fs')
 const sharp = require('sharp')
+const {getPlaiceholder} = require('plaiceholder')
 
 const uploadPictureHandler = (url, typeField) =>
 	new Promise(async (resolve, reject) => {
@@ -71,21 +72,22 @@ const uploadPictureHandler = (url, typeField) =>
 						}
 					})(type)
 
-					// console.log(httpsUrl, 'SHARP')
+					try {
+						await sharp(tempPath)
+							.resize(resizeOptions)
+							.webp()
+							.toFile(webp.webpPath)
+							.then(() => webp.webpName)
 
-					return sharp(tempPath)
-						.resize(resizeOptions)
-						.webp()
-						.toFile(webp.webpPath)
-						.then(() => {
-							fs.unlink(tempPath, e => e && console.error(e))
-							// console.log(httpsUrl, 'SHARP RESOLVE')
-							return resolve({url: webp.webpName})
-						})
-						.catch(err => {
-							// console.log(httpsUrl, 'SHARP ERROR')
-							return reject(new Error(err))
-						})
+						const {base64} = await getPlaiceholder(path.resolve('/cdn', webp.webpName))
+
+						fs.unlink(tempPath, e => e && console.error(e))
+
+						return resolve({url: webp.webpName, thumbnailBlur: base64})
+					} catch (err) {
+						fs.unlink(tempPath, e => e && console.error(e))
+						return reject(new Error(err))
+					}
 				})
 
 				return res.pipe(fstream)

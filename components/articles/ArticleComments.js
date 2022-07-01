@@ -2,7 +2,9 @@ import {useState, useEffect} from 'react'
 
 import {useForm} from '@mantine/form'
 import {Divider, Loader, Center, Textarea, Button, Space, Grid, Group, Avatar, Text, Anchor, Alert} from '@mantine/core'
-import {Check, MessageCircle} from 'tabler-icons-react'
+
+import Check from 'tabler-icons-react/dist/icons/check'
+import MessageCircle from 'tabler-icons-react/dist/icons/message-circle'
 
 import Image from 'next/image'
 import Link from 'next/link'

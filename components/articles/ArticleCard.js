@@ -1,21 +1,40 @@
 import {Text, Space, Anchor, Grid, Group, ThemeIcon, MediaQuery, Button} from '@mantine/core'
-import {CalendarStats, User} from 'tabler-icons-react'
+import CalendarStats from 'tabler-icons-react/dist/icons/calendar-stats'
+import User from 'tabler-icons-react/dist/icons/user'
 
 import {toLocaleDateFull, strip} from '../../connections/locales'
 
 import Link from 'next/link'
 import Image from 'next/image'
 
-const NewsArticleCard = ({id, userName, thumbnail, publishedAt, title, url, article, createdAt, editLink}) => (
+const NewsArticleCard = ({
+	id,
+	userName,
+	thumbnail,
+	thumbnailBlur,
+	publishedAt,
+	title,
+	url,
+	article,
+	createdAt,
+	editLink,
+	count = 9999
+}) => (
 	<>
 		<Grid>
 			<Grid.Col xs={12} sm={5}>
-				<Image
-					src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
-					alt={title}
-					width='689'
-					height='387'
-				/>
+				<div style={{display: 'block', maxHeight: 387, maxWidth: 689}}>
+					<Image
+						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
+						alt={title}
+						width='689'
+						height='387'
+						layout='responsive'
+						placeholder='blur'
+						blurDataURL={thumbnailBlur}
+						priority={count <= 3}
+					/>
+				</div>
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>
 				<Group>

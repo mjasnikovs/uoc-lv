@@ -16,7 +16,7 @@ import {
 } from '@mantine/core'
 import {useForm} from '@mantine/form'
 
-import {AlertCircle} from 'tabler-icons-react'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 import Link from 'next/link'
 

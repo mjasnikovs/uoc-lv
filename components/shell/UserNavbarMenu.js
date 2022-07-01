@@ -1,7 +1,11 @@
 import {Anchor, Group, ThemeIcon, Tooltip} from '@mantine/core'
 
 import Link from 'next/link'
-import {Logout, Login, User, List} from 'tabler-icons-react'
+
+import Logout from 'tabler-icons-react/dist/icons/logout'
+import Login from 'tabler-icons-react/dist/icons/login'
+import User from 'tabler-icons-react/dist/icons/user'
+import List from 'tabler-icons-react/dist/icons/list'
 
 const UserMenu = ({session}) => {
 	if (session) {

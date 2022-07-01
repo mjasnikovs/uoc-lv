@@ -1,13 +1,11 @@
 import {useState} from 'react'
 
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper, Group, Button} from '@mantine/core'
+import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper} from '@mantine/core'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 import {useForm} from '@mantine/form'
-import {List} from 'tabler-icons-react'
 
 import {useRouter} from 'next/router'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import AppShellPage from '../components/shell/AppShellPage'
 import ErrorBox from '../components/ErrorBox'

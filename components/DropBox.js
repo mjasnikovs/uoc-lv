@@ -1,6 +1,6 @@
 import React from 'react'
 import {Group, Text} from '@mantine/core'
-import {FileUpload} from 'tabler-icons-react'
+import FileUpload from 'tabler-icons-react/dist/icons/file-upload'
 
 const dropBox = status => (
 	<Group position='center' spacing='xl'>

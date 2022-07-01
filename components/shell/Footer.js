@@ -1,5 +1,11 @@
 import {Footer, Text, Container, Anchor, Grid, Group, ThemeIcon, Divider, Stack, Center} from '@mantine/core'
-import {BrandTwitter, BrandFacebook, BrandYoutube, BrandTwitch, Mail, BrandDiscord} from 'tabler-icons-react'
+
+import BrandTwitter from 'tabler-icons-react/dist/icons/brand-twitter'
+import BrandFacebook from 'tabler-icons-react/dist/icons/brand-facebook'
+import BrandYoutube from 'tabler-icons-react/dist/icons/brand-youtube'
+import BrandTwitch from 'tabler-icons-react/dist/icons/brand-twitch'
+import Mail from 'tabler-icons-react/dist/icons/mail'
+import BrandDiscord from 'tabler-icons-react/dist/icons/brand-discord'
 
 const FooterPage = () => (
 	<Footer p='md'>

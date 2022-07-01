@@ -2,7 +2,12 @@ import 'react-h5-audio-player/lib/styles.css'
 import AudioPlayer from 'react-h5-audio-player'
 
 import {Title, Avatar, Grid, Group, ThemeIcon, Text, Badge, Anchor, Button} from '@mantine/core'
-import {CalendarStats, BrandTwitter, BrandFacebook, Mail} from 'tabler-icons-react'
+
+import CalendarStats from 'tabler-icons-react/dist/icons/calendar-stats'
+import BrandTwitter from 'tabler-icons-react/dist/icons/brand-twitter'
+import BrandFacebook from 'tabler-icons-react/dist/icons/brand-facebook'
+import Mail from 'tabler-icons-react/dist/icons/mail'
+
 import Image from 'next/image'
 import Link from 'next/link'
 

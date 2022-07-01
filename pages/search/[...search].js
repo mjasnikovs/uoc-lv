@@ -7,7 +7,7 @@ import logger from '../../connections/logger'
 import pg from '../../connections/pg'
 
 import {Pagination, Title, Space, Alert, Anchor} from '@mantine/core'
-import {AlertCircle} from 'tabler-icons-react'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 import {format, integerFormat, stringFormat} from 'format-schema'
 
@@ -58,6 +58,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
 				a.article,
 				a.notes,
 				a.thumbnail,
+				a."thumbnailBlur",
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")

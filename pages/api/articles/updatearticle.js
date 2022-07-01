@@ -14,6 +14,7 @@ const test = format({
 	article: stringFormat({trim: true, notEmpty: true}),
 	notes: stringFormat({trim: true}),
 	thumbnail: stringFormat({trim: true}),
+	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/gm}),
 	mp3: stringFormat({trim: true})
 })
 
@@ -33,7 +34,7 @@ const updateArticlehandler = async (req, res) => {
 			return reject(new Error(props))
 		}
 
-		const {id, title, tags, category, status, article, notes, thumbnail, mp3} = props
+		const {id, title, tags, category, status, article, notes, thumbnail, mp3, thumbnailBlur} = props
 
 		const tagList = tags
 			.split(',')
@@ -56,12 +57,26 @@ const updateArticlehandler = async (req, res) => {
 						article = $8::text,
 						notes = $9::text,
 						thumbnail = $10::text,
-						mp3 = $11::text
+						thumbnailBlur = $11::text,
+						mp3 = $12::text
 					where id = $1::bigint
 					RETURNING
 					*
 				`,
-			values: [id, url, title, tagList, slugTags, category, status, article, notes, thumbnail, mp3],
+			values: [
+				id,
+				url,
+				title,
+				tagList,
+				slugTags,
+				category,
+				status,
+				article,
+				notes,
+				thumbnail,
+				thumbnailBlur,
+				mp3
+			],
 			object: true
 		})
 			.then(resolve)

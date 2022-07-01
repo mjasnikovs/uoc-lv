@@ -51,6 +51,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 					a.article,
 					a.notes,
 					a.thumbnail,
+					a."thumbnailBlur",
 					a.mp3
 				from articles a
 				left join users u on(u.id = a."userId")

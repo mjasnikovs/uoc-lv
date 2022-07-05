@@ -37,7 +37,7 @@ const NewsArticleCard = ({
 				</div>
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>
-				{/*				<Group>
+				<Group>
 					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<CalendarStats />
 					</ThemeIcon>
@@ -47,6 +47,7 @@ const NewsArticleCard = ({
 					</ThemeIcon>
 					<Text>{userName}</Text>
 				</Group>
+				{/*
 				<Space h='xs' />
 
 				<Link href={`/article/${url}`} passHref={true}>

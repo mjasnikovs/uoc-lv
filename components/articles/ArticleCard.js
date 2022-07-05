@@ -22,7 +22,7 @@ const NewsArticleCard = ({
 }) => (
 	<div>
 		<Grid>
-			<Grid.Col xs={12} sm={5}>
+			{/*			<Grid.Col xs={12} sm={5}>
 				<div className='article-card-img-container'>
 					<Image
 						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
@@ -47,7 +47,7 @@ const NewsArticleCard = ({
 					</ThemeIcon>
 					<Text>{userName}</Text>
 				</Group>
-				{/*<Space h='xs' />*/}
+				<Space h='xs' />
 
 				<Link href={`/article/${url}`} passHref={true}>
 					<Anchor>
@@ -57,7 +57,7 @@ const NewsArticleCard = ({
 					</Anchor>
 				</Link>
 
-				{/*<Space h='xs' />*/}
+				<Space h='xs' />
 				<MediaQuery smallerThan='sm' styles={{display: 'none'}}>
 					<Text>{strip(article || '')}</Text>
 				</MediaQuery>
@@ -91,9 +91,9 @@ const NewsArticleCard = ({
 						</Link>
 					)}
 				</Group>
-			</Grid.Col>
+			</Grid.Col>*/}
 		</Grid>
-		{/*<Space h='xl' />*/}
+		<Space h='xl' />
 	</div>
 )
 

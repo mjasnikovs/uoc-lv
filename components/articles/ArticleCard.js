@@ -47,7 +47,7 @@ const NewsArticleCard = ({
 					</ThemeIcon>
 					<Text>{userName}</Text>
 				</Group>
-				<Space h='xs' />
+				{/*<Space h='xs' />*/}
 
 				<Link href={`/article/${url}`} passHref={true}>
 					<Anchor>
@@ -57,7 +57,7 @@ const NewsArticleCard = ({
 					</Anchor>
 				</Link>
 
-				{/*				<Space h='xs' />
+				{/*<Space h='xs' />*/}
 				<MediaQuery smallerThan='sm' styles={{display: 'none'}}>
 					<Text>{strip(article || '')}</Text>
 				</MediaQuery>
@@ -90,10 +90,10 @@ const NewsArticleCard = ({
 							</Button>
 						</Link>
 					)}
-				</Group>*/}
+				</Group>
 			</Grid.Col>
 		</Grid>
-		<Space h='xl' />
+		{/*<Space h='xl' />*/}
 	</div>
 )
 

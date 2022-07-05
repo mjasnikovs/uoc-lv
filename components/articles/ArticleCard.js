@@ -38,18 +38,18 @@ const NewsArticleCard = ({
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>
 				<Group>
-					{/*					<ThemeIcon radius='xl' variant='light' size='sm'>
+					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<CalendarStats />
 					</ThemeIcon>
-					*/}
-					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
-					{/*
+
+					{/*<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>*/}
+
 					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />
-					</ThemeIcon>*/}
+					</ThemeIcon>
 					<Text>{userName}</Text>
 				</Group>
-				{/*
+
 				<Space h='xs' />
 
 				<Link href={`/article/${url}`} passHref={true}>
@@ -93,7 +93,7 @@ const NewsArticleCard = ({
 							</Button>
 						</Link>
 					)}
-				</Group>*/}
+				</Group>
 			</Grid.Col>
 		</Grid>
 		<Space h='xl' />

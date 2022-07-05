@@ -24,7 +24,7 @@ const NewsArticleCard = ({
 		<Grid>
 			<Grid.Col xs={12} sm={5}>
 				<div className='article-card-img-container'>
-					<Image
+					{/*					<Image
 						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
 						alt={title}
 						width='689'
@@ -33,7 +33,7 @@ const NewsArticleCard = ({
 						placeholder='blur'
 						blurDataURL={thumbnailBlur}
 						priority={count <= 3}
-					/>
+					/>*/}
 				</div>
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>

@@ -42,7 +42,7 @@ const NewsArticleCard = ({
 						<CalendarStats />
 					</ThemeIcon>
 
-					{/*<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>*/}
+					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
 
 					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />

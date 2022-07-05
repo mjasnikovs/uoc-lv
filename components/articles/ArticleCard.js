@@ -41,7 +41,9 @@ const NewsArticleCard = ({
 					{/*					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<CalendarStats />
 					</ThemeIcon>
+					*/}
 					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
+					{/*
 					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />
 					</ThemeIcon>*/}

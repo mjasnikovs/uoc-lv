@@ -12,8 +12,15 @@ const nextConfig = {
 	productionBrowserSourceMaps: true
 }
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-	enabled: process.env.ANALYZE === 'true'
-})
+const expo = (() => {
+	if (process.env.NODE_ENV === 'production') {
+		const withBundleAnalyzer = require('@next/bundle-analyzer')({
+			enabled: process.env.ANALYZE === 'true'
+		})
+		return withBundleAnalyzer(nextConfig)
+	}
 
-module.exports = process.env.NODE_ENV === 'production' ? nextConfig : withBundleAnalyzer(nextConfig)
+	return nextConfig
+})()
+
+module.exports = expo

@@ -20,7 +20,7 @@ const NewsArticleCard = ({
 	editLink,
 	count = 9999
 }) => (
-	<>
+	<div>
 		<Grid>
 			<Grid.Col xs={12} sm={5}>
 				<div className='article-card-img-container'>
@@ -94,7 +94,7 @@ const NewsArticleCard = ({
 			</Grid.Col>
 		</Grid>
 		<Space h='xl' />
-	</>
+	</div>
 )
 
 export default NewsArticleCard

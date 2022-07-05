@@ -13,7 +13,7 @@ const nextConfig = {
 }
 
 const expo = (() => {
-	if (process.env.NODE_ENV === 'production') {
+	if (process.env.NODE_ENV === 'devlopment') {
 		const withBundleAnalyzer = require('@next/bundle-analyzer')({
 			enabled: process.env.ANALYZE === 'true'
 		})

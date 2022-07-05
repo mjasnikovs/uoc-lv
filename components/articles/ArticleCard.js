@@ -22,7 +22,7 @@ const NewsArticleCard = ({
 }) => (
 	<div>
 		<Grid>
-			{/*			<Grid.Col xs={12} sm={5}>
+			<Grid.Col xs={12} sm={5}>
 				<div className='article-card-img-container'>
 					<Image
 						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
@@ -36,6 +36,7 @@ const NewsArticleCard = ({
 					/>
 				</div>
 			</Grid.Col>
+			{/*			
 			<Grid.Col xs={12} sm={7}>
 				<Group>
 					<ThemeIcon radius='xl' variant='light' size='sm'>

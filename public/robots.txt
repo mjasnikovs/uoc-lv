@@ -1,0 +1,6 @@
+Sitemap: https://mx5.lv/api/sitemap
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*

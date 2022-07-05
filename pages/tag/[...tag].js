@@ -105,7 +105,7 @@ const Index = ({session, articles, tag, page, totalPages}) => {
 					Diemžēl pēc Jūsu meklētās frāzes &quot;{tag}&quot; nekas netika atrasts. Mēģiniet vēlreiz ar citu
 					atslēgas vārdu.
 					<br /> Piemērs: &nbsp;
-					<Link href='/tag/podkasts'>
+					<Link href='/tag/podkasts' passHref={true}>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 							podkāsts
 						</Anchor>
@@ -116,7 +116,28 @@ const Index = ({session, articles, tag, page, totalPages}) => {
 				<ArticleCard key={article.id} {...article} />
 			))}
 			{totalPages > 0 && (
-				<Pagination page={page} onChange={pageNavigation} total={totalPages} radius='xs' color='indigo' />
+				<Pagination
+					page={page}
+					onChange={pageNavigation}
+					total={totalPages}
+					aria-label='pagination'
+					getItemAriaLabel={p => {
+						if (p === 'dots') {
+							return 'dots element'
+						} else if (p === 'prev') {
+							return 'previous page'
+						} else if (p === 'next') {
+							return 'next page'
+						} else if (p === 'first') {
+							return 'first page'
+						} else if (p === 'last') {
+							return 'last page'
+						}
+						return `${page} item`
+					}}
+					radius='xs'
+					color='indigo'
+				/>
 			)}
 		</AppShellPage>
 	)

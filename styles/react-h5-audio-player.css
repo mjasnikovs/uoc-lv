@@ -18,3 +18,12 @@
 .rhap_total-time {
     color: #dddddd !important;
 }
+
+@media only screen and (min-width: 769px) {
+    .article-card-img-container {
+        display: block;
+        overflow: hidden;
+        max-height: 195px;
+        max-width: 347px;
+    }
+}

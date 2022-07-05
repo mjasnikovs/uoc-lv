@@ -21,7 +21,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 		{session && (
 			<Grid.Col span={12}>
 				<Group position='right'>
-					<Link href={`/editor/${id}`}>
+					<Link href={`/editor/${id}`} passHref={true}>
 						<Button
 							variant='gradient'
 							compact

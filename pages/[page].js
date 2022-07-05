@@ -86,7 +86,28 @@ const Index = ({session, articles, page, totalPages}) => {
 					<ArticleCard key={article.id} {...article} count={count} />
 				))}
 			</>
-			<Pagination page={page} onChange={pageNavigation} total={totalPages} radius='xs' color='indigo' />
+			<Pagination
+				page={page}
+				onChange={pageNavigation}
+				total={totalPages}
+				aria-label='pagination'
+				getItemAriaLabel={p => {
+					if (p === 'dots') {
+						return 'dots element'
+					} else if (p === 'prev') {
+						return 'previous page'
+					} else if (p === 'next') {
+						return 'next page'
+					} else if (p === 'first') {
+						return 'first page'
+					} else if (p === 'last') {
+						return 'last page'
+					}
+					return `${page} item`
+				}}
+				radius='xs'
+				color='indigo'
+			/>
 		</AppShellPage>
 	)
 }

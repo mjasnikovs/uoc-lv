@@ -23,7 +23,7 @@ const NewsArticleCard = ({
 	<>
 		<Grid>
 			<Grid.Col xs={12} sm={5}>
-				<div style={{display: 'block', maxHeight: 387, maxWidth: 689}}>
+				<div className='article-card-img-container'>
 					<Image
 						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
 						alt={title}
@@ -38,18 +38,18 @@ const NewsArticleCard = ({
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>
 				<Group>
-					<ThemeIcon radius='xl' variant='light' size='sm' color='gray'>
+					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<CalendarStats />
 					</ThemeIcon>
-					<Text color='grey'>{toLocaleDateFull(publishedAt || createdAt)}</Text>
-					<ThemeIcon radius='xl' variant='light' size='sm' color='gray'>
+					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
+					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />
 					</ThemeIcon>
-					<Text color='grey'>{userName}</Text>
+					<Text>{userName}</Text>
 				</Group>
 				<Space h='xs' />
 
-				<Link href={`/article/${url}`}>
+				<Link href={`/article/${url}`} passHref={true}>
 					<Anchor>
 						<Text size='xl' weight='bold'>
 							{title}
@@ -59,11 +59,11 @@ const NewsArticleCard = ({
 
 				<Space h='xs' />
 				<MediaQuery smallerThan='sm' styles={{display: 'none'}}>
-					<Text color='grey'>{strip(article || '')}</Text>
+					<Text>{strip(article || '')}</Text>
 				</MediaQuery>
 				<Space h='xs' />
 				<Group>
-					<Link href={`/article/${url}`}>
+					<Link href={`/article/${url}`} passHref={true}>
 						<Button
 							variant='gradient'
 							compact
@@ -77,7 +77,7 @@ const NewsArticleCard = ({
 					</Link>
 
 					{editLink && (
-						<Link href={`/editor/${id}`}>
+						<Link href={`/editor/${id}`} passHref={true}>
 							<Button
 								variant='gradient'
 								compact

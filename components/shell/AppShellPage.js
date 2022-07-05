@@ -39,7 +39,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
 						<Group direction='column' p='md'>
-							<Link href='/tag/podkasts'>
+							<Link href='/tag/podkasts' passHref={true}>
 								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									podkasts
 								</Anchor>
@@ -58,7 +58,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 					<MediaQuery largerThan='sm' styles={{display: 'none'}}>
 						<Group>
 							<Burger opened={opened} onClick={() => setOpened(o => !o)} size='sm' mr='xl' />
-							<Link href='/'>
+							<Link href='/' passHref={true}>
 								<Anchor
 									style={{
 										textDecoration: 'none'
@@ -78,7 +78,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 							<Grid>
 								<Grid.Col xs={12} sm={8}>
 									<Breadcrumbs separator=' '>
-										<Link href='/'>
+										<Link href='/' passHref={true}>
 											<Anchor
 												style={{
 													textDecoration: 'none'
@@ -90,7 +90,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 												UOC.LV
 											</Anchor>
 										</Link>
-										<Link href='/editor'>
+										<Link href='/editor' passHref={true}>
 											<Anchor
 												size='xl'
 												variant='gradient'
@@ -99,7 +99,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 												redaktors
 											</Anchor>
 										</Link>
-										<Link href='/reader'>
+										<Link href='/reader' passHref={true}>
 											<Anchor
 												size='xl'
 												variant='gradient'

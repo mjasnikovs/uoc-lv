@@ -12,7 +12,7 @@ const UserMenu = ({session}) => {
 		return (
 			<Group position='right'>
 				<Tooltip label='Melnraksti' position='bottom' placement='end' color='indigo' gutter={10}>
-					<Link href='/drafts'>
+					<Link href='/drafts' passHref={true}>
 						<Anchor>
 							<Group position='right'>
 								<ThemeIcon size='lg' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
@@ -23,7 +23,7 @@ const UserMenu = ({session}) => {
 					</Link>
 				</Tooltip>
 				<Tooltip label='Profils' position='bottom' placement='end' color='indigo' gutter={10}>
-					<Link href='/profile'>
+					<Link href='/profile' passHref={true}>
 						<Anchor>
 							<Group position='right'>
 								<ThemeIcon size='lg' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
@@ -34,7 +34,7 @@ const UserMenu = ({session}) => {
 					</Link>
 				</Tooltip>
 				<Tooltip label='Atvienoties' position='bottom' placement='end' color='indigo' gutter={10}>
-					<Link href='/logout'>
+					<Link href='/logout' passHref={true}>
 						<Anchor>
 							<Group position='right'>
 								<ThemeIcon size='lg' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
@@ -49,7 +49,7 @@ const UserMenu = ({session}) => {
 	}
 
 	return (
-		<Link href='/login'>
+		<Link href='/login' passHref={true}>
 			<Anchor>
 				<Group position='right'>
 					Pievienoties

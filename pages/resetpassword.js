@@ -23,12 +23,12 @@ const ResetPassword = () => (
 				<Grid.Col span={12}>
 					<Center>
 						<Breadcrumbs align='center'>
-							<Link href='/register'>
+							<Link href='/register' passHref={true}>
 								<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									Izveidot jaunu kontu
 								</Anchor>
 							</Link>
-							<Link href='/login'>
+							<Link href='/login' passHref={true}>
 								<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 									Pievienoties sistēmai
 								</Anchor>

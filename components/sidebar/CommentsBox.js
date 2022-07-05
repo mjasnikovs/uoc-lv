@@ -77,7 +77,7 @@ const ComentsTab = () => {
 					>
 						<Grid gutter='xs'>
 							<Grid.Col span={10}>
-								<Link href={`/article/${comment.url}`}>
+								<Link href={`/article/${comment.url}`} passHref={true}>
 									<Anchor>{comment.title}</Anchor>
 								</Link>
 							</Grid.Col>

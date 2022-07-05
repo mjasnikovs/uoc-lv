@@ -203,7 +203,7 @@ const SideBar = ({form, article}) => {
 				</Grid.Col>
 				{article?.url && (
 					<Grid.Col>
-						<Link href={`/article/${article.url}`}>
+						<Link href={`/article/${article.url}`} passHref={true}>
 							<Anchor>
 								<Group>
 									<ActionIcon>

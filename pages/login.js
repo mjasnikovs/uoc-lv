@@ -71,7 +71,7 @@ const Login = ({id, token}) => {
 			<AppShellPage>
 				<Alert icon={<AlertCircle size={16} />} title='Tev paveicās!' color='teal'>
 					Tu tiksi pāradresēts uz sākumlapu. Ja tas nenotiek automātiski, spied te:
-					<Link href='/'>
+					<Link href='/' passHref={true}>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 							{' '}
 							sākums
@@ -131,12 +131,12 @@ const Login = ({id, token}) => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href='/resetpassword'>
+									<Link href='/resetpassword' passHref={true}>
 										<Anchor inherit variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Atjaunot paroli
 										</Anchor>
 									</Link>
-									<Link href='/register'>
+									<Link href='/register' passHref={true}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Izveidot jaunu kontu
 										</Anchor>

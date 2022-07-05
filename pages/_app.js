@@ -10,13 +10,16 @@ const App = props => {
 		<>
 			<Head>
 				<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
-				<link rel='shortcut icon' href='/favicon.ico' />
 			</Head>
 			<DefaultSeo
+				title='UOC.LV video spēļu un citu hobiju portāls'
+				description='video spēļu un citu hobiju portāls'
 				openGraph={{
+					title: 'UOC.LV video spēļu un citu hobiju portāls',
+					description: 'video spēļu un citu hobiju portāls',
+					url: process.env.NEXT_PUBLIC_HOSTNAME,
 					type: 'website',
 					locale: 'lv_LV',
-					url: process.env.NEXT_PUBLIC_HOSTNAME,
 					site_name: 'uoc.lv'
 				}}
 				twitter={{
@@ -30,14 +33,7 @@ const App = props => {
 				withNormalizeCSS
 				theme={{
 					/** Put your mantine theme override here */
-					colorScheme: 'dark',
-					breakpoints: {
-						xs: 576,
-						sm: 768,
-						md: 992,
-						lg: 1200,
-						xl: 1400
-					}
+					colorScheme: 'dark'
 				}}
 			>
 				<Component {...pageProps} />

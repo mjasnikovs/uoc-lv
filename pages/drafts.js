@@ -72,7 +72,7 @@ const Drafts = ({session, articles}) => (
 						<Title order={2}>Melnrakstis</Title>
 					</Grid.Col>
 					<Grid.Col span={4}>
-						<Link href='/editor/0'>
+						<Link href='/editor/0' passHref={true}>
 							<Button leftIcon={<News />} variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 								Izveidot jaunu
 							</Button>

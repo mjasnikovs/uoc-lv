@@ -81,11 +81,9 @@ const Index = ({session, articles, page, totalPages}) => {
 
 	return (
 		<AppShellPage session={session}>
-			<>
-				{articles.map((article, count) => (
-					<ArticleCard key={article.id} {...article} count={count} />
-				))}
-			</>
+			{articles.map((article, count) => (
+				<ArticleCard key={article.id} {...article} count={count} />
+			))}
 			<Pagination
 				page={page}
 				onChange={pageNavigation}

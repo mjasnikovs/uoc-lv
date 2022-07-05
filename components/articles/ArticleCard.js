@@ -24,7 +24,7 @@ const NewsArticleCard = ({
 		<Grid>
 			<Grid.Col xs={12} sm={5}>
 				<div className='article-card-img-container'>
-					{/*					<Image
+					<Image
 						src={thumbnail ? `${process.env.NEXT_PUBLIC_CDN}${thumbnail}` : '/placeholder.png'}
 						alt={title}
 						width='689'
@@ -33,18 +33,20 @@ const NewsArticleCard = ({
 						placeholder='blur'
 						blurDataURL={thumbnailBlur}
 						priority={count <= 3}
-					/>*/}
+					/>
 				</div>
 			</Grid.Col>
 			<Grid.Col xs={12} sm={7}>
 				<Group>
-					<ThemeIcon radius='xl' variant='light' size='sm'>
+					{/*					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<CalendarStats />
 					</ThemeIcon>
+*/}{' '}
 					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
-					<ThemeIcon radius='xl' variant='light' size='sm'>
+					{/*					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />
 					</ThemeIcon>
+*/}{' '}
 					<Text>{userName}</Text>
 				</Group>
 				<Space h='xs' />

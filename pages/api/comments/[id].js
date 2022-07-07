@@ -26,8 +26,8 @@ const commentsHandler = (req, res) => {
 		return pg({
 			query: `select
 					c.id,
-					to_char(c."updatedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "updatedAt",
-					to_char(c."createdAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "createdAt",
+					to_char(c."updatedAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "updatedAt",
+					to_char(c."createdAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "createdAt",
 					c."articleId",
 					c."userId",
 					u.name as "userName",

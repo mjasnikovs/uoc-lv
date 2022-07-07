@@ -2,7 +2,7 @@ import {Text, Space, Anchor, Grid, Group, ThemeIcon, MediaQuery, Button} from '@
 import CalendarStats from 'tabler-icons-react/dist/icons/calendar-stats'
 import User from 'tabler-icons-react/dist/icons/user'
 
-import {toLocaleDateFull, strip} from '../../connections/locales'
+import {strip} from '../../connections/locales'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -42,7 +42,7 @@ const NewsArticleCard = ({
 						<CalendarStats />
 					</ThemeIcon>
 
-					<Text>{toLocaleDateFull(publishedAt || createdAt)}</Text>
+					<Text>{publishedAt || createdAt}</Text>
 
 					<ThemeIcon radius='xl' variant='light' size='sm'>
 						<User />

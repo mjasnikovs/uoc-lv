@@ -29,9 +29,9 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 		query: `
 			select
 				a.id,
-				to_char(a."updatedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "updatedAt",
-				to_char(a."createdAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "createdAt",
-				to_char(a."publishedAt" at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "publishedAt",
+				to_char(a."updatedAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "updatedAt",
+				to_char(a."createdAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "createdAt",
+				to_char(a."publishedAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "publishedAt",
 				a."userId",
 				u.name as "userName",
 				a.url,
@@ -42,6 +42,7 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 				a.article,
 				a.notes,
 				a.thumbnail,
+				a."thumbnailBlur",
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")

@@ -11,7 +11,7 @@ import Mail from 'tabler-icons-react/dist/icons/mail'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {toLocaleDateFull, convertToSlug} from '../../connections/locales'
+import {convertToSlug} from '../../connections/locales'
 
 import ArticleComments from './ArticleComments'
 import RichTextEditor from '../RichTextEditor'
@@ -123,7 +123,7 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 					<ThemeIcon radius='xl' variant='light' size='sm' color='gray'>
 						<CalendarStats />
 					</ThemeIcon>
-					<Text color='grey'>{toLocaleDateFull(publishedAt || createdAt)}</Text>
+					<Text color='grey'>{publishedAt || createdAt}</Text>
 				</Group>
 			</Group>
 		</Grid.Col>

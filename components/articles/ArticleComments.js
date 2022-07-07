@@ -9,8 +9,6 @@ import MessageCircle from 'tabler-icons-react/dist/icons/message-circle'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {toLocaleDateFull} from '../../connections/locales'
-
 import ErrorBox from '../ErrorBox'
 
 const ArticleComents = ({id, session}) => {
@@ -114,7 +112,7 @@ const ArticleComents = ({id, session}) => {
 									<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
 										<MessageCircle size={16} /> {comment.userName}
 									</Anchor>
-									<Text size='xs'>{toLocaleDateFull(comment.createdAt)}</Text>
+									<Text size='xs'>{comment.createdAt}</Text>
 								</Group>
 								<Text>{replaceUsernames(comment.content)}</Text>
 								<Divider my='sm' variant='dotted' />

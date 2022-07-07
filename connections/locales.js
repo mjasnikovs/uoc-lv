@@ -1,5 +1,3 @@
-console.log(process.env.NODE_ICU_DATA)
-
 export const stdTimezoneOffset = date => {
 	const jan = new Date(date.getFullYear(), 0, 1)
 	const jul = new Date(date.getFullYear(), 6, 1)

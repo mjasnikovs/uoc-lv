@@ -35,14 +35,47 @@ services:
         container_name: uoc-nginx
         restart: unless-stopped
         ports:
-            - "80:80"
-            - "443:443"  
+            - '80:80'
+            - '443:443'
         networks:
             - uoc-network
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
             - ./public/cdn:/var/www/cdn
+
+    mailserver:
+        image: docker.io/mailserver/docker-mailserver:latest
+        container_name: mailserver
+        # If the FQDN for your mail-server is only two labels (eg: example.com),
+        # you can assign this entirely to `hostname` and remove `domainname`.
+        hostname: mx5.lv
+        domainname: mail.mx5.lv
+        env_file: mailserver.env
+        # More information about the mail-server ports:
+        # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
+        # To avoid conflicts with yaml base-60 float, DO NOT remove the quotation marks.
+        ports:
+            - '25:25' # SMTP  (explicit TLS => STARTTLS)
+            - '143:143' # IMAP4 (explicit TLS => STARTTLS)
+            - '465:465' # ESMTP (implicit TLS)
+            - '587:587' # ESMTP (explicit TLS => STARTTLS)
+            - '993:993' # IMAP4 (implicit TLS)
+        volumes:
+            - ./docker-data/dms/mail-data/:/mailserver/mail/
+            - ./docker-data/dms/mail-state/:/mailserver/mail-state/
+            - ./docker-data/dms/mail-logs/:/mailserver/log/
+            - ./docker-data/dms/config/:/tmp/docker-mailserver/
+            - /etc/localtime:/etc/localtime:ro
+            - ./certbot/conf:/etc/letsencrypt
+        restart: always
+        stop_grace_period: 1m
+        cap_add:
+            - NET_ADMIN
+        healthcheck:
+            test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+            timeout: 3s
+            retries: 0
 
     certbot:
         container_name: uoc-certbot

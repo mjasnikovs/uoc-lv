@@ -1,5 +1,7 @@
 import {Footer, Text, Container, Anchor, Grid, Group, ThemeIcon, Divider, Stack, Center} from '@mantine/core'
 
+import Link from 'next/link'
+
 import BrandTwitter from 'tabler-icons-react/dist/icons/brand-twitter'
 import BrandFacebook from 'tabler-icons-react/dist/icons/brand-facebook'
 import BrandYoutube from 'tabler-icons-react/dist/icons/brand-youtube'
@@ -15,8 +17,12 @@ const FooterPage = () => (
 					<Stack>
 						<Text weight='bold'>Kategorijas</Text>
 						<Divider color='indigo' size='sm' />
-						<Anchor href='/'>Sākums</Anchor>
-						<Anchor href='/'>Arhīvs</Anchor>
+						<Link href='/' passHref={true}>
+							<Anchor>Sākums</Anchor>
+						</Link>
+						<Link href='/tag/podkasts' passHref={true}>
+							<Anchor>Podkāsts</Anchor>
+						</Link>
 					</Stack>
 				</Grid.Col>
 				<Grid.Col xs={6} md={3}>

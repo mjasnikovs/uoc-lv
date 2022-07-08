@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-import {Space, Input, Badge} from '@mantine/core'
+import {Space, Input, Badge, Button} from '@mantine/core'
 import Search from 'tabler-icons-react/dist/icons/search'
 
 import {useRouter} from 'next/router'
@@ -25,6 +25,11 @@ const SideBar = () => {
 					placeholder='Meklēt'
 					value={search}
 					onChange={e => setSearch(e.target.value)}
+					rightSection={
+						<Button disabled={search === ''} type='submit'>
+							<Search />
+						</Button>
+					}
 				/>
 			</form>
 			<Space h='xl' />

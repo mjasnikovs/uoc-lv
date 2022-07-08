@@ -11,10 +11,15 @@ import {
 	Anchor,
 	Group,
 	Breadcrumbs,
-	Space
+	Space,
+	Input,
+	Button
 } from '@mantine/core'
 
 import Link from 'next/link'
+import {useRouter} from 'next/router'
+
+import Search from 'tabler-icons-react/dist/icons/search'
 
 import Footer from './Footer'
 import UserNavbarMenu from './UserNavbarMenu'
@@ -22,6 +27,15 @@ import SideBar from '../sidebar/SideBar'
 
 const AppShellContainer = ({children, sidebar, session}) => {
 	const [opened, setOpened] = useState(false)
+
+	const router = useRouter()
+	const [search, setSearch] = useState('')
+
+	const handleSubmit = e => {
+		e.preventDefault()
+		router.push('/search/' + search)
+		setOpened(false)
+	}
 
 	return (
 		<AppShell
@@ -38,15 +52,23 @@ const AppShellContainer = ({children, sidebar, session}) => {
 				>
 					<Navbar.Section></Navbar.Section>
 					<Navbar.Section p='md' hidden={!opened}>
-						<Group direction='column' p='md'>
-							<Link href='/tag/podkasts' passHref={true}>
-								<Anchor size='xl' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-									podkasts
-								</Anchor>
-							</Link>
+						<Group direction='column' p='md' grow>
+							<form action='' method='post' onSubmit={handleSubmit}>
+								<Input
+									icon={<Search />}
+									placeholder='Meklēt'
+									value={search}
+									onChange={e => setSearch(e.target.value)}
+									rightSection={
+										<Button disabled={search === ''} type='submit'>
+											<Search />
+										</Button>
+									}
+								/>
+							</form>
 						</Group>
 					</Navbar.Section>
-					<Navbar.Section>
+					<Navbar.Section p='md' hidden={!opened}>
 						<UserNavbarMenu session={session} />
 						<Space h='xl' />
 					</Navbar.Section>
@@ -88,24 +110,6 @@ const AppShellContainer = ({children, sidebar, session}) => {
 												size='xl'
 											>
 												UOC.LV
-											</Anchor>
-										</Link>
-										<Link href='/editor' passHref={true}>
-											<Anchor
-												size='xl'
-												variant='gradient'
-												gradient={{from: 'indigo', to: 'cyan'}}
-											>
-												redaktors
-											</Anchor>
-										</Link>
-										<Link href='/reader' passHref={true}>
-											<Anchor
-												size='xl'
-												variant='gradient'
-												gradient={{from: 'indigo', to: 'cyan'}}
-											>
-												skatītājs
 											</Anchor>
 										</Link>
 									</Breadcrumbs>

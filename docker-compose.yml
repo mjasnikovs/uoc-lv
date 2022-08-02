@@ -1,4 +1,4 @@
-version: '2.0'
+version: '3.0'
 
 services:
     uoc-pg:
@@ -62,11 +62,11 @@ services:
             - '587:587' # ESMTP (explicit TLS => STARTTLS)
             - '993:993' # IMAP4 (implicit TLS)
         volumes:
-            - ./docker-data/dms/mail-data/:/mailserver/mail/
-            - ./docker-data/dms/mail-state/:/mailserver/mail-state/
-            - ./docker-data/dms/mail-logs/:/mailserver/log/
-            - ./docker-data/dms/config/:/tmp/docker-mailserver/
-            - /etc/localtime:/etc/localtime:ro
+            - ./mailserver/mail/:/mailserver/mail/
+            - ./mailserver/mail-state/:/mailserver/mail-state/
+            - ./mailserver/logs/:/mailserver/log/
+            - ./mailserver/config/:/tmp/docker-mailserver/
+            - ./etc/localtime:/etc/localtime:ro
             - ./certbot/conf:/etc/letsencrypt
         restart: always
         stop_grace_period: 1m

@@ -16,6 +16,9 @@ import {
 	Anchor,
 	ActionIcon,
 	Group,
+	Alert,
+	Modal,
+	Space,
 	Image as ImageContainer
 } from '@mantine/core'
 import {useForm} from '@mantine/form'
@@ -23,6 +26,7 @@ import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 
 import Check from 'tabler-icons-react/dist/icons/check'
 import IconLink from 'tabler-icons-react/dist/icons/link'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 import Head from 'next/head'
 import Image from 'next/image'
@@ -39,6 +43,17 @@ import DropBox from '../../components/DropBox'
 const test = format({
 	articleId: integerFormat({naturalNumber: true, notEmpty: true})
 })
+
+const statusOptions = [
+	{key: 'draft', value: 'draft', label: 'Melnraksts'},
+	{key: 'approved', value: 'approved', label: 'Iesniegt apstiprināšanai'}
+]
+
+const statusOptionsAdministrator = [
+	{key: 'draft', value: 'draft', label: 'Melnraksts'},
+	{key: 'approved', value: 'approved', label: 'Apstiprināts'},
+	{key: 'active', value: 'active', label: 'Aktīvs'}
+]
 
 export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) => {
 	const session = await getSession(req)
@@ -64,6 +79,15 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 		return {
 			props: {
 				session
+			}
+		}
+	}
+
+	if (data.articleId === 0) {
+		return {
+			props: {
+				session,
+				article: null
 			}
 		}
 	}
@@ -96,6 +120,17 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 		object: true
 	})
 
+	if (session.privileges !== 'administrator' && session.id !== article?.userId) {
+		res.statusCode = 403
+		res.setHeader('location', '/')
+		res.end()
+		return {
+			props: {
+				session: null
+			}
+		}
+	}
+
 	return {
 		props: {
 			session,
@@ -104,10 +139,15 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 	}
 }, ironSessionSettings)
 
-const SideBar = ({form, article}) => {
+const SideBar = ({form, article, session}) => {
+	const router = useRouter()
 	const [error, setError] = useState(null)
 	const [loadingThumbnail, setLoadingThumbnail] = useState(null)
 	const [thumbnail, setThumbnail] = useState(null)
+	const [deleteId, setDeleteId] = useState(null)
+
+	const [deleteError, setDeleteError] = useState(null)
+	const [deleteLoading, setDeleteLoading] = useState(null)
 
 	const handleProfilePictureSubmit = files => {
 		setError(null)
@@ -137,17 +177,67 @@ const SideBar = ({form, article}) => {
 			})
 	}
 
+	const handleArticleDelete = () => {
+		setDeleteLoading(true)
+		fetch('/api/articles/deletearticle', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({id: article?.id})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setDeleteLoading(false)
+				if (typeof res.error !== 'undefined') {
+					return setDeleteError(res.error)
+				}
+				return router.push('/drafts')
+			})
+			.catch(err => {
+				setDeleteLoading(false)
+				return setDeleteError(err.message)
+			})
+	}
+
 	return (
 		<Container>
+			<>
+				<Modal opened={deleteId} onClose={() => setDeleteId(null)} title='Apstiprināt dzēšanu.'>
+					<Alert icon={<AlertCircle size={16} />} title='Brīdinājums' color='red'>
+						Raksts tik neatgriezeniski dzēst. Apstiprināt?
+					</Alert>
+					<Space h='xl' />
+					<ErrorBox error={deleteError} />
+					<Button
+						loading={deleteLoading}
+						disabled={deleteLoading}
+						variant='gradient'
+						radius='sm'
+						fullWidth
+						uppercase
+						gradient={{from: 'red', to: 'pink'}}
+						onClick={handleArticleDelete}
+					>
+						Dzēst
+					</Button>
+				</Modal>
+			</>
 			<Grid>
 				<Grid.Col span={12}>
 					<label>Titilbilde</label>
 				</Grid.Col>
-				{thumbnail && (
+				{(thumbnail || article?.thumbnail) && (
 					<>
 						<Grid.Col span={12}>
 							<Center>
-								<Image as={ImageContainer} src={thumbnail} alt='titulbilde' width='384' height='216' />
+								<Image
+									as={ImageContainer}
+									src={thumbnail || `${process.env.NEXT_PUBLIC_CDN}${article.thumbnail}`}
+									alt='titulbilde'
+									width='384'
+									height='216'
+								/>
 							</Center>
 						</Grid.Col>
 						<Grid.Col>
@@ -193,27 +283,39 @@ const SideBar = ({form, article}) => {
 						label='Status'
 						placeholder='Izvēlies vienu'
 						required
-						data={[
-							{key: 'draft', value: 'draft', label: 'Melnraksts'},
-							{key: 'approved', value: 'approved', label: 'Apstiprināts'},
-							{key: 'active', value: 'active', label: 'Aktīvs'}
-						]}
+						data={session.privileges === 'administrator' ? statusOptionsAdministrator : statusOptions}
 						{...form.getInputProps('status')}
 					/>
 				</Grid.Col>
 				{article?.url && (
-					<Grid.Col>
-						<Link href={`/article/${article.url}`} passHref={true}>
-							<Anchor>
-								<Group>
-									<ActionIcon>
-										<IconLink />
-									</ActionIcon>
-									{process.env.NEXT_PUBLIC_HOSTNAME}article/{article.url}
-								</Group>
-							</Anchor>
-						</Link>
-					</Grid.Col>
+					<>
+						<Grid.Col>
+							<Link href={`/article/${article.url}`} passHref={true}>
+								<Anchor>
+									<Group>
+										<ActionIcon>
+											<IconLink />
+										</ActionIcon>
+										{process.env.NEXT_PUBLIC_HOSTNAME}article/{article.url}
+									</Group>
+								</Anchor>
+							</Link>
+						</Grid.Col>
+
+						<Grid.Col>
+							<Button
+								variant='gradient'
+								compact
+								radius='sm'
+								size='xs'
+								uppercase
+								gradient={{from: 'red', to: 'pink'}}
+								onClick={() => setDeleteId(article.id)}
+							>
+								Dzēst
+							</Button>
+						</Grid.Col>
+					</>
 				)}
 			</Grid>
 		</Container>
@@ -235,8 +337,8 @@ const Editor = ({session, article}) => {
 			status: article?.status || 'draft',
 			article: article?.article || 'Some text? Bro?',
 			notes: article?.notes || '',
-			thumbnail: article?.thumbnail || '',
-			thumbnailBlur: article?.thumbnailBlur || '',
+			thumbnail: article?.thumbnail || undefined,
+			thumbnailBlur: article?.thumbnailBlur || undefined,
 			mp3: article?.mp3 || ''
 		},
 		validate: {
@@ -292,7 +394,9 @@ const Editor = ({session, article}) => {
 			</Head>
 			<AppShellPage
 				session={session}
-				sidebar={<SideBar form={form} article={article} loading={loading} success={success} />}
+				sidebar={
+					<SideBar form={form} article={article} loading={loading} success={success} session={session} />
+				}
 			>
 				<Container size='xl'>
 					<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>

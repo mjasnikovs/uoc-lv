@@ -13,7 +13,7 @@ const test = format({
 	article: stringFormat({trim: true, notEmpty: true}),
 	notes: stringFormat({trim: true}),
 	thumbnail: stringFormat({trim: true}),
-	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/gm}),
+	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/}),
 	mp3: stringFormat({trim: true})
 })
 
@@ -34,6 +34,13 @@ const createArticlehandler = async (req, res) => {
 		}
 
 		const {title, tags, category, status, article, notes, thumbnail, thumbnailBlur, mp3} = props
+
+		if (req.session.privileges !== 'administrator' && status === 'active') {
+			return reject(
+				new Error(`Sessions don't have appropriate privileges.
+					The article can't be set to status-active.`)
+			)
+		}
 
 		const tagList = tags
 			.split(',')

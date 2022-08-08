@@ -14,7 +14,7 @@ const test = format({
 	article: stringFormat({trim: true, notEmpty: true}),
 	notes: stringFormat({trim: true}),
 	thumbnail: stringFormat({trim: true}),
-	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/gm}),
+	thumbnailBlur: stringFormat({trim: true, test: /^data:image\/webp;base64,.*$/}),
 	mp3: stringFormat({trim: true})
 })
 
@@ -35,6 +35,33 @@ const updateArticlehandler = async (req, res) => {
 		}
 
 		const {id, title, tags, category, status, article, notes, thumbnail, mp3, thumbnailBlur} = props
+
+		const articleUser = await pg({
+			query: 'select "userId" from articles where id = $1::bigint limit 1',
+			values: [id],
+			object: true
+		})
+
+		if (articleUser === null) {
+			return reject(
+				new Error(`Sessions don't have appropriate article id.
+					The article can't be updated.`)
+			)
+		}
+
+		if (req.session.privileges !== 'administrator' && articleUser.userId !== req.session.user.id) {
+			return reject(
+				new Error(`Sessions don't have appropriate privileges.
+					The article can't be updated.`)
+			)
+		}
+
+		if (req.session.privileges !== 'administrator' && status === 'active') {
+			return reject(
+				new Error(`Sessions don't have appropriate privileges.
+					The article can't be set to status-active.`)
+			)
+		}
 
 		const tagList = tags
 			.split(',')
@@ -57,7 +84,7 @@ const updateArticlehandler = async (req, res) => {
 						article = $8::text,
 						notes = $9::text,
 						thumbnail = $10::text,
-						thumbnailBlur = $11::text,
+						"thumbnailBlur" = $11::text,
 						mp3 = $12::text
 					where id = $1::bigint
 					RETURNING

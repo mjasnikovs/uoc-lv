@@ -22,7 +22,7 @@ const loginRoute = async (req, res) => {
 		const {email, password} = args
 
 		const user = await pg({
-			query: 'select id, email, name, password from users where email = $1::text limit 1',
+			query: 'select id, email, name, password, privileges from users where email = $1::text limit 1',
 			values: [email],
 			object: true
 		}).catch(err => {
@@ -59,6 +59,7 @@ const loginRoute = async (req, res) => {
 		req.session.user = {
 			id: user.id,
 			name: user.name,
+			privileges: user.privileges,
 			token
 		}
 

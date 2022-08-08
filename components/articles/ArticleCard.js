@@ -30,8 +30,8 @@ const NewsArticleCard = ({
 						width='689'
 						height='387'
 						layout='responsive'
-						placeholder='blur'
-						blurDataURL={thumbnailBlur}
+						placeholder={thumbnail ? 'blur' : null}
+						blurDataURL={thumbnail ? thumbnailBlur : null}
 						priority={count <= 3}
 					/>
 				</div>

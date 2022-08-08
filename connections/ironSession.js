@@ -34,9 +34,9 @@ export const getSession = req =>
 
 		const {id, token} = user
 
-		pg({
+		return pg({
 			query: `
-			select id, name, photo from users
+			select id, name, photo, privileges from users
 			where id = $1::bigint and token = $2::text
 			limit 1
 		`,
@@ -52,6 +52,7 @@ export const getSession = req =>
 
 export const getServerSideProps = withIronSessionSsr(async ({req}) => {
 	const session = await getSession(req)
+
 	return {
 		props: {
 			session

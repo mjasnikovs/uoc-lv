@@ -46,10 +46,10 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res}) => {
 				a.mp3
 			from articles a
 			left join users u on(u.id = a."userId")
-			where status != 'active'
+			where status != 'active' and (a."userId" = $1::bigint or true = $2::boolean)
 			order by a."createdAt" DESC
 	    `,
-		values: [],
+		values: [req.session.user.id, req.session.user.privileges === 'administrator'],
 		object: false
 	})
 

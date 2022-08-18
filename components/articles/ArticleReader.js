@@ -18,7 +18,7 @@ import RichTextEditor from '../RichTextEditor'
 
 const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags, publishedAt, createdAt, session}) => (
 	<Grid>
-		{(session.privileges === 'administrator' || session.id === article.userId) && (
+		{(session?.privileges === 'administrator' || session?.id === article.userId) && (
 			<Grid.Col span={12}>
 				<Group position='right'>
 					<Link href={`/editor/${id}`} passHref={true}>

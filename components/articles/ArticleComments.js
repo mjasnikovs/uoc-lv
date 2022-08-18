@@ -1,21 +1,47 @@
 import {useState, useEffect} from 'react'
 
 import {useForm} from '@mantine/form'
-import {Divider, Loader, Center, Textarea, Button, Space, Grid, Group, Avatar, Text, Anchor, Alert} from '@mantine/core'
+import {
+	Divider,
+	Loader,
+	Center,
+	Textarea,
+	Button,
+	Space,
+	Grid,
+	Group,
+	Avatar,
+	Text,
+	Anchor,
+	Alert,
+	ActionIcon,
+	Modal
+} from '@mantine/core'
 
 import Check from 'tabler-icons-react/dist/icons/check'
 import MessageCircle from 'tabler-icons-react/dist/icons/message-circle'
+import Edit from 'tabler-icons-react/dist/icons/edit'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
 import ErrorBox from '../ErrorBox'
 
+const compareTimeStrings = (createdAt, updatedAt) => {
+	const createdAtString = createdAt.split(/[\.,:, ]/).join('')
+	const updatedAtString = updatedAt.split(/[\.,:, ]/).join('')
+	if (updatedAtString > createdAtString) {
+		return `Labots: ${updatedAt}`
+	}
+	return createdAt
+}
+
 const ArticleComents = ({id, session}) => {
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
 	const [comments, setComments] = useState([])
+	const [editCommentId, setEditCommentId] = useState(false)
 
 	useEffect(() => {
 		fetch(`/api/comments/${id}`, {
@@ -35,6 +61,13 @@ const ArticleComents = ({id, session}) => {
 
 	const form = useForm({
 		initialValues: {
+			content: ''
+		}
+	})
+
+	const editCommentForm = useForm({
+		initialValues: {
+			id: null,
 			content: ''
 		}
 	})
@@ -76,7 +109,38 @@ const ArticleComents = ({id, session}) => {
 				}
 				setSuccess(true)
 				form.reset()
-				return setComments([...comments, res])
+				return setComments([res, ...comments])
+			})
+			.catch(err => {
+				setLoading(false)
+				return setError(err.message)
+			})
+	}
+
+	const handleEditSubmit = values => {
+		setError(null)
+		setSuccess(null)
+		setLoading(true)
+
+		fetch(`/api/comments/${id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({...values, id, commentId: editCommentId})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setLoading(false)
+				if (typeof res.error !== 'undefined') {
+					return setError(res.error)
+				}
+				const commentIndex = comments.findIndex(comment => comment.id === editCommentId)
+				comments[commentIndex] = res
+				editCommentForm.reset()
+				setSuccess(true)
+				setEditCommentId(false)
+				return setComments(comments)
 			})
 			.catch(err => {
 				setLoading(false)
@@ -86,6 +150,27 @@ const ArticleComents = ({id, session}) => {
 
 	return (
 		<>
+			<Modal
+				opened={!!editCommentId}
+				onClose={() => setEditCommentId(false)}
+				size='xl'
+				centered
+				title='Rediģēt komentāru'
+			>
+				<form action='' method='post' onSubmit={editCommentForm.onSubmit(handleEditSubmit)}>
+					<Textarea
+						minrow={5}
+						placeholder='Raksti te!'
+						label='Komentārs'
+						radius='md'
+						{...editCommentForm.getInputProps('content')}
+					/>
+					<Space h='md' />
+					<Button loading={loading} leftIcon={success && <Check size={14} />} type='submit' color='indigo'>
+						Labot
+					</Button>
+				</form>
+			</Modal>
 			<Divider my='sm' />
 			{error && <ErrorBox error={error} />}
 			{loading && (
@@ -99,12 +184,16 @@ const ArticleComents = ({id, session}) => {
 						<Grid>
 							<Grid.Col span={1}>
 								<Avatar radius='sm' size='lg'>
-									<Image
-										src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
-										alt={comment.userName}
-										width='56'
-										height='56'
-									/>
+									{comment.userPhoto ? (
+										<Image
+											src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
+											alt={comment.userName}
+											width='56'
+											height='56'
+										/>
+									) : (
+										comment.userName.slice(0, 3)
+									)}
 								</Avatar>
 							</Grid.Col>
 							<Grid.Col span={11}>
@@ -112,7 +201,25 @@ const ArticleComents = ({id, session}) => {
 									<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
 										<MessageCircle size={16} /> {comment.userName}
 									</Anchor>
-									<Text size='xs'>{comment.createdAt}</Text>
+									<Group>
+										<Text size='xs'>
+											{compareTimeStrings(comment.createdAt, comment.updatedAt)}
+										</Text>
+										{(session?.privileges === 'administrator' ||
+											session?.id === comment.userId) && (
+											<ActionIcon
+												onClick={() => {
+													editCommentForm.setFieldValue('content', comment.content)
+													setEditCommentId(comment.id)
+												}}
+												radius='sm'
+												color='indigo'
+												size='xs'
+											>
+												<Edit />
+											</ActionIcon>
+										)}
+									</Group>
 								</Group>
 								<Text>{replaceUsernames(comment.content)}</Text>
 								<Divider my='sm' variant='dotted' />

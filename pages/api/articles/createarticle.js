@@ -35,7 +35,7 @@ const createArticlehandler = async (req, res) => {
 
 		const {title, tags, category, status, article, notes, thumbnail, thumbnailBlur, mp3} = props
 
-		if (req.session.privileges !== 'administrator' && status === 'active') {
+		if (req.session.user.privileges !== 'administrator' && status === 'active') {
 			return reject(
 				new Error(`Sessions don't have appropriate privileges.
 					The article can't be set to status-active.`)

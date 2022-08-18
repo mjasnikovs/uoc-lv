@@ -49,14 +49,14 @@ const updateArticlehandler = async (req, res) => {
 			)
 		}
 
-		if (req.session.privileges !== 'administrator' && articleUser.userId !== req.session.user.id) {
+		if (req.session.user.privileges !== 'administrator' && articleUser.userId !== req.session.user.id) {
 			return reject(
 				new Error(`Sessions don't have appropriate privileges.
 					The article can't be updated.`)
 			)
 		}
 
-		if (req.session.privileges !== 'administrator' && status === 'active') {
+		if (req.session.user.privileges !== 'administrator' && status === 'active') {
 			return reject(
 				new Error(`Sessions don't have appropriate privileges.
 					The article can't be set to status-active.`)

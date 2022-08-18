@@ -65,12 +65,16 @@ const ComentsTab = () => {
 						icon={
 							comment.userId && (
 								<Avatar color='indigo' radius='xl' alt={comment.userName}>
-									<Image
-										src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
-										alt={comment.userName}
-										width='56'
-										height='56'
-									/>
+									{comment.userPhoto ? (
+										<Image
+											src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
+											alt={comment.userName}
+											width='56'
+											height='56'
+										/>
+									) : (
+										comment.userName.slice(0, 3)
+									)}
 								</Avatar>
 							)
 						}

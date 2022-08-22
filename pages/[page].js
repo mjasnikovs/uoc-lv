@@ -4,6 +4,7 @@ import {useRouter} from 'next/router'
 import {ironSessionSettings, getSession} from '../connections/ironSession'
 import logger from '../connections/logger'
 import pg from '../connections/pg'
+import redirect from '../connections/redirect'
 
 import {Pagination} from '@mantine/core'
 
@@ -17,7 +18,8 @@ const test = format({
 })
 
 export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
-	console.log(req.headers['x-real-ip'] || req.connection.remoteAddress)
+	redirect()
+
 	const page = (() => {
 		if (typeof params === 'undefined') return 1
 		const data = test(params)

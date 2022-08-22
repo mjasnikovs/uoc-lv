@@ -11,7 +11,7 @@
 		"lint": "next lint",
 		"cdn-dev": "env-cmd -f './.env.development' nodemon ./cdn.js",
 		"cdn": "env-cmd -f './.env.production' node ./cdn.js",
-		"xml": "env-cmd -f './.env.development' node ./xml.js",
+		"xml": "env-cmd -f './.env.production' node ./xml.js",
 		"analyze": "ANALYZE=true next build"
 	},
 	"dependencies": {

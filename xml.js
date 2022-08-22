@@ -62,7 +62,6 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 	sync(
 		data.items
 			.reverse()
-			.reverse()
 			.map(val => {
 				return (item => {
 					return async cb => {

@@ -149,13 +149,17 @@ const SideBar = ({form, article, session}) => {
 	const [deleteError, setDeleteError] = useState(null)
 	const [deleteLoading, setDeleteLoading] = useState(null)
 
-	const handleProfilePictureSubmit = files => {
+	const handlePictureSubmit = files => {
 		setError(null)
 		setLoadingThumbnail(true)
 
 		const formData = new FormData()
 		formData.append('file', files[0])
 		formData.append('type', 'thumbnail')
+		formData.append(
+			'oldThumbnailUrl',
+			thumbnail || (article && `${process.env.NEXT_PUBLIC_CDN}${article.thumbnail}`)
+		)
 
 		fetch('/api/uploadpicture', {
 			method: 'POST',
@@ -250,7 +254,7 @@ const SideBar = ({form, article, session}) => {
 					<Dropzone
 						loading={loadingThumbnail}
 						multiple={false}
-						onDrop={handleProfilePictureSubmit}
+						onDrop={handlePictureSubmit}
 						onReject={() => setError('Faila/u augšuplāde neizdevās.')}
 						maxSize={3 * 1024 ** 2}
 						accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}

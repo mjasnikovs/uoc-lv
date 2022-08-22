@@ -4,6 +4,9 @@ import logger from '../../../connections/logger'
 import pg from '../../../connections/pg'
 import {getApiRouteSession} from '../../../connections/ironSession'
 
+import fs from 'fs'
+import path from 'path'
+
 const test = format({
 	id: integerFormat({naturalNumber: true, notEmpty: true, notZero: true})
 })
@@ -27,7 +30,7 @@ const deleteArticlehandler = async (req, res) => {
 		const {id} = props
 
 		const article = await pg({
-			query: 'select "userId" from articles where id = $1::bigint limit 1',
+			query: 'select "userId", article, thumbnail from articles where id = $1::bigint limit 1',
 			values: [id],
 			object: true
 		})
@@ -45,6 +48,23 @@ const deleteArticlehandler = async (req, res) => {
 					The article can't be deleted.`)
 			)
 		}
+
+		const imageSearch = article.article.matchAll(/src="(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)"/gm)
+
+		const deleteImages = [article.thumbnail, ...[...imageSearch].map(thumb => thumb[1])]
+
+		await Promise.all(
+			deleteImages.map(img => {
+				return new Promise(cb =>
+					fs.unlink(path.resolve('public/cdn/', img), err => {
+						if (err) {
+							logger.error(err)
+						}
+						return cb()
+					})
+				)
+			})
+		)
 
 		return pg({
 			query: `

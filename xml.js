@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const pg = require('./connections/pgreq')
 const uploadPictureHandler = require('./connections/uploadpicreq')
+const uploadMp3Handler = require('./connections/uploadMp3req')
 const {sync} = require('scpp')
 const decodeEscapedHTML = require('./bbc')
 const readline = require('readline')
@@ -59,86 +60,95 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 	let count = data.items.length
 
 	sync(
-		data.items.reverse().map(val => {
-			return (item => {
-				return async cb => {
-					const parsed = test({
-						title: item.title,
-						publishedAt: item.isoDate,
-						userId: USER_ID,
-						url: convertToSlug(item.title),
-						title: item.title,
-						tags: item.itunes.keywords || 'arhīvs',
-						category: item.categories[0],
-						status: 'active',
-						thumbnail: item.itunes.image,
-						mp3: item.enclosure.url
-					})
+		data.items
+			.reverse()
+			.reverse()
+			.map(val => {
+				return (item => {
+					return async cb => {
+						const parsed = test({
+							title: item.title,
+							publishedAt: item.isoDate,
+							userId: USER_ID,
+							url: convertToSlug(item.title),
+							title: item.title,
+							tags: item.itunes.keywords || 'arhīvs',
+							category: item.categories[0],
+							status: 'active',
+							thumbnail: item.itunes.image,
+							mp3: item.enclosure.url
+						})
 
-					if (parsed instanceof Error) {
-						return cb(new Error(parsed))
-					}
+						if (parsed instanceof Error) {
+							return cb(new Error(parsed))
+						}
 
-					const {userId, url, title, tags, category, status, notes, thumbnail, mp3, publishedAt} = parsed
+						const {userId, url, title, tags, category, status, notes, thumbnail, mp3, publishedAt} = parsed
 
-					const tagList = tags
-						.split(',')
-						.map(v => v.trim())
-						.filter(v => !!v)
+						const tagList = tags
+							.split(',')
+							.map(v => v.trim())
+							.filter(v => !!v)
 
-					const slugTags = tagList.map(convertToSlug)
+						const slugTags = tagList.map(convertToSlug)
 
-					const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(console.error)
+						const uploadThumbImg = await uploadPictureHandler(thumbnail, 'thumbnail').catch(console.error)
 
-					if (!uploadThumbImg) {
-						console.error('uploadThumbImg: Error', 'Skiping', title, thumbnail)
-						return cb(null)
-					}
+						let newMp3 = null
+						if (category === 'podcast') {
+							newMp3 = mp3.replace('http://cdn.uoc.lv/', process.env.NEXT_PUBLIC_CDN)
+							await uploadMp3Handler(mp3).catch(console.error)
+						}
 
-					let articleHTML = decodeEscapedHTML(item.itunes.summary)
-					const images = articleHTML.match(/<img src="(.*?)" \/>/gm)
+						if (!uploadThumbImg) {
+							console.error('uploadThumbImg: Error', 'Skiping', title, thumbnail)
+							return cb(null)
+						}
 
-					sync(
-						[
-							...images.map(v => {
-								return (image => {
-									return (cbS, skip = false) => {
-										if (skip === true) {
-											return cbS(null, true)
-										}
+						let articleHTML = decodeEscapedHTML(item.itunes.summary)
+						const images = articleHTML.match(/<img src="(.*?)" \/>/gm)
 
-										const imgUrl = /src="(.*?)"/gm.exec(image)
+						sync(
+							[
+								...images.map(v => {
+									return (image => {
+										return (cbS, skip = false) => {
+											if (skip === true) {
+												return cbS(null, true)
+											}
 
-										if (imgUrl[1] === thumbnail) {
-											articleHTML = articleHTML.replace(
-												new RegExp(`${image}`, 'gm'),
-												`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadThumbImg.url}" alt="${item.title}" />`
-											)
-											return cbS(null, false)
-										}
+											const imgUrl = /src="(.*?)"/gm.exec(image)
 
-										uploadPictureHandler(imgUrl[1])
-											.then(uploadImg => {
+											if (imgUrl[1] === thumbnail) {
 												articleHTML = articleHTML.replace(
 													new RegExp(`${image}`, 'gm'),
-													`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadImg.url}" alt="${item.title}" />`
+													`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadThumbImg.url}" alt="${item.title}" />`
 												)
 												return cbS(null, false)
-											})
-											.catch(err => {
-												console.log(err)
-												return cbS(null, true)
-											})
-									}
-								})(v)
-							}),
-							(cbS, skip = false) => {
-								if (skip === true) {
-									return cbS(null)
-								}
+											}
 
-								return pg({
-									query: `
+											uploadPictureHandler(imgUrl[1])
+												.then(uploadImg => {
+													articleHTML = articleHTML.replace(
+														new RegExp(`${image}`, 'gm'),
+														`<img src="${process.env.NEXT_PUBLIC_CDN}${uploadImg.url}" alt="${item.title}" />`
+													)
+													return cbS(null, false)
+												})
+												.catch(err => {
+													console.log(err)
+													return cbS(null, true)
+												})
+										}
+									})(v)
+								}),
+								(cbS, skip = false) => {
+									if (skip === true) {
+										return cbS(null)
+									}
+
+									return pg({
+										query: `
 										insert into articles (
 											"userId",
 											url,
@@ -176,44 +186,44 @@ const xmlText = fs.readFileSync(xml, 'utf-8')
 											$16::timestamp with time zone
 										)
 									`,
-									values: [
-										userId,
-										url,
-										title,
-										tagList,
-										slugTags,
-										category,
-										status,
-										articleHTML,
-										notes,
-										uploadThumbImg.url,
-										uploadThumbImg.thumbnailBlur,
-										mp3,
-										publishedAt,
-										publishedAt,
-										publishedAt,
-										publishedAt
-									],
-									object: true
-								})
-									.then(() => cbS(null))
-									.catch(err => cbS(new Error(err)))
-							}
-						],
-						err => {
-							if (err) {
-								return cb(err)
-							}
-							readline.clearLine(process.stdout, 0)
-							readline.cursorTo(process.stdout, 0)
-							process.stdout.write(`Progress: ${data.items.length}/${--count}`)
+										values: [
+											userId,
+											url,
+											title,
+											tagList,
+											slugTags,
+											category,
+											status,
+											articleHTML,
+											notes,
+											uploadThumbImg.url,
+											uploadThumbImg.thumbnailBlur,
+											newMp3 || mp3,
+											publishedAt,
+											publishedAt,
+											publishedAt,
+											publishedAt
+										],
+										object: true
+									})
+										.then(() => cbS(null))
+										.catch(err => cbS(new Error(err)))
+								}
+							],
+							err => {
+								if (err) {
+									return cb(err)
+								}
+								readline.clearLine(process.stdout, 0)
+								readline.cursorTo(process.stdout, 0)
+								process.stdout.write(`Progress: ${data.items.length}/${--count}`)
 
-							return cb(null)
-						}
-					)
-				}
-			})(val)
-		}),
+								return cb(null)
+							}
+						)
+					}
+				})(val)
+			}),
 		err => {
 			if (err) {
 				console.error(err)

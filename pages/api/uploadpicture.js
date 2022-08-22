@@ -81,6 +81,20 @@ const uploadPictureHandler = async (req, res) => {
 					}
 				})(fields.get('type'))
 
+				if (fields.get('type') === 'thumbnail' && fields.get('oldThumbnailUrl') !== null) {
+					const thumbnailSearch = fields
+						.get('oldThumbnailUrl')
+						.match(/^(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)$/m)
+
+					if (thumbnailSearch !== null) {
+						fs.unlink(path.resolve('public/cdn/', thumbnailSearch[1]), err => {
+							if (err) {
+								logger.error(err)
+							}
+						})
+					}
+				}
+
 				try {
 					const url = await sharp(tempPath)
 						.resize(resizeOptions)

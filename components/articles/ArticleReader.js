@@ -128,9 +128,6 @@ const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags,
 			</Group>
 		</Grid.Col>
 		<Grid.Col span={12}>
-			<textarea defaultValue={article} />
-		</Grid.Col>
-		<Grid.Col span={12}>
 			<ArticleComments session={session} id={id} />
 		</Grid.Col>
 	</Grid>

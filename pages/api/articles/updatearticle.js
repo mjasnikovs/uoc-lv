@@ -5,6 +5,9 @@ import pg from '../../../connections/pg'
 import {getApiRouteSession} from '../../../connections/ironSession'
 import {convertToSlug} from '../../../connections/locales'
 
+import fs from 'fs'
+import path from 'path'
+
 const test = format({
 	id: integerFormat({naturalNumber: true, notEmpty: true, notZero: true}),
 	title: stringFormat({trim: true, notEmpty: true, max: 200}),
@@ -37,7 +40,7 @@ const updateArticlehandler = async (req, res) => {
 		const {id, title, tags, category, status, article, notes, thumbnail, mp3, thumbnailBlur} = props
 
 		const articleUser = await pg({
-			query: 'select "userId" from articles where id = $1::bigint limit 1',
+			query: 'select "userId", article from articles where id = $1::bigint limit 1',
 			values: [id],
 			object: true
 		})
@@ -71,6 +74,30 @@ const updateArticlehandler = async (req, res) => {
 		const slugTags = tagList.map(convertToSlug)
 
 		const url = convertToSlug(title)
+
+		const oldImageSearch = [...articleUser.article.matchAll(/src="(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)"/gm)].map(
+			img => img[1]
+		)
+		const newImageSearch = [...article.matchAll(/src="(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)"/gm)].map(
+			img => img[1]
+		)
+
+		const deleteImages = oldImageSearch.filter(img => newImageSearch.indexOf(img) === -1)
+
+		if (deleteImages.length !== 0) {
+			await Promise.all(
+				deleteImages.map(img => {
+					return new Promise(cb =>
+						fs.unlink(path.resolve('public/cdn/', img), err => {
+							if (err) {
+								logger.error(err)
+							}
+							return cb()
+						})
+					)
+				})
+			)
+		}
 
 		return pg({
 			query: `

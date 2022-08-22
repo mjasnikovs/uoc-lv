@@ -18,7 +18,7 @@ const test = format({
 })
 
 export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
-	redirect()
+	redirect(req)
 
 	const page = (() => {
 		if (typeof params === 'undefined') return 1

@@ -17,6 +17,7 @@ const test = format({
 })
 
 export const getServerSideProps = withIronSessionSsr(async ({req, params}) => {
+	console.log(req.headers['x-real-ip'] || req.connection.remoteAddress)
 	const page = (() => {
 		if (typeof params === 'undefined') return 1
 		const data = test(params)

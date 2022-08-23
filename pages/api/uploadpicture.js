@@ -55,7 +55,7 @@ const uploadPictureHandler = async (req, res) => {
 						const webpName = `${Buffer.from(new Date().getTime() + filename)
 							.toString('base64url')
 							.slice(0, 25)}.webp`
-						const webpPath = path.resolve('public/cdn/', webpName)
+						const webpPath = path.resolve('cdn/', webpName)
 
 						return {webpName, webpPath}
 					}
@@ -87,7 +87,7 @@ const uploadPictureHandler = async (req, res) => {
 						.match(/^(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)$/m)
 
 					if (thumbnailSearch !== null) {
-						fs.unlink(path.resolve('public/cdn/', thumbnailSearch[1]), err => {
+						fs.unlink(path.resolve('cdn/', thumbnailSearch[1]), err => {
 							if (err) {
 								logger.error(err)
 							}
@@ -102,8 +102,7 @@ const uploadPictureHandler = async (req, res) => {
 						.toFile(webp.webpPath)
 						.then(() => webp.webpName)
 
-					const {base64} = await getPlaiceholder(path.resolve('/cdn', webp.webpName))
-
+					const {base64} = await getPlaiceholder(`/../cdn/${webp.webpName}`)
 					fs.unlink(tempPath, e => e && logger.error(e))
 
 					if (count++ === 0) {

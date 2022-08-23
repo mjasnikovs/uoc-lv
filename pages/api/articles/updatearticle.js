@@ -88,7 +88,7 @@ const updateArticlehandler = async (req, res) => {
 			await Promise.all(
 				deleteImages.map(img => {
 					return new Promise(cb =>
-						fs.unlink(path.resolve('public/cdn/', img), err => {
+						fs.unlink(path.resolve('cdn/', img), err => {
 							if (err) {
 								logger.error(err)
 							}

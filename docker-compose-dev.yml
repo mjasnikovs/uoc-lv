@@ -20,7 +20,7 @@ services:
             context: ./
             dockerfile: Dockerfile.cdn
         volumes:
-            - ./public/cdn:/usr/src/app/public/cdn
+            - ./cdn:/usr/src/app/public/cdn
         networks:
             - uoc-network
         ports:

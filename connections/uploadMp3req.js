@@ -30,7 +30,7 @@ const uploadMp3Handler = url =>
 					return reject(new Error(`Status code: ${res.statusCode} for mp3 "${httpsUrl}"`))
 				}
 
-				const fstream = fs.createWriteStream(path.resolve('public/cdn/', filename))
+				const fstream = fs.createWriteStream(path.resolve('cdn/', filename))
 
 				fstream.on('finish', async () => {
 					console.log(httpsUrl, 'completed download')

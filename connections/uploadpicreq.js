@@ -44,7 +44,7 @@ const uploadPictureHandler = (url, typeField) =>
 							const webpName = `${Buffer.from(new Date().getTime() + filename)
 								.toString('base64url')
 								.slice(0, 25)}.webp`
-							const webpPath = path.resolve('public/cdn/', webpName)
+							const webpPath = path.resolve('cdn/', webpName)
 
 							return {webpName, webpPath}
 						}
@@ -79,7 +79,7 @@ const uploadPictureHandler = (url, typeField) =>
 							.toFile(webp.webpPath)
 							.then(() => webp.webpName)
 
-						const {base64} = await getPlaiceholder(path.resolve('/cdn', webp.webpName))
+						const {base64} = await getPlaiceholder(`/../cdn/${webp.webpName}`)
 
 						fs.unlink(tempPath, e => e && console.error(e))
 

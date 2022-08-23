@@ -53,7 +53,7 @@ const uploadProfilePictureHandler = async (req, res) => {
 						const webpName = `${Buffer.from(new Date().getTime() + filename)
 							.toString('base64url')
 							.slice(0, 25)}.webp`
-						const webpPath = path.resolve('public/cdn/', webpName)
+						const webpPath = path.resolve('cdn/', webpName)
 
 						return {webpName, webpPath}
 					}
@@ -107,7 +107,7 @@ const uploadProfilePictureHandler = async (req, res) => {
 			})
 
 			if (user.photo !== null) {
-				const oldPhotoPath = path.resolve('public/cdn/', user.photo)
+				const oldPhotoPath = path.resolve('cdn/', user.photo)
 				fs.access(oldPhotoPath, fs.constants.F_OK, err => {
 					if (!err) {
 						fs.unlink(oldPhotoPath, e => e && logger.error(e))

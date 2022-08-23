@@ -19,7 +19,7 @@ services:
             dockerfile: Dockerfile.next
         volumes:
             - ./logs:/usr/src/app/logs
-            - ./public/cdn:/usr/src/app/public/cdn
+            - ./cdn:/usr/src/app/public/cdn
         networks:
             - uoc-network
         depends_on:
@@ -42,7 +42,7 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-            - ./public/cdn:/var/www/cdn
+            - ./cdn:/var/www/cdn
 
     mailserver:
         image: docker.io/mailserver/docker-mailserver:latest

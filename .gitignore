@@ -34,7 +34,7 @@ yarn-error.log*
 .vercel
 
 /temp/**/*
-/public/cdn/**/*
+/cdn/**/*
 /postgresqlData
 /uoc-next-logs
 /certbot/**/*

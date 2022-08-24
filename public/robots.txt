@@ -1,4 +1,4 @@
-Sitemap: https://mx5.lv/api/sitemap
+Sitemap: https://uoc.lv/api/sitemap
 
 User-agent: *
 Allow: /*

@@ -7,7 +7,7 @@ const nextConfig = {
 		ignoreDuringBuilds: true
 	},
 	images: {
-		domains: ['localhost', 'mx5.lv', 'cdn.mx5.lv']
+		domains: ['localhost', 'uoc.lv', 'cdn.uoc.lv']
 	},
 	productionBrowserSourceMaps: true
 }

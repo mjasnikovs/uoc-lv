@@ -49,8 +49,8 @@ services:
         container_name: mailserver
         # If the FQDN for your mail-server is only two labels (eg: example.com),
         # you can assign this entirely to `hostname` and remove `domainname`.
-        hostname: mail.mx5.lv
-        # domainname: mail.mx5.lv
+        hostname: mail.uoc.lv
+        # domainname: mail.uoc.lv
         env_file: mailserver.env
         # More information about the mail-server ports:
         # https://docker-mailserver.github.io/docker-mailserver/edge/config/security/understanding-the-ports/
@@ -107,7 +107,7 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-              # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d mail.mx5.lv -d cdn.mx5.lv -d mx5.lv --agree-tos
+              # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d mail.uoc.lv -d cdn.uoc.lv -d uoc.lv --agree-tos
 
 networks:
     uoc-network:

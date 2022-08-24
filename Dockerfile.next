@@ -22,6 +22,7 @@ RUN git reset --hard
 RUN git pull origin main
 
 RUN mkdir -p /usr/src/app/logs
+RUN mkdir -p /usr/src/app/cdn
 COPY .env.production .env.production 
 RUN npm run build
 

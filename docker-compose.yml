@@ -19,7 +19,7 @@ services:
             dockerfile: Dockerfile.next
         volumes:
             - ./logs:/usr/src/app/logs
-            - ./cdn:/usr/src/app/public/cdn
+            - ./cdn:/usr/src/app/cdn
         networks:
             - uoc-network
         depends_on:
@@ -99,7 +99,7 @@ services:
         env_file:
             - ./.env.production
 
-    certbot:
+    uoc-certbot:
         container_name: uoc-certbot
         image: certbot/certbot:v1.28.0
         depends_on:
@@ -107,7 +107,7 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-              # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d mail.uoc.lv -d cdn.uoc.lv -d uoc.lv --agree-tos
+        #command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d uoc.lv --agree-tos
 
 networks:
     uoc-network:

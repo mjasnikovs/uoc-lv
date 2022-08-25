@@ -37,6 +37,7 @@ yarn-error.log*
 /cdn/**/*
 /postgresqlData
 /mysqlData
+/shop-wordpress-html
 /uoc-next-logs
 /certbot/**/*
 /mailserver/**/*

@@ -94,6 +94,7 @@ services:
             - ./shop-wordpress-html:/var/www/html
         networks:
             - uoc-network
+        restart: unless-stopped
         depends_on:
             - uoc-shop-mysql
         env_file:
@@ -107,7 +108,7 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-        #command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d uoc.lv --agree-tos
+              # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d shop.uoc.lv --agree-tos
 
 networks:
     uoc-network:

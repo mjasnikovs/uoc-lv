@@ -64,14 +64,6 @@ const Profile = ({session}) => {
 					<Grid>
 						<Grid.Col span={12}>
 							<Title order={2}>Profils</Title>
-							<pre>{JSON.stringify(session, null, 4)}</pre>
-							<pre>
-								{JSON.stringify(
-									{hostname: process.env.NEXT_PUBLIC_HOSTNAME, cnd: process.env.NEXT_PUBLIC_CDN},
-									null,
-									4
-								)}
-							</pre>
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<TextInput

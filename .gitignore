@@ -36,6 +36,7 @@ yarn-error.log*
 /temp/**/*
 /cdn/**/*
 /postgresqlData
+/mysqlData
 /uoc-next-logs
 /certbot/**/*
 /mailserver/**/*

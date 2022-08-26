@@ -162,7 +162,7 @@ const Register = () => {
 							<Center>
 								<Breadcrumbs align='center'>
 									<Link href='/resetpassword' passHref={true}>
-										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+										<Anchor variant='gradient' disabled gradient={{from: 'indigo', to: 'cyan'}}>
 											Atjaunot paroli
 										</Anchor>
 									</Link>

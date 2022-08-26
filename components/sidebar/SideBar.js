@@ -4,7 +4,6 @@ import {Space, Input, Badge, Button} from '@mantine/core'
 import Search from 'tabler-icons-react/dist/icons/search'
 
 import {useRouter} from 'next/router'
-import Image from 'next/image'
 
 import CommentsBox from './CommentsBox'
 
@@ -49,15 +48,15 @@ const SideBar = () => {
 					height: '400px'
 				}}
 			>
-				<Image src='/discord.png' width='420' height='413' alt='discord' layout='responsive' />
-				{/*<iframe
-				src='https://discord.com/widget?id=619838999208656906&theme=dark'
-				width='100%'
-				height='400'
-				allowtransparency='true'
-				frameBorder='0'
-				sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts'
-			></iframe>*/}
+				{/*<Image src='/discord.png' width='420' height='413' alt='discord' layout='responsive' />*/}
+				<iframe
+					src='https://discord.com/widget?id=619838999208656906&theme=dark'
+					width='100%'
+					height='400'
+					allowtransparency='true'
+					frameBorder='0'
+					sandbox='allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts'
+				></iframe>
 			</div>
 		</>
 	)

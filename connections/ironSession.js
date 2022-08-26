@@ -36,7 +36,7 @@ export const getSession = req =>
 
 		return pg({
 			query: `
-			select id, name, photo, privileges from users
+			select id, name, photo, email, privileges from users
 			where id = $1::bigint and token = $2::text
 			limit 1
 		`,

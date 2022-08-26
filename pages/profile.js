@@ -70,7 +70,7 @@ const Profile = ({session}) => {
 								id='email'
 								disabled
 								label='E-pasts'
-								placeholder='tavs@epasts.lv'
+								placeholder='E-pasts'
 								{...form.getInputProps('email')}
 							/>
 						</Grid.Col>
@@ -79,7 +79,7 @@ const Profile = ({session}) => {
 								id='name'
 								disabled
 								label='Segvārds'
-								placeholder='Skaistas12'
+								placeholder='Segvārds'
 								{...form.getInputProps('name')}
 							/>
 						</Grid.Col>

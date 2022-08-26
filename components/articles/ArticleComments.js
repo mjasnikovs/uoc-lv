@@ -248,7 +248,7 @@ const ArticleComents = ({id, session}) => {
 				<Alert icon={<MessageCircle size={16} />} title='Vēlies komentēt?' color='gray'>
 					<Link href='/login' passHref={true}>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-							Pievienojies sistēmai
+							Pieslēgties sistēmai
 						</Anchor>
 					</Link>
 				</Alert>

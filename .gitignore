@@ -40,5 +40,6 @@ yarn-error.log*
 /shop-wordpress-html
 /uoc-next-logs
 /certbot/**/*
+public/uocpodcast.xml
 /mailserver/**/*
 !.gitkeep

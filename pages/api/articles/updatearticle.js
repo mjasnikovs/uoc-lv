@@ -4,6 +4,7 @@ import logger from '../../../connections/logger'
 import pg from '../../../connections/pg'
 import {getApiRouteSession} from '../../../connections/ironSession'
 import {convertToSlug} from '../../../connections/locales'
+import generatePodcastRss from '../../../connections/generatePodcastRss'
 
 import fs from 'fs'
 import path from 'path'
@@ -40,7 +41,7 @@ const updateArticlehandler = async (req, res) => {
 		const {id, title, tags, category, status, article, notes, thumbnail, mp3, thumbnailBlur} = props
 
 		const articleUser = await pg({
-			query: 'select "userId", article from articles where id = $1::bigint limit 1',
+			query: 'select "userId", article, "publishedAt", status from articles where id = $1::bigint limit 1',
 			values: [id],
 			object: true
 		})
@@ -112,7 +113,8 @@ const updateArticlehandler = async (req, res) => {
 						notes = $9::text,
 						thumbnail = $10::text,
 						"thumbnailBlur" = $11::text,
-						mp3 = $12::text
+						mp3 = $12::text,
+                        "publishedAt" = $13::timestamp with time zone
 					where id = $1::bigint
 					RETURNING
 					*
@@ -129,11 +131,17 @@ const updateArticlehandler = async (req, res) => {
 				notes,
 				thumbnail,
 				thumbnailBlur,
-				mp3
+				mp3,
+				status === 'active' && articleUser.status !== 'active' ? 'NOW()' : articleUser.publishedAt
 			],
 			object: true
 		})
-			.then(resolve)
+			.then(result => {
+				if (category === 'podcast') {
+					generatePodcastRss()
+				}
+				return resolve(result)
+			})
 			.catch(err => reject(new Error(err)))
 	})
 		.then(article => {

@@ -16,9 +16,22 @@ import {convertToSlug} from '../../connections/locales'
 import ArticleComments from './ArticleComments'
 import RichTextEditor from '../RichTextEditor'
 
-const ArticleReader = ({id, url, mp3, userName, userPhoto, title, article, tags, publishedAt, createdAt, session}) => (
+const ArticleReader = ({
+	id,
+	url,
+	mp3,
+	userName,
+	userPhoto,
+	title,
+	article,
+	userId,
+	tags,
+	publishedAt,
+	createdAt,
+	session
+}) => (
 	<Grid>
-		{(session?.privileges === 'administrator' || session?.id === article.userId) && (
+		{(session?.privileges === 'administrator' || session?.id === userId) && (
 			<Grid.Col span={12}>
 				<Group position='right'>
 					<Link href={`/editor/${id}`} passHref={true}>

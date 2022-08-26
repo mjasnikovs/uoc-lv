@@ -335,11 +335,11 @@ const Editor = ({session, article}) => {
 
 	const form = useForm({
 		initialValues: {
-			title: article?.title || 'Virsraksts',
-			tags: article ? String(article.tags) : 'mario, party, wuu',
+			title: article?.title || '',
+			tags: article ? String(article.tags) : '',
 			category: article?.category || 'news',
 			status: article?.status || 'draft',
-			article: article?.article || 'Some text? Bro?',
+			article: article?.article || '',
 			notes: article?.notes || '',
 			thumbnail: article?.thumbnail || undefined,
 			thumbnailBlur: article?.thumbnailBlur || undefined,

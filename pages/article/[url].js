@@ -62,8 +62,6 @@ export const getServerSideProps = withIronSessionSsr(async ({req, res, params}) 
 		}).catch(err => logger.error(new Error(err)))
 	])
 
-	console.log(article)
-
 	if (article === null) {
 		res.statusCode = 302
 		res.setHeader('location', '/')

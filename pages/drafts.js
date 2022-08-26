@@ -70,7 +70,7 @@ const Drafts = ({session, articles}) => (
 			<Container size='xl'>
 				<Grid>
 					<Grid.Col span={8}>
-						<Title order={2}>Melnrakstis</Title>
+						<Title order={2}>Melnraksti</Title>
 					</Grid.Col>
 					<Grid.Col span={4}>
 						<Link href='/editor/0' passHref={true}>

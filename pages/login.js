@@ -122,7 +122,7 @@ const Login = ({id, token}) => {
 									</Center>
 								) : (
 									<Button type='submit' fullWidth>
-										Pievienoties
+										Pieslēgties
 									</Button>
 								)}
 							</>

@@ -135,7 +135,7 @@ const Register = () => {
 									Konts ir reģistrēts. &nbsp;
 									<Link href='/login' passHref={true}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-											pievienoties sistēmai
+											pieslēgties sistēmai
 										</Anchor>
 									</Link>
 								</Alert>
@@ -161,14 +161,14 @@ const Register = () => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href='/resetpassword' passHref={true}>
+									{/*	<Link href='/resetpassword' passHref={true}>
 										<Anchor variant='gradient' disabled gradient={{from: 'indigo', to: 'cyan'}}>
 											Atjaunot paroli
 										</Anchor>
-									</Link>
+                                    </Link>*/}
 									<Link href='/login' passHref={true}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-											Pievienoties sistēmai
+											Pieslēgties sistēmai
 										</Anchor>
 									</Link>
 								</Breadcrumbs>

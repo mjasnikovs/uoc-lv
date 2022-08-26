@@ -131,7 +131,7 @@ const Login = ({id, token}) => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href='/resetpassword' passHref={true}>
+									{/*<Link href='/resetpassword' passHref={true}>
 										<Anchor
 											inherit
 											variant='gradient'
@@ -140,7 +140,7 @@ const Login = ({id, token}) => {
 										>
 											Atjaunot paroli
 										</Anchor>
-									</Link>
+                                    </Link>*/}
 									<Link href='/register' passHref={true}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Izveidot jaunu kontu

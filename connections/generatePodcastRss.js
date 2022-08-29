@@ -62,9 +62,9 @@ const generatePodcastRss = async () => {
 			values: [],
 			object: false
 		})
-		
-        const items = podcasts.map(podcast => {
-		const {size} = await stat(path.resolve('./cdn', 'uoc.lv-podkasts-109.mp3'))
+
+		const items = podcasts.map(async podcast => {
+			const {size} = await stat(path.resolve('./cdn', 'uoc.lv-podkasts-109.mp3'))
 			return `
                 <item>
                     <title>${podcast.title}</title>

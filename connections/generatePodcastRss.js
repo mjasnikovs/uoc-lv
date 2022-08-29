@@ -63,23 +63,25 @@ const generatePodcastRss = async () => {
 			object: false
 		})
 
-		const items = podcasts.map(async podcast => {
-			const {size} = await stat(path.resolve('./cdn', 'uoc.lv-podkasts-109.mp3'))
-			return `
-                <item>
-                    <title>${podcast.title}</title>
-                    <itunes:author>UOC.LV</itunes:author>
-                    <itunes:subtitle>Video spēļu podkāsts</itunes:subtitle>
-                    <itunes:summary>${cleanHTML(podcast.article)}</itunes:summary>
-                    <itunes:image href="${process.env.NEXT_PUBLIC_HOSTNAME}podcasticon.png" />
-                    <enclosure url="${podcast.mp3}" length="${size}" type="audio/mp3" />
-                    <guid>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</guid>
-                    <link>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</link>
-                    <pubDate>${podcast.publishedAt}</pubDate>
-                    <itunes:keywords>${cleanHTML(podcast.tags.join(', '))}</itunes:keywords>
-                </item>
-            `
-		})
+		const items = await Promise.all(
+			podcasts.map(async podcast => {
+				const {size} = await stat(path.resolve('./cdn', podcast.mp3.replace(/https:\/\/cdn.uoc.lv\//gm, '')))
+				return `
+                    <item>
+                        <title>${podcast.title}</title>
+                        <itunes:author>UOC.LV</itunes:author>
+                        <itunes:subtitle>Video spēļu podkāsts</itunes:subtitle>
+                        <itunes:summary>${cleanHTML(podcast.article)}</itunes:summary>
+                        <itunes:image href="${process.env.NEXT_PUBLIC_HOSTNAME}podcasticon.png" />
+                        <enclosure url="${podcast.mp3}" length="${size}" type="audio/mp3" />
+                        <guid>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</guid>
+                        <link>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</link>
+                        <pubDate>${podcast.publishedAt}</pubDate>
+                        <itunes:keywords>${cleanHTML(podcast.tags.join(', '))}</itunes:keywords>
+                    </item>
+                `
+			})
+		)
 
 		const FEED = `${HEADER}${items.join('')}${FOOTER}`
 

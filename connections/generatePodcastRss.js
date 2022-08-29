@@ -1,4 +1,4 @@
-import {writeFile} from 'fs/promises'
+import {writeFile, stat} from 'fs/promises'
 import path from 'path'
 
 import pg from '../connections/pg'
@@ -62,8 +62,9 @@ const generatePodcastRss = async () => {
 			values: [],
 			object: false
 		})
-
-		const items = podcasts.map(podcast => {
+		
+        const items = podcasts.map(podcast => {
+		const {size} = await stat(path.resolve('./cdn', 'uoc.lv-podkasts-109.mp3'))
 			return `
                 <item>
                     <title>${podcast.title}</title>
@@ -71,7 +72,7 @@ const generatePodcastRss = async () => {
                     <itunes:subtitle>Video spēļu podkāsts</itunes:subtitle>
                     <itunes:summary>${cleanHTML(podcast.article)}</itunes:summary>
                     <itunes:image href="${process.env.NEXT_PUBLIC_HOSTNAME}podcasticon.png" />
-                    <enclosure url="${podcast.mp3}" length="110730209" type="audio/mp3" />
+                    <enclosure url="${podcast.mp3}" length="${size}" type="audio/mp3" />
                     <guid>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</guid>
                     <link>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</link>
                     <pubDate>${podcast.publishedAt}</pubDate>

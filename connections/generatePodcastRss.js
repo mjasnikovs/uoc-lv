@@ -5,13 +5,13 @@ import pg from '../connections/pg'
 import logger from '../connections/logger'
 
 const cleanHTML = text =>
-	text
+	String(text)
 		.replace(/<[^>]*>?/gm, '')
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;')
+		.replace(/&/gm, '&amp;')
+		.replace(/</gm, '&lt;')
+		.replace(/>/gm, '&gt;')
+		.replace(/"/gm, '&quot;')
+		.replace(/'/gm, '&#039;')
 
 const HEADER = `
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
@@ -75,7 +75,7 @@ const generatePodcastRss = async () => {
                     <guid>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</guid>
                     <link>${process.env.NEXT_PUBLIC_HOSTNAME}${podcast.url}</link>
                     <pubDate>${podcast.publishedAt}</pubDate>
-                    <itunes:keywords>${cleanHTML(podcast.tags)}</itunes:keywords>
+                    <itunes:keywords>${cleanHTML(podcast.tags.join(', '))}</itunes:keywords>
                 </item>
             `
 		})

@@ -80,7 +80,7 @@ const generatePodcastRss = async () => {
             `
 		})
 
-		const FEED = `${HEADER}${items.join()}${FOOTER}`
+		const FEED = `${HEADER}${items.join('')}${FOOTER}`
 
 		await writeFile(path.resolve('./cdn', 'uocpodcast.xml'), FEED, 'utf-8')
 	} catch (e) {

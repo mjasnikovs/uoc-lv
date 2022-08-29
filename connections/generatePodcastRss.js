@@ -4,7 +4,14 @@ import path from 'path'
 import pg from '../connections/pg'
 import logger from '../connections/logger'
 
-const cleanHTML = text => text.replace(/<[^>]*>?/gm, '').replace(/&(?!#?[a-z0-9]+;)/g, '$amp;')
+const cleanHTML = text =>
+	text
+		.replace(/<[^>]*>?/gm, '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;')
 
 const HEADER = `
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">

@@ -51,7 +51,7 @@ const deleteArticlehandler = async (req, res) => {
 
 		const imageSearch = article.article.matchAll(/src="(?:.*?)(?:\/\/)(?:.*?)(?:\/)(.*?\.webp)"/gm)
 
-		const deleteImages = [article.thumbnail, ...[...imageSearch].map(thumb => thumb[1])]
+		const deleteImages = [article.thumbnail, ...[...imageSearch].map(thumb => thumb[1])].filter(val => val !== null)
 
 		await Promise.all(
 			deleteImages.map(img => {

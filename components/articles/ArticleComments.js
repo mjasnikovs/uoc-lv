@@ -22,6 +22,8 @@ import {
 import Check from 'tabler-icons-react/dist/icons/check'
 import MessageCircle from 'tabler-icons-react/dist/icons/message-circle'
 import Edit from 'tabler-icons-react/dist/icons/edit'
+import Eraser from 'tabler-icons-react/dist/icons/eraser'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -43,6 +45,7 @@ const ArticleComents = ({id, session}) => {
 	const [success, setSuccess] = useState(null)
 	const [comments, setComments] = useState([])
 	const [editCommentId, setEditCommentId] = useState(false)
+	const [deleteCommentId, setDeleteCommentId] = useState(false)
 
 	useEffect(() => {
 		fetch(`/api/comments/${id}`, {
@@ -149,6 +152,35 @@ const ArticleComents = ({id, session}) => {
 			})
 	}
 
+	const handleDeleteSubmit = () => {
+		setError(null)
+		setSuccess(null)
+		setLoading(true)
+
+		fetch(`/api/comments/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({id: deleteCommentId})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setLoading(false)
+				if (typeof res.error !== 'undefined') {
+					return setError(res.error)
+				}
+				const newComments = comments.filter(comment => comment.id !== deleteCommentId)
+				setSuccess(true)
+				setDeleteCommentId(false)
+				return setComments(newComments)
+			})
+			.catch(err => {
+				setLoading(false)
+				return setError(err.message)
+			})
+	}
+
 	return (
 		<>
 			<Modal
@@ -171,6 +203,23 @@ const ArticleComents = ({id, session}) => {
 						Labot
 					</Button>
 				</form>
+			</Modal>
+
+			<Modal opened={!!deleteCommentId} onClose={() => setDeleteCommentId(false)} title='Apstiprināt dzēšanu.'>
+				<Alert icon={<AlertCircle size={16} />} title='Brīdinājums' color='red'>
+					Komentārs tik neatgriezeniski dzēst. Apstiprināt?
+				</Alert>
+				<Space h='xl' />
+				<Button
+					loading={loading}
+					onClick={handleDeleteSubmit}
+					n={success && <Check size={14} />}
+					type='submit'
+					color='red'
+					fullWidth
+				>
+					Dzēst
+				</Button>
 			</Modal>
 			<Divider my='sm' />
 			{error && <ErrorBox error={error} />}
@@ -201,6 +250,18 @@ const ArticleComents = ({id, session}) => {
 										<Edit />
 									</ActionIcon>
 								)}
+								{session?.privileges === 'administrator' && (
+									<ActionIcon
+										onClick={() => {
+											setDeleteCommentId(comment.id)
+										}}
+										radius='sm'
+										color='red'
+										size='xs'
+									>
+										<Eraser />
+									</ActionIcon>
+								)}
 							</Group>
 						</Group>
 					</Grid.Col>
@@ -228,7 +289,7 @@ const ArticleComents = ({id, session}) => {
 					</Grid.Col>
 				</Grid>
 			))}
-			<space h='md' />
+			<Space h='md' />
 			{session && (
 				<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
 					<Textarea

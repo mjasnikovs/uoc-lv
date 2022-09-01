@@ -15,7 +15,8 @@ import {
 	Anchor,
 	Alert,
 	ActionIcon,
-	Modal
+	Modal,
+	List
 } from '@mantine/core'
 
 import Check from 'tabler-icons-react/dist/icons/check'
@@ -178,11 +179,35 @@ const ArticleComents = ({id, session}) => {
 					<Loader color='indigo' size='md' />
 				</Center>
 			)}
-			<Grid>
-				{comments.map(comment => (
-					<Grid.Col key={comment.id} span={12}>
-						<Grid>
-							<Grid.Col span={1}>
+			{comments.map(comment => (
+				<Grid gutter='xs' key={comment.id}>
+					<Grid.Col span={12}>
+						<Group position='apart'>
+							<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
+								<MessageCircle size={16} /> {comment.userName}
+							</Anchor>
+							<Group>
+								<Text size='xs'>{compareTimeStrings(comment.createdAt, comment.updatedAt)}</Text>
+								{(session?.privileges === 'administrator' || session?.id === comment.userId) && (
+									<ActionIcon
+										onClick={() => {
+											editCommentForm.setFieldValue('content', comment.content)
+											setEditCommentId(comment.id)
+										}}
+										radius='sm'
+										color='indigo'
+										size='xs'
+									>
+										<Edit />
+									</ActionIcon>
+								)}
+							</Group>
+						</Group>
+					</Grid.Col>
+					<Grid.Col span={12}>
+						<List
+							spacing='xs'
+							icon={
 								<Avatar radius='sm' size='lg'>
 									{comment.userPhoto ? (
 										<Image
@@ -195,40 +220,15 @@ const ArticleComents = ({id, session}) => {
 										comment.userName.slice(0, 3)
 									)}
 								</Avatar>
-							</Grid.Col>
-							<Grid.Col span={11}>
-								<Group position='apart'>
-									<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
-										<MessageCircle size={16} /> {comment.userName}
-									</Anchor>
-									<Group>
-										<Text size='xs'>
-											{compareTimeStrings(comment.createdAt, comment.updatedAt)}
-										</Text>
-										{(session?.privileges === 'administrator' ||
-											session?.id === comment.userId) && (
-											<ActionIcon
-												onClick={() => {
-													editCommentForm.setFieldValue('content', comment.content)
-													setEditCommentId(comment.id)
-												}}
-												radius='sm'
-												color='indigo'
-												size='xs'
-											>
-												<Edit />
-											</ActionIcon>
-										)}
-									</Group>
-								</Group>
-								<Text>{replaceUsernames(comment.content)}</Text>
-								<Divider my='sm' variant='dotted' />
-							</Grid.Col>
-						</Grid>
+							}
+						>
+							<List.Item>{replaceUsernames(comment.content)}</List.Item>
+						</List>
+						<Divider my='sm' variant='dotted' />
 					</Grid.Col>
-				))}
-			</Grid>
-			<Space h='md' />
+				</Grid>
+			))}
+			<space h='md' />
 			{session && (
 				<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
 					<Textarea

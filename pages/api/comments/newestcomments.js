@@ -11,11 +11,12 @@ const newestCommentsHandler = (req, res) => {
 						a.title,
 						a.url,
 						(select count(*) from comments c where "articleId" = a.id) as count,
-						(select "userId" from comments c where "articleId" = a.id order by c."createdAt" DESC limit 1) as "userId"
+						(select "userId" from comments c where "articleId" = a.id order by c."createdAt" DESC limit 1) as "userId",
+                        a."commentedAt"
 					from articles a
 					where a.status = 'active'
 					group by a.id
-					order by a."commentedAt" DESC
+					order by a."commentedAt" DESC NULLS LAST
 					limit 10
 				)
 				select
@@ -24,6 +25,7 @@ const newestCommentsHandler = (req, res) => {
 					a.url,
 					a.count,
 					a."userId",
+                    a."commentedAt",
 					u.name as "userName",
 					u.photo as "userPhoto"
 				from art a

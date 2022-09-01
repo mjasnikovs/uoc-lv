@@ -1,15 +1,40 @@
 import {Fragment} from 'react'
 import useSWR from 'swr'
-import {Space, Grid, Badge, List, Avatar, Skeleton, Anchor} from '@mantine/core'
+import {Space, Grid, Badge, Avatar, Skeleton, Anchor} from '@mantine/core'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
 import ErrorBox from '../ErrorBox'
 
-const ComentBadgeStyle = {float: 'right', position: 'absolute', right: 0}
-
 const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+const DisplayAvatar = comment => {
+	if (comment.userId && comment.userPhoto) {
+		return (
+			<Avatar color='indigo' radius='xl' alt={comment.userName}>
+				<Image
+					src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
+					alt={comment.userName}
+					width='56'
+					height='56'
+				/>
+			</Avatar>
+		)
+	} else if (comment.userId) {
+		return (
+			<Avatar color='indigo' radius='xl' alt={comment.userName}>
+				{comment.userName.slice(0, 3)}
+			</Avatar>
+		)
+	}
+
+	return (
+		<Avatar color='indigo' radius='xl'>
+			UOC
+		</Avatar>
+	)
+}
 
 const ComentsTab = () => {
 	const {data, error} = useSWR('/api/comments/newestcomments', fetcher)
@@ -50,50 +75,23 @@ const ComentsTab = () => {
 			</Badge>
 			<Space h='xl' />
 			{error && <ErrorBox error={error} />}
-			<List
-				style={{position: 'relative'}}
-				spacing='lg'
-				icon={
-					<Avatar color='indigo' radius='xl'>
-						UOC
-					</Avatar>
-				}
-			>
-				{data.map(comment => (
-					<List.Item
-						key={comment.id}
-						icon={
-							comment.userId && (
-								<Avatar color='indigo' radius='xl' alt={comment.userName}>
-									{comment.userPhoto ? (
-										<Image
-											src={`${process.env.NEXT_PUBLIC_CDN}${comment.userPhoto}`}
-											alt={comment.userName}
-											width='56'
-											height='56'
-										/>
-									) : (
-										comment.userName.slice(0, 3)
-									)}
-								</Avatar>
-							)
-						}
-					>
-						<Grid gutter='xs'>
-							<Grid.Col span={10}>
-								<Link href={`/article/${comment.url}`} passHref={true}>
-									<Anchor>{comment.title}</Anchor>
-								</Link>
-							</Grid.Col>
-							<Grid.Col span={2}>
-								<Badge size='lg' variant='outline' style={ComentBadgeStyle}>
-									{comment.count}
-								</Badge>
-							</Grid.Col>
-						</Grid>
-					</List.Item>
-				))}
-			</List>
+			{data.map(comment => (
+				<Grid gutter='xl' key={comment.id} columns={24}>
+					<Grid.Col span={3}>
+						<DisplayAvatar comment={comment} />
+					</Grid.Col>
+					<Grid.Col span={18}>
+						<Link href={`/article/${comment.url}`} passHref={true}>
+							<Anchor>{comment.title}</Anchor>
+						</Link>
+					</Grid.Col>
+					<Grid.Col span={3}>
+						<Badge size='lg' variant='outline' style={{float: 'right'}}>
+							{comment.count}
+						</Badge>
+					</Grid.Col>
+				</Grid>
+			))}
 		</>
 	)
 }

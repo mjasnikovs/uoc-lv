@@ -41,4 +41,5 @@ yarn-error.log*
 /uoc-next-logs
 /certbot/**/*
 /mailserver/**/*
+/baltijas_autoserviss
 !.gitkeep

@@ -2,6 +2,8 @@ import {format, stringFormat} from 'format-schema'
 
 import pg from '../../../connections/pg'
 import logger from '../../../connections/logger'
+import generatePodcastRss from '../../../connections/generatePodcastRss'
+
 import {getApiRouteSession} from '../../../connections/ironSession'
 import {convertToSlug} from '../../../connections/locales'
 
@@ -53,7 +55,7 @@ const createArticlehandler = async (req, res) => {
 
 		return pg({
 			query: `
-					insert into articles ("userId", url, title, tags, "slugTags", category, status, article, notes, thumbnail, "thumbnailBlur", mp3) 
+					insert into articles ("userId", url, title, tags, "slugTags", category, status, article, notes, thumbnail, "thumbnailBlur", mp3, "publishedAt") 
 					values (
 						$1::bigint,
 						(CONCAT($2::text,'-',currval('articles_id_seq'::regclass)))::varchar(300),
@@ -66,7 +68,8 @@ const createArticlehandler = async (req, res) => {
 						$9::text,
 						$10::text,
 						$11::text,
-						$12::text
+						$12::text,
+                        $13::timestamp with time zone
 					)
 					RETURNING
 					*
@@ -83,11 +86,17 @@ const createArticlehandler = async (req, res) => {
 				notes,
 				thumbnail,
 				thumbnailBlur,
-				mp3
+				mp3,
+				category === 'active' ? 'NOW()' : null
 			],
 			object: true
 		})
-			.then(resolve)
+			.then(result => {
+				if (category === 'podcast') {
+					generatePodcastRss()
+				}
+				return resolve(result)
+			})
 			.catch(err => reject(new Error(err)))
 	})
 		.then(article => {

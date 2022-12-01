@@ -182,8 +182,64 @@ const commentsHandler = async (req, res) => {
 				logger.error(new Error(err))
 				return res.status(500).send({error: 'Server error'})
 			})
-	}
+	} else if (req.method === 'DELETE') {
+		if (typeof req.session.user === 'undefined') {
+			return res.status(200).redirect(307, '/')
+		}
 
+		const args = testGet(req.body)
+
+		if (args instanceof Error) {
+			return res.status(400).send({error: args.message})
+		}
+
+		const {id} = args
+
+		if (req.session.user.privileges !== 'administrator') {
+			return res.status(400).send({
+				error: `Sessions don't have appropriate privileges.
+					The comment can't be deleted.`
+			})
+		}
+
+		return pg({
+			query: `
+				with comment AS (
+                    delete from comments where id = $1::bigint
+					RETURNING
+						id,
+					    to_char("updatedAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "updatedAt",
+					    to_char("createdAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "createdAt",
+						"articleId",
+						"userId",
+						content,
+						likes
+				)
+				select 
+					c.id,
+					c."updatedAt",
+					c."createdAt",
+					c."articleId",
+					c."userId",
+					u.name as "userName",
+					u.photo as "userPhoto",
+					c.content,
+					c.likes
+				from comment c
+				left join users u on(u.id = c."userId")
+				order by c."createdAt" DESC
+			`,
+			values: [id],
+			object: true
+		})
+			.then(comment => {
+				return res.status(200).send(comment)
+			})
+			.catch(err => {
+				logger.error(new Error(err))
+				return res.status(500).send({error: 'Server error'})
+			})
+	}
 	return res
 		.status(404)
 		.send({error: 'Route accepts only post or get requests. The non-post/get request was requested.'})

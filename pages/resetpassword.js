@@ -30,7 +30,7 @@ const ResetPassword = () => (
 							</Link>
 							<Link href='/login' passHref={true}>
 								<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-									Pievienoties sistēmai
+									Pieslēgties sistēmai
 								</Anchor>
 							</Link>
 						</Breadcrumbs>

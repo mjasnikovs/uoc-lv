@@ -40,6 +40,7 @@ yarn-error.log*
 /shop-wordpress-html
 /uoc-next-logs
 /certbot/**/*
+public/uocpodcast.xml
 /mailserver/**/*
 /baltijas_autoserviss
 !.gitkeep

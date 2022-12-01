@@ -52,7 +52,7 @@ const UserMenu = ({session}) => {
 		<Link href='/login' passHref={true}>
 			<Anchor>
 				<Group position='right'>
-					Pievienoties
+					Pieslēgties
 					<ThemeIcon size='lg' variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 						<Login />
 					</ThemeIcon>

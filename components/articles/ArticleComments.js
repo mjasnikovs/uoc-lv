@@ -15,12 +15,15 @@ import {
 	Anchor,
 	Alert,
 	ActionIcon,
-	Modal
+	Modal,
+	List
 } from '@mantine/core'
 
 import Check from 'tabler-icons-react/dist/icons/check'
 import MessageCircle from 'tabler-icons-react/dist/icons/message-circle'
 import Edit from 'tabler-icons-react/dist/icons/edit'
+import Eraser from 'tabler-icons-react/dist/icons/eraser'
+import AlertCircle from 'tabler-icons-react/dist/icons/alert-circle'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -42,6 +45,7 @@ const ArticleComents = ({id, session}) => {
 	const [success, setSuccess] = useState(null)
 	const [comments, setComments] = useState([])
 	const [editCommentId, setEditCommentId] = useState(false)
+	const [deleteCommentId, setDeleteCommentId] = useState(false)
 
 	useEffect(() => {
 		fetch(`/api/comments/${id}`, {
@@ -148,6 +152,35 @@ const ArticleComents = ({id, session}) => {
 			})
 	}
 
+	const handleDeleteSubmit = () => {
+		setError(null)
+		setSuccess(null)
+		setLoading(true)
+
+		fetch(`/api/comments/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({id: deleteCommentId})
+		})
+			.then(res => res.json())
+			.then(res => {
+				setLoading(false)
+				if (typeof res.error !== 'undefined') {
+					return setError(res.error)
+				}
+				const newComments = comments.filter(comment => comment.id !== deleteCommentId)
+				setSuccess(true)
+				setDeleteCommentId(false)
+				return setComments(newComments)
+			})
+			.catch(err => {
+				setLoading(false)
+				return setError(err.message)
+			})
+	}
+
 	return (
 		<>
 			<Modal
@@ -171,6 +204,23 @@ const ArticleComents = ({id, session}) => {
 					</Button>
 				</form>
 			</Modal>
+
+			<Modal opened={!!deleteCommentId} onClose={() => setDeleteCommentId(false)} title='Apstiprināt dzēšanu.'>
+				<Alert icon={<AlertCircle size={16} />} title='Brīdinājums' color='red'>
+					Komentārs tik neatgriezeniski dzēst. Apstiprināt?
+				</Alert>
+				<Space h='xl' />
+				<Button
+					loading={loading}
+					onClick={handleDeleteSubmit}
+					n={success && <Check size={14} />}
+					type='submit'
+					color='red'
+					fullWidth
+				>
+					Dzēst
+				</Button>
+			</Modal>
 			<Divider my='sm' />
 			{error && <ErrorBox error={error} />}
 			{loading && (
@@ -178,11 +228,47 @@ const ArticleComents = ({id, session}) => {
 					<Loader color='indigo' size='md' />
 				</Center>
 			)}
-			<Grid>
-				{comments.map(comment => (
-					<Grid.Col key={comment.id} span={12}>
-						<Grid>
-							<Grid.Col span={1}>
+			{comments.map(comment => (
+				<Grid gutter='xs' key={comment.id}>
+					<Grid.Col span={12}>
+						<Group position='apart'>
+							<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
+								<MessageCircle size={16} /> {comment.userName}
+							</Anchor>
+							<Group>
+								<Text size='xs'>{compareTimeStrings(comment.createdAt, comment.updatedAt)}</Text>
+								{(session?.privileges === 'administrator' || session?.id === comment.userId) && (
+									<ActionIcon
+										onClick={() => {
+											editCommentForm.setFieldValue('content', comment.content)
+											setEditCommentId(comment.id)
+										}}
+										radius='sm'
+										color='indigo'
+										size='xs'
+									>
+										<Edit />
+									</ActionIcon>
+								)}
+								{session?.privileges === 'administrator' && (
+									<ActionIcon
+										onClick={() => {
+											setDeleteCommentId(comment.id)
+										}}
+										radius='sm'
+										color='red'
+										size='xs'
+									>
+										<Eraser />
+									</ActionIcon>
+								)}
+							</Group>
+						</Group>
+					</Grid.Col>
+					<Grid.Col span={12}>
+						<List
+							spacing='xs'
+							icon={
 								<Avatar radius='sm' size='lg'>
 									{comment.userPhoto ? (
 										<Image
@@ -195,39 +281,14 @@ const ArticleComents = ({id, session}) => {
 										comment.userName.slice(0, 3)
 									)}
 								</Avatar>
-							</Grid.Col>
-							<Grid.Col span={11}>
-								<Group position='apart'>
-									<Anchor onClick={() => insertFormValue(`@${comment.userName}`)} color='grey'>
-										<MessageCircle size={16} /> {comment.userName}
-									</Anchor>
-									<Group>
-										<Text size='xs'>
-											{compareTimeStrings(comment.createdAt, comment.updatedAt)}
-										</Text>
-										{(session?.privileges === 'administrator' ||
-											session?.id === comment.userId) && (
-											<ActionIcon
-												onClick={() => {
-													editCommentForm.setFieldValue('content', comment.content)
-													setEditCommentId(comment.id)
-												}}
-												radius='sm'
-												color='indigo'
-												size='xs'
-											>
-												<Edit />
-											</ActionIcon>
-										)}
-									</Group>
-								</Group>
-								<Text>{replaceUsernames(comment.content)}</Text>
-								<Divider my='sm' variant='dotted' />
-							</Grid.Col>
-						</Grid>
+							}
+						>
+							<List.Item>{replaceUsernames(comment.content)}</List.Item>
+						</List>
+						<Divider my='sm' variant='dotted' />
 					</Grid.Col>
-				))}
-			</Grid>
+				</Grid>
+			))}
 			<Space h='md' />
 			{session && (
 				<form action='' method='post' onSubmit={form.onSubmit(handleSubmit)}>
@@ -248,7 +309,7 @@ const ArticleComents = ({id, session}) => {
 				<Alert icon={<MessageCircle size={16} />} title='Vēlies komentēt?' color='gray'>
 					<Link href='/login' passHref={true}>
 						<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
-							Pievienojies sistēmai
+							Pieslēgties sistēmai
 						</Anchor>
 					</Link>
 				</Alert>

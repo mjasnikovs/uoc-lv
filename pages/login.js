@@ -89,7 +89,7 @@ const Login = ({id, token}) => {
 					<Grid>
 						<Grid.Col span={12}>
 							<Title order={2}>
-								Pievienoties sistēmai {id} {token}
+								Pieslēgties sistēmai {id} {token}
 							</Title>
 						</Grid.Col>
 
@@ -122,7 +122,7 @@ const Login = ({id, token}) => {
 									</Center>
 								) : (
 									<Button type='submit' fullWidth>
-										Pievienoties
+										Pieslēgties
 									</Button>
 								)}
 							</>
@@ -131,11 +131,16 @@ const Login = ({id, token}) => {
 						<Grid.Col span={12}>
 							<Center>
 								<Breadcrumbs align='center'>
-									<Link href='/resetpassword' passHref={true}>
-										<Anchor inherit variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
+									{/*<Link href='/resetpassword' passHref={true}>
+										<Anchor
+											inherit
+											variant='gradient'
+											disabled
+											gradient={{from: 'indigo', to: 'cyan'}}
+										>
 											Atjaunot paroli
 										</Anchor>
-									</Link>
+                                    </Link>*/}
 									<Link href='/register' passHref={true}>
 										<Anchor variant='gradient' gradient={{from: 'indigo', to: 'cyan'}}>
 											Izveidot jaunu kontu

@@ -32,9 +32,8 @@ const HEADER = `
         
         <itunes:image href="https://uoc.lv/podcasticon.png" />
         
-        <itunes:category text="Leisure" />
-        <itunes:category text="Video Games" />
-        <itunes:category text="Hobbies" />
+        <itunes:category text="Games" />
+		<itunes:explicit>true</itunes:explicit>	
 `.trim()
 
 const FOOTER = `
@@ -48,7 +47,7 @@ const generatePodcastRss = async () => {
 			query: `
                 select
                     id,
-                    to_char("publishedAt" at time zone 'EETDST', 'DD.MM.YYYY HH24:MI') as "publishedAt",
+                    to_char("publishedAt" at time zone 'GMT', 'Dy, DD Mon YYYY HH24:MI:SS GMT') as "publishedAt",
                     title,
                     article,
                     mp3,
@@ -65,10 +64,13 @@ const generatePodcastRss = async () => {
 
 		const items = await Promise.all(
 			podcasts.map(async podcast => {
-				const {size} = await stat(path.resolve('./cdn', podcast.mp3.replace(/https:\/\/cdn.uoc.lv\//gm, '')))
+				// const {size} = await stat(path.resolve('./cdn', podcast.mp3.replace(/https:\/\/cdn.uoc.lv\//gm, '')))
+				const {size} = await stat(path.resolve('./cdn/uoc.lv-podkasts-110.mp3'))
+
 				return `
                     <item>
                         <title>${podcast.title}</title>
+                        <itunes:title>${podcast.title}</itunes:title>
                         <itunes:author>UOC.LV</itunes:author>
                         <itunes:subtitle>Video spēļu podkāsts</itunes:subtitle>
                         <itunes:summary>${cleanHTML(podcast.article)}</itunes:summary>

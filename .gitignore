@@ -42,4 +42,5 @@ yarn-error.log*
 /certbot/**/*
 public/uocpodcast.xml
 /mailserver/**/*
+/baltijas_autoserviss
 !.gitkeep

@@ -1,5 +1,5 @@
 #!/bin/sh
-export $(cat .env.development | sed 's/#.*//g' | xargs)
+export $(cat .env.production | sed 's/#.*//g' | xargs)
 BACKUPNAME="uoc"
 
 TIMESTAMP=`date "+%Y%m%d-%H%M%S"`

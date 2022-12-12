@@ -43,6 +43,7 @@ services:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
             - ./cdn:/var/www/cdn
+            - ./baltijas_autoserviss:/var/www/baltijas_autoserviss
 
     mailserver:
         image: docker.io/mailserver/docker-mailserver:latest
@@ -88,7 +89,7 @@ services:
             - ./.env.production
 
     uoc-shop:
-        image: wordpress:5.4.1-php7.2-apache
+        image:  wordpress:6.0.1-php7.4-apache #wordpress:5.4.1-php7.2-apache
         container_name: uoc-shop
         volumes:
             - ./shop-wordpress-html:/var/www/html
@@ -108,7 +109,7 @@ services:
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-              # command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d shop.uoc.lv --agree-tos
+        command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d baltijasautoserviss.lv -d uoc.lv -d cdn.uoc.lv -d mail.uoc.lv -d shop.uoc.lv --agree-tos
 
 networks:
     uoc-network:

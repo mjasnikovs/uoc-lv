@@ -14,9 +14,10 @@ const cleanHTML = text =>
 		.replace(/'/gm, '&#039;')
 
 const HEADER = `
-<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-        <title>UOC.LV Podkāsts</title>
+        <atom:link href="https://cdn.uoc.lv/uocpodcast.xml" rel="self" type="application/rss+xml" />
+		<title>UOC.LV Podkāsts</title>
         <link>http://uoc.lv/</link>
         <language>lv</language>
         <copyright>UOC.LV</copyright>
@@ -32,14 +33,13 @@ const HEADER = `
         
         <itunes:image href="https://uoc.lv/podcasticon.png" />
         
-	    <itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Games &amp; Hobbies">
+	    <itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Leisure">
 			<itunes:category text="Video Games"/>
 		</itunes:category>
 		<itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Technology">
-			<itunes:category text="Gadgets"/>
 		</itunes:category>
-		<itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Games &amp; Hobbies">
-			<itunes:category text="Other Games"/>
+		<itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Leisure">
+			<itunes:category text="Hobbies"/>
 		</itunes:category>	
 
 		<itunes:explicit>no</itunes:explicit>	

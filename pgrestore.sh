@@ -1,7 +1,7 @@
 #!/bin/bash
 export $(cat .env.development | sed 's/#.*//g' | xargs)
 
-ZIPFILE="uoc-20220805-010001.zip"
+ZIPFILE="uoc-20221201-133444.zip"
 BACKUPNAME="${ZIPFILE::-4}.sql"
 
 echo "$ZIPFILE >>> $BACKUPNAME"

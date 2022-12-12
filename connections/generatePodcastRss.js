@@ -32,8 +32,17 @@ const HEADER = `
         
         <itunes:image href="https://uoc.lv/podcasticon.png" />
         
-        <itunes:category text="Games" />
-		<itunes:explicit>true</itunes:explicit>	
+	    <itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Games &amp; Hobbies">
+			<itunes:category text="Video Games"/>
+		</itunes:category>
+		<itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Technology">
+			<itunes:category text="Gadgets"/>
+		</itunes:category>
+		<itunes:category xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" text="Games &amp; Hobbies">
+			<itunes:category text="Other Games"/>
+		</itunes:category>	
+
+		<itunes:explicit>no</itunes:explicit>	
 `.trim()
 
 const FOOTER = `

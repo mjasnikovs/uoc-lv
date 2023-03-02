@@ -2,9 +2,9 @@ import React from 'react'
 import {Group, Text} from '@mantine/core'
 import FileUpload from 'tabler-icons-react/dist/icons/file-upload'
 
-const dropBox = status => (
+const dropBox = () => (
 	<Group position='center' spacing='xl'>
-		<FileUpload status={status} size={50} />
+		<FileUpload size={50} />
 		<div>
 			<Text size='lg' inline>
 				Uzvelc failu šeit vai noklikšķini lai izvēlētos.

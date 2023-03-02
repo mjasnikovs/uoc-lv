@@ -39,6 +39,7 @@ const AppShellContainer = ({children, sidebar, session}) => {
 
 	return (
 		<AppShell
+			fixed={false}
 			navbarOffsetBreakpoint='sm'
 			asideOffsetBreakpoint='sm'
 			navbar={

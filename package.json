@@ -15,11 +15,11 @@
 		"analyze": "ANALYZE=true next build"
 	},
 	"dependencies": {
-		"@mantine/core": "4.2.9",
-		"@mantine/dropzone": "4.2.9",
-		"@mantine/form": "4.2.9",
-		"@mantine/next": "4.2.9",
-		"@mantine/rte": "4.2.9",
+		"@mantine/core": "5.10.5",
+		"@mantine/dropzone": "5.10.5",
+		"@mantine/form": "5.10.5",
+		"@mantine/next": "5.10.5",
+		"@mantine/rte": "5.10.5",
 		"busboy": "1.6.0",
 		"env-cmd": "10.1.0",
 		"express": "4.18.1",

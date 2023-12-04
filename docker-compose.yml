@@ -46,7 +46,7 @@ services:
             - ./baltijas_autoserviss:/var/www/baltijas_autoserviss
 
     mailserver:
-        image: docker.io/mailserver/docker-mailserver:latest
+        image: docker.io/mailserver/docker-mailserver:12.1.0
         container_name: mailserver
         # If the FQDN for your mail-server is only two labels (eg: example.com),
         # you can assign this entirely to `hostname` and remove `domainname`.
@@ -103,13 +103,13 @@ services:
 
     uoc-certbot:
         container_name: uoc-certbot
-        image: certbot/certbot:v1.28.0
+        image: certbot/certbot:v1.32.2
         depends_on:
             - uoc-nginx
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/www:/var/www/certbot
-        command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d baltijasautoserviss.lv -d uoc.lv -d cdn.uoc.lv -d mail.uoc.lv -d shop.uoc.lv --agree-tos
+        command: certonly --webroot -w /var/www/certbot --force-renewal --email mjasnikovs@gmail.com -d baltijasautoserviss.lv --agree-tos
 
 networks:
     uoc-network:

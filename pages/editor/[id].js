@@ -259,7 +259,7 @@ const SideBar = ({form, article, session}) => {
 						maxSize={3 * 1024 ** 2}
 						accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
 					>
-						{status => DropBox(status)}
+						<DropBox />
 					</Dropzone>
 				</Grid.Col>
 				{form.getInputProps('category').value === 'podcast' && (

@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-import {Grid, Center, Container, Title, TextInput, Avatar, InputWrapper} from '@mantine/core'
+import {Grid, Center, Container, Title, TextInput, Avatar, Input} from '@mantine/core'
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone'
 import {useForm} from '@mantine/form'
 
@@ -93,7 +93,7 @@ const Profile = ({session}) => {
 							/>
 						</Grid.Col>
 						<Grid.Col span={12}>
-							<InputWrapper label='Profila attēls' />
+							<Input.Wrapper label='Profila attēls' />
 							{avatarUrl && (
 								<Center>
 									<Avatar size='xl'>
@@ -109,6 +109,7 @@ const Profile = ({session}) => {
 						</Grid.Col>
 						<Grid.Col span={12}>
 							<ErrorBox error={error} />
+
 							<Dropzone
 								loading={loading}
 								multiple={false}
@@ -117,7 +118,7 @@ const Profile = ({session}) => {
 								maxSize={3 * 1024 ** 2}
 								accept={[MIME_TYPES.png, MIME_TYPES.jpeg]}
 							>
-								{status => DropBox(status)}
+								<DropBox />
 							</Dropzone>
 						</Grid.Col>
 					</Grid>

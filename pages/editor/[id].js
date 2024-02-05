@@ -229,7 +229,7 @@ const SideBar = ({form, article, session}) => {
 			</>
 			<Grid>
 				<Grid.Col span={12}>
-					<label>Titilbilde</label>
+					<label>Titulbilde</label>
 				</Grid.Col>
 				{(thumbnail || article?.thumbnail) && (
 					<>
@@ -284,7 +284,7 @@ const SideBar = ({form, article, session}) => {
 				</Grid.Col>
 				<Grid.Col>
 					<Select
-						label='Status'
+						label='Statuss'
 						placeholder='Izvēlies vienu'
 						required
 						data={session.privileges === 'administrator' ? statusOptionsAdministrator : statusOptions}

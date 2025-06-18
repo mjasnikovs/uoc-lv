@@ -1,3 +1,5 @@
+version: '3'
+
 services:
     uoc-next:
         container_name: uoc-next

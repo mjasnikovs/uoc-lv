@@ -1,4 +1,3 @@
-import assert from 'assert'
 import fs from 'fs/promises'
 import path from 'path'
 import express from 'express'
@@ -7,9 +6,6 @@ import {generatePodcastRss} from './generatePodcastRss.js'
 import {listMp3Metadata} from './mp3Metadata.js'
 import type {Mp3MetadataType} from './mp3Metadata.js'
 import {minify} from 'html-minifier'
-
-const PORT = process.env.PORT
-assert(PORT, 'PORT environment variable must be set')
 
 const app = express()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -41,4 +37,4 @@ getMp3Metadata()
 
 setInterval(() => void getMp3Metadata(), 1000 * 60 * 30)
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}/`))
+app.listen(80, () => console.log('Server running at http://localhost:80/'))

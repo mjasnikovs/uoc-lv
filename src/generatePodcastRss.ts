@@ -1,12 +1,10 @@
 import {writeFile} from 'fs/promises'
 import path from 'path'
-import assert from 'assert'
 
 import {listMp3Metadata} from './mp3Metadata.js'
 import type {Mp3MetadataType} from './mp3Metadata.js'
 
-assert(process.env.MP3_PATH, 'MP3_PATH environment variable must be set')
-const MP3_PATH = path.resolve(process.env.MP3_PATH)
+const MP3_PATH = path.resolve(import.meta.dirname, '../../cdn')
 
 const HEADER = `
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

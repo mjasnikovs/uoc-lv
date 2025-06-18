@@ -1,10 +1,8 @@
-import assert from 'assert'
 import fs from 'fs/promises'
 import path from 'path'
 import {parseFile} from 'music-metadata'
 
-assert(process.env.MP3_PATH, 'MP3_PATH environment variable must be set')
-const MP3_PATH = path.resolve(process.env.MP3_PATH)
+const MP3_PATH = path.resolve(import.meta.dirname, '../../cdn')
 
 export type Mp3MetadataType = {
 	filename: string

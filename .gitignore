@@ -4,6 +4,5 @@ dist
 distTest
 /logs/**/*.txt
 *.temp
-.env.development
 .env.production
 cdn

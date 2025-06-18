@@ -1,6 +1,0 @@
-Sitemap: https://uoc.lv/api/sitemap
-
-User-agent: *
-Allow: /*
-
-Disallow: /api/*

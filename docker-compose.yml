@@ -1,24 +1,12 @@
 version: '3.0'
 
 services:
-    uoc-pg:
-        image: postgres:14.3-alpine3.16
-        container_name: uoc-pg
-        volumes:
-            - ./postgresqlData:/var/lib/postgresql/data
-            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-        networks:
-            - uoc-network
-        env_file:
-            - ./.env.production
-
     uoc-next:
         container_name: uoc-next
         build:
             context: ./
             dockerfile: Dockerfile.next
         volumes:
-            - ./logs:/usr/src/app/logs
             - ./cdn:/usr/src/app/cdn
         networks:
             - uoc-network

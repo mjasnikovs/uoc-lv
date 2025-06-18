@@ -33,6 +33,8 @@ export const listMp3Metadata: () => Promise<Mp3MetadataType[]> = async () => {
 			createdAt: (stats.birthtime || new Date()).toISOString()
 		}
 
+		metadataEntry.title = metadataEntry.title.replace(/[$%&#]/g, '').trim()
+
 		metadataList.push(metadataEntry)
 	}
 

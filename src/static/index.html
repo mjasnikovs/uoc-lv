@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="lv">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+		<title>UOC.LV video spēļu un citu hobiju portāls</title>
+		<meta name="robots" content="index,follow" />
+		<meta name="description" content="video spēļu un citu hobiju portāls" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@uoc.lv" />
+		<meta name="twitter:creator" content="@lielaiswuu" />
+		<meta property="og:title" content="UOC.LV video spēļu un citu hobiju portāls" />
+		<meta property="og:description" content="video spēļu un citu hobiju portāls" />
+		<meta property="og:url" content="https://uoc.lv/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="lv_LV" />
+		<meta property="og:site_name" content="uoc.lv" />
+		<meta name="next-head-count" content="14" />
+		<meta name="color-scheme" content="dark" />
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="/style.css" />
+		<style>
+			.logo {
+				color: #e97111;
+			}
+			a {
+				text-decoration: none;
+			}
+			.playlist {
+				cursor: pointer;
+				list-style: none;
+			}
+			.playlist li {
+				list-style: none;
+			}
+			.playlist li.active {
+				cursor: pointer;
+				color: white;
+				list-style: none;
+				display: inline-block;
+				color: #13161e;
+				background-color: #e0e3da;
+				border-radius: 5px;
+				overflow: hidden;
+				padding: 0.5rem 1rem;
+			}
+			.playlist li.active::before {
+				content: '▶';
+				padding-right: 0.5rem;
+			}
+			audio {
+				width: 100%;
+				margin-bottom: 1rem;
+			}
+			.content {
+				display: grid;
+				grid-template-columns: 67% 33%;
+				gap: 20px;
+			}
+			@media (max-width: 768px) {
+				.content {
+					grid-template-columns: 100%;
+				}
+			}
+			.discord-widget {
+				border: none;
+				border-radius: 5px;
+				overflow: hidden;
+				position: relative;
+				width: 100%;
+				height: 400px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="container">
+			<nav>
+				<ul>
+					<li><h1 class="logo">UOC.LV</h1></li>
+				</ul>
+			</nav>
+		</header>
+		<main class="container">
+			<div class="grid content">
+				<div>
+					<h2>Podkāsts</h2>
+					<p>
+						UOC.LV ir video spēļu un citu hobiju portāls, kas apvieno cilvēkus ar līdzīgām interesēm. Mēs
+						piedāvājam jaunākās ziņas, apskatus un diskusijas par dažādām tēmām.
+					</p>
+					<audio id="audioPlayer" controls></audio>
+					<ul class="playlist">
+						<li data-src="audio/song1.mp3">Song 1</li>
+					</ul>
+				</div>
+				<div>
+					<div class="discord-widget">
+						<iframe
+							src="https://discord.com/widget?id=619838999208656906&amp;theme=dark"
+							frameborder="0"
+							width="100%"
+							height="400"
+							sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+						></iframe>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer class="container">
+			<div class="grid">
+				<div class="group">
+					<svg role="img" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+						<title>uoc.lv</title>
+						<path
+							d="M2.229 22.844H24V10.501l-8.628 5.882c-.613.419-1.226-.003-1.226-.003L0 6.646v13.969s0 2.229 2.229 2.229m12.558-9.273L24 7.261V1.156H2.229S0 1.156 0 3.384v.06l14.787 10.127Z"
+						/>
+					</svg>
+					<a href="mailto:info@uoc.lv">Pasts</a>
+				</div>
+				<div class="group">
+					<svg
+						role="img"
+						viewBox="0 0 24 24"
+						width="24"
+						height="24"
+						color="#5865F2"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<title>Discord</title>
+						<path
+							d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
+						/>
+					</svg>
+					<a href="https://discord.gg/hCgp2Gy">Discord</a>
+				</div>
+				<div class="group">
+					<svg
+						role="img"
+						viewBox="0 0 24 24"
+						width="24"
+						height="24"
+						color="#9146FF"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<title>Twitch</title>
+						<path
+							d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"
+						/>
+					</svg>
+					<a href="https://www.twitch.tv/lielaiswuu">Twitch</a>
+				</div>
+
+				<div class="group">
+					<svg
+						role="img"
+						viewBox="0 0 24 24"
+						width="24"
+						height="24"
+						color="#FF0000"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<title>YouTube</title>
+						<path
+							d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+						/>
+					</svg>
+					<a href="https://www.youtube.com/user/WuuEvil">YouTube</a>
+				</div>
+
+				<div class="group">
+					<svg
+						role="img"
+						viewBox="0 0 24 24"
+						width="24"
+						height="23"
+						color="#000000"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<title>X</title>
+						<path
+							d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+						/>
+					</svg>
+					<a href="https://twitter.com/UocLV">Twitter</a>
+				</div>
+			</div>
+		</footer>
+
+		<script>
+			const player = document.getElementById('audioPlayer')
+			const playlistItems = document.querySelectorAll('.playlist li')
+			let current = 0
+
+			function loadAndPlay(index) {
+				const item = playlistItems[index]
+				if (!item) return
+				playlistItems.forEach(el => el.classList.remove('active'))
+				item.classList.add('active')
+				player.src = item.dataset.src
+				player.play()
+				current = index
+			}
+
+			playlistItems.forEach((item, index) => {
+				item.addEventListener('click', () => loadAndPlay(index))
+			})
+
+			player.addEventListener('ended', () => {
+				const next = (current + 1) % playlistItems.length
+				loadAndPlay(next)
+			})
+		</script>
+	</body>
+</html>

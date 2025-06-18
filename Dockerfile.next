@@ -18,7 +18,7 @@ ADD https://api.github.com/repos/mjasnikovs/uoc-lv/git/refs/heads/main version.j
 
 RUN git reset --hard
 RUN git pull origin main
-RUn npm install
+RUN npm install --no-optional --production
 
 RUN mkdir -p /usr/src/app/logs
 RUN mkdir -p /usr/src/app/cdn

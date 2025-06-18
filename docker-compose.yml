@@ -12,7 +12,6 @@ services:
             - ./.env.production
 
     uoc-nginx:
-        image: nginx:1.21.6
         build:
             context: ./
             dockerfile: Dockerfile.nginx
@@ -97,4 +96,5 @@ services:
 
 networks:
     uoc-network:
+        driver: bridge
 

@@ -16,7 +16,7 @@ const getMp3Metadata = async () => {
 		await generatePodcastRss()
 		const mp3MetadataList: Mp3MetadataType[] = await listMp3Metadata()
 		const htmlList = mp3MetadataList
-			.map(metadata => `<li data-src="${metadata.filename}">${metadata.title}</li>`)
+			.map(metadata => `<li data-src="https://cdn.uoc.lv/${metadata.filename}">${metadata.title}</li>`)
 			.join('\n')
 
 		const template = await fs.readFile(path.resolve(import.meta.dirname, './static/index.html'), 'utf8')

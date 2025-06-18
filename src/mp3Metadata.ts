@@ -39,8 +39,8 @@ export const listMp3Metadata: () => Promise<Mp3MetadataType[]> = async () => {
 	}
 
 	metadataList = metadataList.sort((a, b) => {
-		const aa = a.title.match(/\d+/)
-		const bb = b.title.match(/\d+/)
+		const aa = a.filename.match(/\d+/)
+		const bb = b.filename.match(/\d+/)
 		return (bb ? parseInt(bb[0]) : 0) - (aa ? parseInt(aa[0]) : 0)
 	})
 

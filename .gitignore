@@ -6,3 +6,4 @@ distTest
 *.temp
 .env.development
 .env.production
+cdn

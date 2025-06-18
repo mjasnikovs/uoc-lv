@@ -1,5 +1,3 @@
-version: '3.0'
-
 services:
 <<<<<<< HEAD
     uoc-pg:
@@ -26,8 +24,6 @@ services:
             - ./cdn:/usr/src/app/cdn
         networks:
             - uoc-network
-        depends_on:
-            - uoc-pg
         env_file:
             - ./.env.production
 

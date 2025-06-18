@@ -37,4 +37,14 @@ getMp3Metadata()
 
 setInterval(() => void getMp3Metadata(), 1000 * 60 * 30)
 
+app.get('/uoc.lv-podkasts-:episodeNumber', async (_, res) => {
+	try {
+		const html = await fs.readFile(path.resolve(import.meta.dirname, './static/index.html'), 'utf8')
+		res.send(html)
+	} catch (error) {
+		console.error('Error reading index.html:', error)
+		res.status(500).send('Internal Server Error')
+	}
+})
+
 app.listen(80, () => console.log('Server running at http://localhost:80/'))
